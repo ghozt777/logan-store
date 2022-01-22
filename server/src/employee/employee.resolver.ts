@@ -12,4 +12,9 @@ export class EmployeeResolver {
     hello() {
         return "Hello World"
     }
+
+    @Query(() => [EmployeeEntity])
+    async getEmployees() {
+        return await this.employeeService.queryAllEmployees();
+    }
 }

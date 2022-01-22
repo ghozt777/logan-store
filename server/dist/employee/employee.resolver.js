@@ -12,6 +12,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.EmployeeResolver = void 0;
 const graphql_1 = require("@nestjs/graphql");
 const graphql_2 = require("@nestjs/graphql");
+const employee_entity_1 = require("./employee.entity");
 const employee_service_1 = require("./employee.service");
 let EmployeeResolver = class EmployeeResolver {
     constructor(employeeService) {
@@ -20,6 +21,9 @@ let EmployeeResolver = class EmployeeResolver {
     hello() {
         return "Hello World";
     }
+    async getEmployees() {
+        return await this.employeeService.queryAllEmployees();
+    }
 };
 __decorate([
     (0, graphql_1.Query)(() => String),
@@ -27,6 +31,12 @@ __decorate([
     __metadata("design:paramtypes", []),
     __metadata("design:returntype", void 0)
 ], EmployeeResolver.prototype, "hello", null);
+__decorate([
+    (0, graphql_1.Query)(() => [employee_entity_1.EmployeeEntity]),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", []),
+    __metadata("design:returntype", Promise)
+], EmployeeResolver.prototype, "getEmployees", null);
 EmployeeResolver = __decorate([
     (0, graphql_2.Resolver)(),
     __metadata("design:paramtypes", [employee_service_1.EmployeeService])

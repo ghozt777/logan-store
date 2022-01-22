@@ -21,28 +21,13 @@ let EmployeeService = class EmployeeService {
     constructor(employeeRepository) {
         this.employeeRepository = employeeRepository;
     }
-    createHelloResponse() {
-        return {
-            statusCode: common_1.HttpStatus.OK,
-            success: true,
-            msg: "Hello From /employee"
-        };
-    }
     async queryAllEmployees() {
         const result = await this.employeeRepository.query(`SELECT * FROM employee_entity`);
-        return {
-            statusCode: common_1.HttpStatus.OK,
-            success: true,
-            employees: result !== null && result !== void 0 ? result : []
-        };
+        return result;
     }
     async querySpecificEmployee(id) {
         const result = await this.employeeRepository.findOne({ emp_id: id });
-        return {
-            statusCode: common_1.HttpStatus.OK,
-            success: true,
-            employee: result !== null && result !== void 0 ? result : null
-        };
+        return result;
     }
     async getManager() {
         const query = `SELECT branch.branch_name as branch, 

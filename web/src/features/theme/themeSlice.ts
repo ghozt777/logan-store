@@ -6,8 +6,8 @@ export interface ThemeSlice {
 }
 
 const initialState: ThemeSlice = {
-    theme: new Date().getHours() > 6 && new Date().getHours() < 18 ? "light" : "dark",
-    setBy: "default"
+    theme: localStorage.getItem('theme') ? JSON.parse(localStorage.getItem('theme') as string).theme : new Date().getHours() > 6 && new Date().getHours() < 18 ? "light" : "dark",
+    setBy: localStorage.getItem('theme') ? JSON.parse(localStorage.getItem('theme') as string).setBy : "default"
 }
 
 export const themeSlice = createSlice({
@@ -17,6 +17,7 @@ export const themeSlice = createSlice({
         changeTheme: state => {
             state.setBy = "user"
             state.theme === 'light' ? state.theme = 'dark' : state.theme = 'light'
+            localStorage.setItem('theme', JSON.stringify(state));
         }
     }
 })
