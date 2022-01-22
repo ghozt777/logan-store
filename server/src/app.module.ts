@@ -3,7 +3,7 @@ import { GraphQLModule } from '@nestjs/graphql';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { DatabaseModule } from './database/database.module';
-import { EmployeeModule } from './employee/employee.module';
+import { UserModule } from './user/user.module';
 
 
 @Module({
@@ -12,7 +12,7 @@ import { EmployeeModule } from './employee/employee.module';
       autoSchemaFile: 'schema.gql'
     }),
     DatabaseModule,
-    EmployeeModule
+    UserModule
   ],
   controllers: [AppController],
   providers: [AppService],
