@@ -11,6 +11,7 @@ type Query {
 }
 
 type Mutation {
+  checkAuth: String!
   register(password: String!, email: String!, username: String!): Boolean!
   login(password: String!, usernameOrEmail: String!): LoginResponse!
 }

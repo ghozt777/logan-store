@@ -10,7 +10,8 @@ import { UserModule } from './user/user.module';
   imports: [
     GraphQLModule.forRoot({
       autoSchemaFile: 'schema.gql',
-      context: ({ res }) => ({ res })
+      context: ({ req, res }) => ({ req, res }),
+      cors: { origin: true, credentials: true },
     }),
     DatabaseModule,
     UserModule

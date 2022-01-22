@@ -20,9 +20,6 @@ const typeorm_2 = require("typeorm");
 const user_entity_1 = require("./user.entity");
 const user_service_1 = require("./user.service");
 const argon2 = require("argon2");
-const dotenv = require("dotenv");
-dotenv.config();
-const jwt = require("jsonwebtoken");
 let LoginResponse = class LoginResponse {
 };
 __decorate([
@@ -39,6 +36,15 @@ let UserResolver = class UserResolver {
     }
     hello() {
         return 'Hello From User';
+    }
+    checkAuth(req) {
+        if (req.headers['authorization']) {
+            const token = req.headers['authorization'].split(' ')[1];
+            const { user } = this.userService.isValid(token);
+            console.log("User: ", user);
+            return 'auth passed';
+        }
+        return 'auth failed';
     }
     async register(username, email, password) {
         const payload = await this.userService.createUserPayload({ username, password, email });
@@ -72,21 +78,11 @@ let UserResolver = class UserResolver {
             const isPasswordValid = await argon2.verify(user[0].password, password);
             if (!isPasswordValid)
                 throw new Error('invalid credentails');
-            const accessToken = jwt.sign({
-                id: user[0].id,
-                username: user[0].username,
-                email: user[0].email
-            }, process.env.JWT_SECRET, {
-                expiresIn: '15m'
-            });
-            const refreshToken = jwt.sign({
-                id: user[0].id
-            }, process.env.JWT_COOKIE_SECRET, {
-                expiresIn: '7d'
-            });
+            const accessToken = this.userService.createAccessToken(user[0]);
+            const refreshToken = this.userService.createRefreshToken(user[0]);
             res.cookie('jid', refreshToken, {
                 httpOnly: true,
-                sameSite: 'lax'
+                sameSite: 'lax',
             });
             return {
                 accessToken: accessToken
@@ -102,6 +98,13 @@ __decorate([
     __metadata("design:paramtypes", []),
     __metadata("design:returntype", void 0)
 ], UserResolver.prototype, "hello", null);
+__decorate([
+    (0, graphql_1.Mutation)(() => String),
+    __param(0, (0, graphql_1.Context)('req')),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [Object]),
+    __metadata("design:returntype", void 0)
+], UserResolver.prototype, "checkAuth", null);
 __decorate([
     (0, graphql_1.Mutation)(() => Boolean),
     __param(0, (0, graphql_1.Args)({ name: "username", type: () => String })),

@@ -5,11 +5,7 @@ import { getManager, Repository } from "typeorm";
 import { User } from "./user.entity";
 import { UserService } from "./user.service";
 import * as argon2 from 'argon2'
-import * as dotenv from 'dotenv'
-dotenv.config();
-import * as jwt from 'jsonwebtoken'
-import { ExecutionContext, Req, Res } from "@nestjs/common";
-import { Response } from "express";
+import { Response, Request } from "express";
 
 @ObjectType()
 class LoginResponse {
@@ -26,6 +22,18 @@ export class UserResolver {
         return 'Hello From User'
     }
 
+    @Mutation(() => String)
+    checkAuth(@Context('req') req: Request) {
+        if (req.headers['authorization']) {
+            const token = req.headers['authorization'].split(' ')[1];
+            const { user } = this.userService.isValid(token);
+            console.log("User: ", user);
+            return 'auth passed'
+        }
+        return 'auth failed'
+    }
+
+    
     @Mutation(() => Boolean)
     async register(
         @Args({ name: "username", type: () => String }) username: string,
@@ -66,29 +74,11 @@ export class UserResolver {
         if (Array.isArray(user) && user[0]) {
             const isPasswordValid = await argon2.verify(user[0].password, password);
             if (!isPasswordValid) throw new Error('invalid credentails');
-            const accessToken = jwt.sign(
-                {
-                    id: user[0].id,
-                    username: user[0].username,
-                    email: user[0].email
-                },
-                process.env.JWT_SECRET,
-                {
-                    expiresIn: '15m'
-                }
-            )
-            const refreshToken = jwt.sign(
-                {
-                    id: user[0].id
-                },
-                process.env.JWT_COOKIE_SECRET,
-                {
-                    expiresIn: '7d'
-                }
-            )
+            const accessToken = this.userService.createAccessToken(user[0]);
+            const refreshToken = this.userService.createRefreshToken(user[0]);
             res.cookie('jid', refreshToken, {
                 httpOnly: true,
-                sameSite: 'lax'
+                sameSite: 'lax',
             });
             return {
                 accessToken: accessToken

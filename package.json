@@ -1,0 +1,5 @@
+{
+  "dependencies": {
+    "graphql-middleware": "^6.1.13"
+  }
+}

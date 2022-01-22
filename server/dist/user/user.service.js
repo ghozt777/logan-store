@@ -12,6 +12,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.UserService = void 0;
 const common_1 = require("@nestjs/common");
 const argon2 = require("argon2");
+const jwt = require("jsonwebtoken");
 let UserService = class UserService {
     constructor() { }
     async createUserPayload(dto) {
@@ -24,6 +25,29 @@ let UserService = class UserService {
             email: email
         };
         return payload;
+    }
+    createAccessToken(user) {
+        return jwt.sign({
+            id: user.id,
+            username: user.username,
+            email: user.email
+        }, process.env.JWT_SECRET, {
+            expiresIn: '15m'
+        });
+    }
+    createRefreshToken(user) {
+        return jwt.sign({
+            id: user.id
+        }, process.env.JWT_COOKIE_SECRET, {
+            expiresIn: '7d'
+        });
+    }
+    isValid(token) {
+        const payload = jwt.verify(token, process.env.JWT_SECRET);
+        return {
+            user: payload ? payload : {},
+            isValid: payload ? true : false
+        };
     }
 };
 UserService = __decorate([

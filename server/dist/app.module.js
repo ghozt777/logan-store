@@ -20,7 +20,8 @@ AppModule = __decorate([
         imports: [
             graphql_1.GraphQLModule.forRoot({
                 autoSchemaFile: 'schema.gql',
-                context: ({ res }) => ({ res })
+                context: ({ req, res }) => ({ req, res }),
+                cors: { origin: true, credentials: true },
             }),
             database_module_1.DatabaseModule,
             user_module_1.UserModule
