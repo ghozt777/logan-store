@@ -1,5 +1,5 @@
-import { HamburgerIcon, MoonIcon, TriangleDownIcon } from "@chakra-ui/icons";
-import { Flex, Img, Text } from "@chakra-ui/react";
+import { HamburgerIcon, MoonIcon, SunIcon, TriangleDownIcon } from "@chakra-ui/icons";
+import { Box, Flex, Img, Text, theme } from "@chakra-ui/react";
 import { useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { RootState } from "../../app/store";
@@ -44,7 +44,11 @@ export const Navbar: React.FC<NavbarProps> = ({ title }) => {
                 alignItems='center'
                 gap='20px'
             >
-                {<MoonIcon cursor='pointer' onClick={() => dispatch(changeTheme())} />}
+                <Box cursor='pointer' onClick={() => dispatch(changeTheme())} >
+                    {
+                        themeState.theme === 'dark' ? <MoonIcon /> : <SunIcon />
+                    }
+                </Box>
                 <TriangleDownIcon
                     cursor='pointer'
                     transition='350ms'

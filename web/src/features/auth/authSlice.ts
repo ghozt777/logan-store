@@ -5,13 +5,15 @@ export interface AuthSlice {
     isLoggedIn: boolean;
     isMakingRequest: boolean;
     error: string[];
+    token: string;
 }
 
 const initialState: AuthSlice = {
     currentState: "INIT",
     isLoggedIn: false,
     isMakingRequest: false,
-    error: []
+    error: [],
+    token: ""
 }
 
 export const authSlice = createSlice({
