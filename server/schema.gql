@@ -2,11 +2,15 @@
 # THIS FILE WAS AUTOMATICALLY GENERATED (DO NOT MODIFY)
 # ------------------------------------------------------
 
+type LoginResponse {
+  accessToken: String!
+}
+
 type Query {
   hello: String!
 }
 
 type Mutation {
   register(password: String!, email: String!, username: String!): Boolean!
-  login(password: String!, usernameOrEmail: String!): Boolean!
+  login(password: String!, usernameOrEmail: String!): LoginResponse!
 }

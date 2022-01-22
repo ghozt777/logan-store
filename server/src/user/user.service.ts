@@ -15,7 +15,6 @@ export class UserService {
             password: hashedPassword,
             email: email
         }
-
         return payload;
     }
 

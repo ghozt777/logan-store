@@ -20,6 +20,18 @@ const typeorm_2 = require("typeorm");
 const user_entity_1 = require("./user.entity");
 const user_service_1 = require("./user.service");
 const argon2 = require("argon2");
+const dotenv = require("dotenv");
+dotenv.config();
+const jwt = require("jsonwebtoken");
+let LoginResponse = class LoginResponse {
+};
+__decorate([
+    (0, graphql_1.Field)(),
+    __metadata("design:type", String)
+], LoginResponse.prototype, "accessToken", void 0);
+LoginResponse = __decorate([
+    (0, graphql_1.ObjectType)()
+], LoginResponse);
 let UserResolver = class UserResolver {
     constructor(userService, userRepository) {
         this.userService = userService;
@@ -50,7 +62,7 @@ let UserResolver = class UserResolver {
         }
         return false;
     }
-    async login(usernameOrEmail, password) {
+    async login(res, usernameOrEmail, password) {
         const isEmail = usernameOrEmail.includes('@');
         const entityManager = (0, typeorm_2.getManager)();
         const queryString = `SELECT * FROM users
@@ -58,10 +70,30 @@ let UserResolver = class UserResolver {
         const user = await entityManager.query(queryString);
         if (Array.isArray(user) && user[0]) {
             const isPasswordValid = await argon2.verify(user[0].password, password);
-            return isPasswordValid;
+            if (!isPasswordValid)
+                throw new Error('invalid credentails');
+            const accessToken = jwt.sign({
+                id: user[0].id,
+                username: user[0].username,
+                email: user[0].email
+            }, process.env.JWT_SECRET, {
+                expiresIn: '15m'
+            });
+            const refreshToken = jwt.sign({
+                id: user[0].id
+            }, process.env.JWT_COOKIE_SECRET, {
+                expiresIn: '7d'
+            });
+            res.cookie('jid', refreshToken, {
+                httpOnly: true,
+                sameSite: 'lax'
+            });
+            return {
+                accessToken: accessToken
+            };
         }
         else
-            return false;
+            throw new Error('invalid credentails');
     }
 };
 __decorate([
@@ -80,11 +112,12 @@ __decorate([
     __metadata("design:returntype", Promise)
 ], UserResolver.prototype, "register", null);
 __decorate([
-    (0, graphql_1.Mutation)(() => Boolean),
-    __param(0, (0, graphql_1.Args)({ name: 'usernameOrEmail', type: () => String })),
-    __param(1, (0, graphql_1.Args)({ name: 'password', type: () => String })),
+    (0, graphql_1.Mutation)(() => LoginResponse),
+    __param(0, (0, graphql_1.Context)('res')),
+    __param(1, (0, graphql_1.Args)({ name: 'usernameOrEmail', type: () => String })),
+    __param(2, (0, graphql_1.Args)({ name: 'password', type: () => String })),
     __metadata("design:type", Function),
-    __metadata("design:paramtypes", [String, String]),
+    __metadata("design:paramtypes", [Object, String, String]),
     __metadata("design:returntype", Promise)
 ], UserResolver.prototype, "login", null);
 UserResolver = __decorate([

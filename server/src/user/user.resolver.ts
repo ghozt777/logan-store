@@ -1,11 +1,21 @@
-import { Args, Mutation, Query } from "@nestjs/graphql";
+import { Args, Context, Field, GraphQLExecutionContext, Mutation, ObjectType, Query } from "@nestjs/graphql";
 import { Resolver } from "@nestjs/graphql";
 import { InjectRepository } from "@nestjs/typeorm";
-import { Arg } from "type-graphql";
 import { getManager, Repository } from "typeorm";
 import { User } from "./user.entity";
 import { UserService } from "./user.service";
 import * as argon2 from 'argon2'
+import * as dotenv from 'dotenv'
+dotenv.config();
+import * as jwt from 'jsonwebtoken'
+import { ExecutionContext, Req, Res } from "@nestjs/common";
+import { Response } from "express";
+
+@ObjectType()
+class LoginResponse {
+    @Field()
+    accessToken: string;
+}
 
 @Resolver(() => User)
 export class UserResolver {
@@ -42,11 +52,12 @@ export class UserResolver {
         return false;
     }
 
-    @Mutation(() => Boolean)
+    @Mutation(() => LoginResponse)
     async login(
+        @Context('res') res: Response,
         @Args({ name: 'usernameOrEmail', type: () => String }) usernameOrEmail: string,
-        @Args({ name: 'password', type: () => String }) password: string
-    ) {
+        @Args({ name: 'password', type: () => String }) password: string,
+    ): Promise<LoginResponse> {
         const isEmail = usernameOrEmail.includes('@');
         const entityManager = getManager();
         const queryString = `SELECT * FROM users
@@ -54,9 +65,36 @@ export class UserResolver {
         const user = await entityManager.query(queryString);
         if (Array.isArray(user) && user[0]) {
             const isPasswordValid = await argon2.verify(user[0].password, password);
-            return isPasswordValid;
+            if (!isPasswordValid) throw new Error('invalid credentails');
+            const accessToken = jwt.sign(
+                {
+                    id: user[0].id,
+                    username: user[0].username,
+                    email: user[0].email
+                },
+                process.env.JWT_SECRET,
+                {
+                    expiresIn: '15m'
+                }
+            )
+            const refreshToken = jwt.sign(
+                {
+                    id: user[0].id
+                },
+                process.env.JWT_COOKIE_SECRET,
+                {
+                    expiresIn: '7d'
+                }
+            )
+            res.cookie('jid', refreshToken, {
+                httpOnly: true,
+                sameSite: 'lax'
+            });
+            return {
+                accessToken: accessToken
+            };
         }
-        else return false;
+        else throw new Error('invalid credentails');
     }
 
 }

@@ -9,7 +9,8 @@ import { UserModule } from './user/user.module';
 @Module({
   imports: [
     GraphQLModule.forRoot({
-      autoSchemaFile: 'schema.gql'
+      autoSchemaFile: 'schema.gql',
+      context: ({ res }) => ({ res })
     }),
     DatabaseModule,
     UserModule
