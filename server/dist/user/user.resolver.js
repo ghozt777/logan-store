@@ -19,6 +19,7 @@ const typeorm_1 = require("@nestjs/typeorm");
 const typeorm_2 = require("typeorm");
 const user_entity_1 = require("./user.entity");
 const user_service_1 = require("./user.service");
+const argon2 = require("argon2");
 let UserResolver = class UserResolver {
     constructor(userService, userRepository) {
         this.userService = userService;
@@ -49,6 +50,19 @@ let UserResolver = class UserResolver {
         }
         return false;
     }
+    async login(usernameOrEmail, password) {
+        const isEmail = usernameOrEmail.includes('@');
+        const entityManager = (0, typeorm_2.getManager)();
+        const queryString = `SELECT * FROM users
+        WHERE ${isEmail ? `email='${usernameOrEmail}'` : `username='${usernameOrEmail}'`}`;
+        const user = await entityManager.query(queryString);
+        if (Array.isArray(user) && user[0]) {
+            const isPasswordValid = await argon2.verify(user[0].password, password);
+            return isPasswordValid;
+        }
+        else
+            return false;
+    }
 };
 __decorate([
     (0, graphql_1.Query)(() => String),
@@ -65,6 +79,14 @@ __decorate([
     __metadata("design:paramtypes", [String, String, String]),
     __metadata("design:returntype", Promise)
 ], UserResolver.prototype, "register", null);
+__decorate([
+    (0, graphql_1.Mutation)(() => Boolean),
+    __param(0, (0, graphql_1.Args)({ name: 'usernameOrEmail', type: () => String })),
+    __param(1, (0, graphql_1.Args)({ name: 'password', type: () => String })),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [String, String]),
+    __metadata("design:returntype", Promise)
+], UserResolver.prototype, "login", null);
 UserResolver = __decorate([
     (0, graphql_2.Resolver)(() => user_entity_1.User),
     __param(1, (0, typeorm_1.InjectRepository)(user_entity_1.User)),

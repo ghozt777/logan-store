@@ -7,4 +7,5 @@ export declare class UserResolver {
     constructor(userService: UserService, userRepository: Repository<User>);
     hello(): string;
     register(username: string, email: string, password: string): Promise<boolean>;
+    login(usernameOrEmail: string, password: string): Promise<boolean>;
 }

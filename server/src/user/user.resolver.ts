@@ -2,9 +2,10 @@ import { Args, Mutation, Query } from "@nestjs/graphql";
 import { Resolver } from "@nestjs/graphql";
 import { InjectRepository } from "@nestjs/typeorm";
 import { Arg } from "type-graphql";
-import { Repository } from "typeorm";
+import { getManager, Repository } from "typeorm";
 import { User } from "./user.entity";
 import { UserService } from "./user.service";
+import * as argon2 from 'argon2'
 
 @Resolver(() => User)
 export class UserResolver {
@@ -39,6 +40,23 @@ export class UserResolver {
             }
         }
         return false;
+    }
+
+    @Mutation(() => Boolean)
+    async login(
+        @Args({ name: 'usernameOrEmail', type: () => String }) usernameOrEmail: string,
+        @Args({ name: 'password', type: () => String }) password: string
+    ) {
+        const isEmail = usernameOrEmail.includes('@');
+        const entityManager = getManager();
+        const queryString = `SELECT * FROM users
+        WHERE ${isEmail ? `email='${usernameOrEmail}'` : `username='${usernameOrEmail}'`}`
+        const user = await entityManager.query(queryString);
+        if (Array.isArray(user) && user[0]) {
+            const isPasswordValid = await argon2.verify(user[0].password, password);
+            return isPasswordValid;
+        }
+        else return false;
     }
 
 }
