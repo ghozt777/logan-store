@@ -76,7 +76,7 @@ export class AuthController {
 
     @Post('/revoke')
     async revoke(@Body() body) {
-        this.userService.revokeREfreshTokenForUser(body.id);
+        this.userService.revokeRefreshTokenForUser(body.id);
         return true;
     }
 }

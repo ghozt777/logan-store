@@ -14,6 +14,7 @@ const common_1 = require("@nestjs/common");
 const argon2 = require("argon2");
 const jwt = require("jsonwebtoken");
 const typeorm_1 = require("typeorm");
+const nodemailer = require("nodemailer");
 let UserService = class UserService {
     constructor() { }
     async createUserPayload(dto) {
@@ -49,7 +50,7 @@ let UserService = class UserService {
             isValid: payload ? true : false
         };
     }
-    async revokeREfreshTokenForUser(id) {
+    async revokeRefreshTokenForUser(id) {
         let isOk = false;
         const entityManager = (0, typeorm_1.getManager)();
         const queryString = `SELECT * FROM USERS where id='${id}';`;
@@ -62,6 +63,27 @@ let UserService = class UserService {
             isOk = true;
         }
         return isOk;
+    }
+    async sendEmail(to, html) {
+        console.log('email service called to', to, html);
+        let testAccount = await nodemailer.createTestAccount();
+        let transporter = nodemailer.createTransport({
+            host: "smtp.ethereal.email",
+            port: 587,
+            secure: false,
+            auth: {
+                user: testAccount.user,
+                pass: testAccount.pass,
+            },
+        });
+        let info = await transporter.sendMail({
+            from: '"Ghozt R',
+            to,
+            subject: "Change Password",
+            html,
+        });
+        console.log("Message sent: %s", info.messageId);
+        console.log("Preview URL: %s", nodemailer.getTestMessageUrl(info));
     }
 };
 UserService = __decorate([

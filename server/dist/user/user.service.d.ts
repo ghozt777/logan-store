@@ -14,5 +14,6 @@ export declare class UserService {
         user: string | jwt.JwtPayload;
         isValid: boolean;
     };
-    revokeREfreshTokenForUser(id: string): Promise<boolean>;
+    revokeRefreshTokenForUser(id: string): Promise<boolean>;
+    sendEmail(to: string, html: string): Promise<void>;
 }

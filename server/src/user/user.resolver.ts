@@ -1,4 +1,4 @@
-import { Args, Context, Field, GraphQLExecutionContext, Mutation, ObjectType, Query } from "@nestjs/graphql";
+import { Args, Context, Field, Mutation, ObjectType, Query } from "@nestjs/graphql";
 import { Resolver } from "@nestjs/graphql";
 import { InjectRepository } from "@nestjs/typeorm";
 import { getManager, Repository } from "typeorm";
@@ -6,16 +6,24 @@ import { User } from "./user.entity";
 import { UserService } from "./user.service";
 import * as argon2 from 'argon2'
 import { Response, Request } from "express";
+import { Ctx } from "type-graphql";
+import { RedisContext } from "@nestjs/microservices";
+import { CACHE_MANAGER, Inject } from "@nestjs/common";
+import { Cache } from 'cache-manager';
+import { v4 as uuidv4 } from 'uuid'
 
 @ObjectType()
 class LoginResponse {
     @Field()
     accessToken: string;
+    // errors: any[];
 }
+
+
 
 @Resolver(() => User)
 export class UserResolver {
-    constructor(private userService: UserService, @InjectRepository(User) private userRepository: Repository<User>) { }
+    constructor(private userService: UserService, @InjectRepository(User) private userRepository: Repository<User>, @Inject(CACHE_MANAGER) private cacheManager: Cache) { }
 
     @Query(() => String)
     hello() {
@@ -33,7 +41,7 @@ export class UserResolver {
         return 'auth failed'
     }
 
-    
+
     @Mutation(() => Boolean)
     async register(
         @Args({ name: "username", type: () => String }) username: string,
@@ -85,6 +93,21 @@ export class UserResolver {
             };
         }
         else throw new Error('invalid credentails');
+    }
+
+    @Mutation(() => Boolean)
+    async forgotPassword(
+        @Args({ name: 'email', type: () => String }) email: string
+    ) {
+        const entityManager = getManager();
+        const user = await entityManager.query(`SELECT * FROM users WHERE email='${email}'`);
+        if (user && user[0]) {
+            const token = uuidv4();
+            const html = `<a href="http://localhost:3000/change-password/${token}">reset password</a>`;
+            await this.userService.sendEmail(user[0].email, html);
+            await this.cacheManager.set(process.env.FORGOT_PASSWORD_PREFIX + token, user[0].id);
+        }
+        return true;
     }
 
 }

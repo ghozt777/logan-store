@@ -20,6 +20,8 @@ const typeorm_2 = require("typeorm");
 const user_entity_1 = require("./user.entity");
 const user_service_1 = require("./user.service");
 const argon2 = require("argon2");
+const common_1 = require("@nestjs/common");
+const uuid_1 = require("uuid");
 let LoginResponse = class LoginResponse {
 };
 __decorate([
@@ -30,9 +32,10 @@ LoginResponse = __decorate([
     (0, graphql_1.ObjectType)()
 ], LoginResponse);
 let UserResolver = class UserResolver {
-    constructor(userService, userRepository) {
+    constructor(userService, userRepository, cacheManager) {
         this.userService = userService;
         this.userRepository = userRepository;
+        this.cacheManager = cacheManager;
     }
     hello() {
         return 'Hello From User';
@@ -91,6 +94,17 @@ let UserResolver = class UserResolver {
         else
             throw new Error('invalid credentails');
     }
+    async forgotPassword(email) {
+        const entityManager = (0, typeorm_2.getManager)();
+        const user = await entityManager.query(`SELECT * FROM users WHERE email='${email}'`);
+        if (user && user[0]) {
+            const token = (0, uuid_1.v4)();
+            const html = `<a href="http://localhost:3000/change-password/${token}">reset password</a>`;
+            await this.userService.sendEmail(user[0].email, html);
+            await this.cacheManager.set(process.env.FORGOT_PASSWORD_PREFIX + token, user[0].id);
+        }
+        return true;
+    }
 };
 __decorate([
     (0, graphql_1.Query)(() => String),
@@ -123,10 +137,18 @@ __decorate([
     __metadata("design:paramtypes", [Object, String, String]),
     __metadata("design:returntype", Promise)
 ], UserResolver.prototype, "login", null);
+__decorate([
+    (0, graphql_1.Mutation)(() => Boolean),
+    __param(0, (0, graphql_1.Args)({ name: 'email', type: () => String })),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [String]),
+    __metadata("design:returntype", Promise)
+], UserResolver.prototype, "forgotPassword", null);
 UserResolver = __decorate([
     (0, graphql_2.Resolver)(() => user_entity_1.User),
     __param(1, (0, typeorm_1.InjectRepository)(user_entity_1.User)),
-    __metadata("design:paramtypes", [user_service_1.UserService, typeorm_2.Repository])
+    __param(2, (0, common_1.Inject)(common_1.CACHE_MANAGER)),
+    __metadata("design:paramtypes", [user_service_1.UserService, typeorm_2.Repository, Object])
 ], UserResolver);
 exports.UserResolver = UserResolver;
 //# sourceMappingURL=user.resolver.js.map

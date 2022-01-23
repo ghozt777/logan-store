@@ -13,6 +13,7 @@ const app_controller_1 = require("./app.controller");
 const app_service_1 = require("./app.service");
 const database_module_1 = require("./database/database.module");
 const user_module_1 = require("./user/user.module");
+const microservices_1 = require("@nestjs/microservices");
 let AppModule = class AppModule {
 };
 AppModule = __decorate([
@@ -23,6 +24,15 @@ AppModule = __decorate([
                 context: ({ req, res }) => ({ req, res }),
                 cors: { origin: true, credentials: true },
             }),
+            microservices_1.ClientsModule.register([
+                {
+                    name: 'logan-store',
+                    transport: microservices_1.Transport.REDIS,
+                    options: {
+                        url: 'redis://localhost:6379',
+                    }
+                },
+            ]),
             database_module_1.DatabaseModule,
             user_module_1.UserModule
         ],

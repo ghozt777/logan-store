@@ -78,7 +78,7 @@ let AuthController = class AuthController {
         };
     }
     async revoke(body) {
-        this.userService.revokeREfreshTokenForUser(body.id);
+        this.userService.revokeRefreshTokenForUser(body.id);
         return true;
     }
 };
