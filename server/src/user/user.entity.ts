@@ -23,4 +23,7 @@ export class User {
     @Column({ nullable: true, unique: true })
     cartId: number;
 
+    @Column({ nullable: true })
+    tokenVersion: number;
+
 }

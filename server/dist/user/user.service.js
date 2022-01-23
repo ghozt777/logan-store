@@ -13,6 +13,7 @@ exports.UserService = void 0;
 const common_1 = require("@nestjs/common");
 const argon2 = require("argon2");
 const jwt = require("jsonwebtoken");
+const typeorm_1 = require("typeorm");
 let UserService = class UserService {
     constructor() { }
     async createUserPayload(dto) {
@@ -28,16 +29,15 @@ let UserService = class UserService {
     }
     createAccessToken(user) {
         return jwt.sign({
-            id: user.id,
-            username: user.username,
-            email: user.email
+            id: user.id
         }, process.env.JWT_SECRET, {
             expiresIn: '15m'
         });
     }
     createRefreshToken(user) {
         return jwt.sign({
-            id: user.id
+            id: user.id,
+            tokenVersion: user.tokenVersion
         }, process.env.JWT_COOKIE_SECRET, {
             expiresIn: '7d'
         });
@@ -48,6 +48,20 @@ let UserService = class UserService {
             user: payload ? payload : {},
             isValid: payload ? true : false
         };
+    }
+    async revokeREfreshTokenForUser(id) {
+        let isOk = false;
+        const entityManager = (0, typeorm_1.getManager)();
+        const queryString = `SELECT * FROM USERS where id='${id}';`;
+        const user = await entityManager.query(queryString);
+        if (user && user[0]) {
+            const updateQueryString = `UPDATE users 
+            SET tokenVersion = ${user[0].tokenVersion + 1} 
+            WHERE id='${id}';`;
+            await entityManager.query(updateQueryString);
+            isOk = true;
+        }
+        return isOk;
     }
 };
 UserService = __decorate([

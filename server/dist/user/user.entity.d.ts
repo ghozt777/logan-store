@@ -4,4 +4,5 @@ export declare class User {
     email: string;
     password: string;
     cartId: number;
+    tokenVersion: number;
 }

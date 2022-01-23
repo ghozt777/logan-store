@@ -37,6 +37,10 @@ __decorate([
     (0, typeorm_1.Column)({ nullable: true, unique: true }),
     __metadata("design:type", Number)
 ], User.prototype, "cartId", void 0);
+__decorate([
+    (0, typeorm_1.Column)({ nullable: true }),
+    __metadata("design:type", Number)
+], User.prototype, "tokenVersion", void 0);
 User = __decorate([
     (0, graphql_1.ObjectType)(),
     (0, typeorm_1.Entity)('users')
