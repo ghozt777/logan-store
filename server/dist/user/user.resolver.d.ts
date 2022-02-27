@@ -16,5 +16,6 @@ export declare class UserResolver {
     register(username: string, email: string, password: string): Promise<boolean>;
     login(res: Response, usernameOrEmail: string, password: string): Promise<LoginResponse>;
     forgotPassword(email: string): Promise<boolean>;
+    testMiddleware(headers: any, payload: any, username: string): Promise<string>;
 }
 export {};

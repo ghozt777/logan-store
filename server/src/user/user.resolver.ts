@@ -1,4 +1,4 @@
-import { Args, Context, Field, Mutation, ObjectType, Query } from "@nestjs/graphql";
+import { Args, Context, Field, FieldMiddleware, MiddlewareContext, Mutation, NextFn, ObjectType, Query } from "@nestjs/graphql";
 import { Resolver } from "@nestjs/graphql";
 import { InjectRepository } from "@nestjs/typeorm";
 import { getManager, Repository } from "typeorm";
@@ -6,11 +6,11 @@ import { User } from "./user.entity";
 import { UserService } from "./user.service";
 import * as argon2 from 'argon2'
 import { Response, Request } from "express";
-import { Ctx } from "type-graphql";
-import { RedisContext } from "@nestjs/microservices";
-import { CACHE_MANAGER, Inject } from "@nestjs/common";
+import { CACHE_MANAGER, Header, Inject, Req, UseInterceptors } from "@nestjs/common";
 import { Cache } from 'cache-manager';
 import { v4 as uuidv4 } from 'uuid'
+import { LoggingInterceptor } from "./logging.interceptor";
+
 
 @ObjectType()
 class LoginResponse {
@@ -20,7 +20,7 @@ class LoginResponse {
 }
 
 
-
+@UseInterceptors(LoggingInterceptor)
 @Resolver(() => User)
 export class UserResolver {
     constructor(private userService: UserService, @InjectRepository(User) private userRepository: Repository<User>, @Inject(CACHE_MANAGER) private cacheManager: Cache) { }
@@ -108,6 +108,21 @@ export class UserResolver {
             await this.cacheManager.set(process.env.FORGOT_PASSWORD_PREFIX + token, user[0].id);
         }
         return true;
+    }
+
+    @Query(() => String)
+    async testMiddleware(
+        @Context('headers') headers ,
+        @Context('payload') payload ,
+        @Args({
+            name : 'user' ,
+            type : () => String
+        }) username : string 
+        
+    ){  console.log('test') ;
+        console.log(headers) ;
+        console.log(payload)
+        return "oks"
     }
 
 }

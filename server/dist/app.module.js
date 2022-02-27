@@ -14,15 +14,23 @@ const app_service_1 = require("./app.service");
 const database_module_1 = require("./database/database.module");
 const user_module_1 = require("./user/user.module");
 const microservices_1 = require("@nestjs/microservices");
+const config_1 = require("@nestjs/config");
 let AppModule = class AppModule {
 };
 AppModule = __decorate([
     (0, common_1.Module)({
         imports: [
+            config_1.ConfigModule.forRoot(),
             graphql_1.GraphQLModule.forRoot({
                 autoSchemaFile: 'schema.gql',
-                context: ({ req, res }) => ({ req, res }),
-                cors: { origin: true, credentials: true },
+                context: async ({ req, res }) => {
+                    return {
+                        req,
+                        res,
+                        headers: req.headers,
+                    };
+                },
+                cors: { origin: true, credentials: true }
             }),
             microservices_1.ClientsModule.register([
                 {

@@ -22,6 +22,7 @@ const user_service_1 = require("./user.service");
 const argon2 = require("argon2");
 const common_1 = require("@nestjs/common");
 const uuid_1 = require("uuid");
+const logging_interceptor_1 = require("./logging.interceptor");
 let LoginResponse = class LoginResponse {
 };
 __decorate([
@@ -105,6 +106,12 @@ let UserResolver = class UserResolver {
         }
         return true;
     }
+    async testMiddleware(headers, payload, username) {
+        console.log('test');
+        console.log(headers);
+        console.log(payload);
+        return "oks";
+    }
 };
 __decorate([
     (0, graphql_1.Query)(() => String),
@@ -144,7 +151,20 @@ __decorate([
     __metadata("design:paramtypes", [String]),
     __metadata("design:returntype", Promise)
 ], UserResolver.prototype, "forgotPassword", null);
+__decorate([
+    (0, graphql_1.Query)(() => String),
+    __param(0, (0, graphql_1.Context)('headers')),
+    __param(1, (0, graphql_1.Context)('payload')),
+    __param(2, (0, graphql_1.Args)({
+        name: 'user',
+        type: () => String
+    })),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [Object, Object, String]),
+    __metadata("design:returntype", Promise)
+], UserResolver.prototype, "testMiddleware", null);
 UserResolver = __decorate([
+    (0, common_1.UseInterceptors)(logging_interceptor_1.LoggingInterceptor),
     (0, graphql_2.Resolver)(() => user_entity_1.User),
     __param(1, (0, typeorm_1.InjectRepository)(user_entity_1.User)),
     __param(2, (0, common_1.Inject)(common_1.CACHE_MANAGER)),
