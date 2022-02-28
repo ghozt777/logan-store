@@ -24,10 +24,12 @@ AppModule = __decorate([
             graphql_1.GraphQLModule.forRoot({
                 autoSchemaFile: 'schema.gql',
                 context: async ({ req, res }) => {
+                    var _a;
                     return {
                         req,
                         res,
                         headers: req.headers,
+                        cookies: (_a = req.cookies) !== null && _a !== void 0 ? _a : []
                     };
                 },
                 cors: { origin: true, credentials: true }

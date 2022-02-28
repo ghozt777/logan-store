@@ -8,7 +8,6 @@ type LoginResponse {
 
 type Query {
   hello: String!
-  testMiddleware(user: String!): String!
 }
 
 type Mutation {

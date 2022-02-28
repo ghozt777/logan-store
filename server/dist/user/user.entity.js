@@ -38,7 +38,7 @@ __decorate([
     __metadata("design:type", Number)
 ], User.prototype, "cartId", void 0);
 __decorate([
-    (0, typeorm_1.Column)({ nullable: true }),
+    (0, typeorm_1.Column)({ nullable: true, default: 0 }),
     __metadata("design:type", Number)
 ], User.prototype, "tokenVersion", void 0);
 User = __decorate([

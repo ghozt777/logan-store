@@ -19,7 +19,7 @@ import { ConfigModule } from '@nestjs/config';
           req, 
           res , 
           headers : req.headers  ,
-  
+          cookies : req.cookies ?? [] 
         }
       },
       cors: { origin: true, credentials: true }

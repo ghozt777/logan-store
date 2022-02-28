@@ -23,7 +23,7 @@ export class User {
     @Column({ nullable: true, unique: true })
     cartId: number;
 
-    @Column({ nullable: true })
+    @Column({ nullable: true , default: 0 })
     tokenVersion: number;
 
 }
