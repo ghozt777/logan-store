@@ -23,8 +23,14 @@ export type LoginResponse = {
 export type Mutation = {
   __typename?: 'Mutation';
   checkAuth: Scalars['String'];
+  forgotPassword: Scalars['Boolean'];
   login: LoginResponse;
   register: Scalars['Boolean'];
+};
+
+
+export type MutationForgotPasswordArgs = {
+  email: Scalars['String'];
 };
 
 

@@ -3,8 +3,8 @@ import { extendTheme } from "@chakra-ui/react";
 export const theme = extendTheme({
     colors: {
         nav: {
-            light: "#cbd5e1",
-            dark: "#111827"
+            light: "#0C0705",
+            dark: "#121212"
         },
         dropdown: {
             light: "#fb923c",
@@ -12,7 +12,7 @@ export const theme = extendTheme({
         },
         main: {
             light: "#ffff",
-            dark: "tomato"
+            dark: "#262626"
         },
     }
 })

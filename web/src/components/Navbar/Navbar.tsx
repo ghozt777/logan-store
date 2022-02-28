@@ -1,10 +1,12 @@
-import { HamburgerIcon, MoonIcon, SunIcon, TriangleDownIcon } from "@chakra-ui/icons";
+import { HamburgerIcon, SunIcon, TriangleDownIcon } from "@chakra-ui/icons";
 import { Box, Flex, Img, Text, theme } from "@chakra-ui/react";
 import { useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { RootState } from "../../app/store";
 import { changeTheme } from '../../features/theme/themeSlice'
 import { Dropdown } from "../Dropdown/Dropdown";
+import { TiWeatherNight } from "react-icons/ti"
+import "./style.css"
 
 
 type NavbarProps = {
@@ -19,45 +21,62 @@ export const Navbar: React.FC<NavbarProps> = ({ title }) => {
     const [isDropdownOpen, setIsDropdownOpen] = useState(false);
 
     return (
-        <Flex
-            bg={`nav.${themeState.theme}`}
-            h='60px'
+        <Box
+            bg={`main.${themeState.theme}`}
+            h='13vh'
+            minHeight='60px'
             w='100%'
-            p='20px'
-            color={themeState.theme === 'dark' ? 'white' : 'black'}
-            fontWeight='bold'
-            fontFamily='sans-serif'
-            fontSize='1.3rem'
-            position='relative'
-            justifyContent='flex-start'
-            alignItems='center'
-            gap='1rem'
-            transition='350ms'
+            display="flex"
+            alignItems="center"
+            justifyContent="center"
         >
-            <HamburgerIcon cursor='pointer' />
-            <Img src={'https://img.icons8.com/nolan/452/logan-paul-maverick.png'} h='100%' />
-            <Text fontSize='lg' cursor='pointer' >{title}</Text>
             <Flex
-                ml='auto'
-                w='40%'
-                justifyContent='flex-end'
+                bg={`nav.${themeState.theme}`}
+                h="80%"
+                w="98%"
+                p='20px'
+                color="white"
+                fontWeight='bold'
+                fontFamily='sans-serif'
+                fontSize='1.3rem'
+                position='relative'
+                justifyContent='flex-start'
                 alignItems='center'
-                gap='20px'
+                gap='1rem'
+                transition='350ms'
+                borderStyle="none"
+                borderRadius="10px"
+                boxShadow={`0px 4px 4px -2px ${themeState.theme === "light" ? "#cbd5e1" : "#0C0705"}`} // 0C0705
             >
-                <Box cursor='pointer' onClick={() => dispatch(changeTheme())} >
-                    {
-                        themeState.theme === 'dark' ? <MoonIcon /> : <SunIcon />
-                    }
-                </Box>
-                <TriangleDownIcon
-                    cursor='pointer'
-                    transition='350ms'
-                    transform={isDropdownOpen ? 'rotate(-90deg)' : 'rotate(0deg)'}
-                    onClick={() => setIsDropdownOpen(s => !s)}
-                />
-                <Dropdown isOpen={isDropdownOpen} />
-            </Flex>
-        </Flex>
+                <HamburgerIcon cursor='pointer' />
+                <Text className="title-text" fontSize='lg' cursor='pointer' >{title}</Text>
+                <Text
+                    fontSize="20px"
+                    className="title-tagline"
+                    letterSpacing="4px"
+                >we believe in minimalism<span style={{ fontSize: "4rem" }}>.</span></Text>
+                <Flex
+                    ml='auto'
+                    w='40%'
+                    justifyContent='flex-end'
+                    alignItems='center'
+                    gap='20px'
+                >
+                    <Box cursor='pointer' onClick={() => dispatch(changeTheme())} >
+                        {
+                            themeState.theme === 'dark' ? <TiWeatherNight size={"1.6rem"} /> : <SunIcon />
+                        }
+                    </Box>
+                    <TriangleDownIcon
+                        cursor='pointer'
+                        transition='350ms'
+                        transform={isDropdownOpen ? 'rotate(-90deg)' : 'rotate(0deg)'}
+                        onClick={() => setIsDropdownOpen(s => !s)}
+                    />
+                    <Dropdown isOpen={isDropdownOpen} />
+                </Flex>
+            </Flex >
+        </Box>
     )
 }
 

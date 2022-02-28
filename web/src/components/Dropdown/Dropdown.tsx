@@ -33,7 +33,7 @@ export const Dropdown: React.FC<DropDownProps> = ({ isOpen }) => {
             gap='12px'
             bg={`dropdown.${themeState.theme}`}
             position='absolute'
-            top='52px'
+            top='80%'
             right='5px'
             borderStyle='none'
             borderRadius='10px'

@@ -1,20 +1,27 @@
-import { Box } from '@chakra-ui/react';
+import { Route, Routes } from 'react-router-dom'
+import { ToastContainer } from 'react-toastify';
+import { Navbar } from '../components/index';
+import 'react-toastify/dist/ReactToastify.css';
+import {
+  LandingPage,
+  LoginPage
+} from "../pages/index"
 import { useSelector } from 'react-redux';
-import { Routes } from 'react-router-dom'
-import { Navbar } from '../components/Navbar/Navbar';
 import { RootState } from './store';
+import { usePingServer } from '../hooks/pingServer';
 
 function App() {
-
   const themeState = useSelector((state: RootState) => state.theme)
-
+  usePingServer();
   return (
-    <Box bg={`main.${themeState.theme}`} w='100vw' h='100vh' overflowX={"hidden"}>
+    <>
+      <ToastContainer theme={`${themeState.theme === "light" ? "colored" : "dark"}`} />
       <Navbar title='Logan Store' />
       <Routes>
-
+        <Route path='/' element={<LandingPage />} />
+        <Route path='/login' element={<LoginPage />} />
       </Routes>
-    </Box>
+    </>
   );
 }
 
