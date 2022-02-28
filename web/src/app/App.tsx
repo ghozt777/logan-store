@@ -4,7 +4,8 @@ import { Navbar } from '../components/index';
 import 'react-toastify/dist/ReactToastify.css';
 import {
   LandingPage,
-  LoginPage
+  LoginPage,
+  RegisterPage
 } from "../pages/index"
 import { useSelector } from 'react-redux';
 import { RootState } from './store';
@@ -20,6 +21,7 @@ function App() {
       <Routes>
         <Route path='/' element={<LandingPage />} />
         <Route path='/login' element={<LoginPage />} />
+        <Route path='/register' element={<RegisterPage />} />
       </Routes>
     </>
   );
