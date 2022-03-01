@@ -23,15 +23,8 @@ const argon2 = require("argon2");
 const common_1 = require("@nestjs/common");
 const uuid_1 = require("uuid");
 const logging_interceptor_1 = require("./logging.interceptor");
-let LoginResponse = class LoginResponse {
-};
-__decorate([
-    (0, graphql_1.Field)(),
-    __metadata("design:type", String)
-], LoginResponse.prototype, "accessToken", void 0);
-LoginResponse = __decorate([
-    (0, graphql_1.ObjectType)()
-], LoginResponse);
+const createUserResponse_type_1 = require("./types/createUserResponse.type");
+const loginResponse_type_1 = require("./types/loginResponse.type");
 let UserResolver = class UserResolver {
     constructor(userService, userRepository, cacheManager) {
         this.userService = userService;
@@ -52,25 +45,46 @@ let UserResolver = class UserResolver {
     }
     async register(username, email, password) {
         const payload = await this.userService.createUserPayload({ username, password, email });
-        let isOk = false;
         if (payload) {
-            const { username, password, email } = payload;
+            const { user, errors, isValid } = payload;
             try {
-                await this.userRepository.insert({
-                    username: username,
-                    email: email,
-                    password: password
-                });
-                isOk = true;
+                if (isValid) {
+                    const result = await this.userRepository.insert({
+                        username: user.username,
+                        email: user.email,
+                        password: user.password
+                    });
+                }
             }
             catch (err) {
                 console.error("USER CREATION FALIURE", err);
             }
             finally {
-                return isOk;
+                console.log(errors);
+                return {
+                    errors,
+                    message: isValid ? "user creation successful" : "user creation faliure"
+                };
             }
         }
-        return false;
+        return {
+            errors: [
+                {
+                    field: 'username',
+                    message: 'unknown error'
+                },
+                {
+                    field: 'email',
+                    message: 'unknown error'
+                },
+                {
+                    field: 'password',
+                    message: 'unknown error'
+                }
+            ],
+            message: "user creation faliure"
+        };
+        ;
     }
     async login(res, usernameOrEmail, password) {
         const isEmail = usernameOrEmail.includes('@');
@@ -121,7 +135,7 @@ __decorate([
     __metadata("design:returntype", void 0)
 ], UserResolver.prototype, "checkAuth", null);
 __decorate([
-    (0, graphql_1.Mutation)(() => Boolean),
+    (0, graphql_1.Mutation)(() => createUserResponse_type_1.UserCreationResponse),
     __param(0, (0, graphql_1.Args)({ name: "username", type: () => String })),
     __param(1, (0, graphql_1.Args)({ name: "email", type: () => String })),
     __param(2, (0, graphql_1.Args)({ name: "password", type: () => String })),
@@ -130,7 +144,7 @@ __decorate([
     __metadata("design:returntype", Promise)
 ], UserResolver.prototype, "register", null);
 __decorate([
-    (0, graphql_1.Mutation)(() => LoginResponse),
+    (0, graphql_1.Mutation)(() => loginResponse_type_1.LoginResponse),
     __param(0, (0, graphql_1.Context)('res')),
     __param(1, (0, graphql_1.Args)({ name: 'usernameOrEmail', type: () => String })),
     __param(2, (0, graphql_1.Args)({ name: 'password', type: () => String })),

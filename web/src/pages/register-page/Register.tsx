@@ -1,12 +1,18 @@
 import { Button, Flex, FormControl, FormErrorMessage, FormHelperText, FormLabel, Input, Stack } from "@chakra-ui/react"
 import { Field, Form, Formik } from "formik"
 import { InputField } from "../../components"
+import { useRegisterMutation } from "../../generated/graphql"
+import { mapErrors } from "../../utils/mapErrors"
+import { toast } from "react-toastify"
+import { useNavigate } from "react-router-dom"
 
 type RegisterPageProps = {}
 
 
 export const RegisterPage: React.FC<RegisterPageProps> = () => {
 
+    const [, register] = useRegisterMutation();
+    const navigate = useNavigate();
 
     function validateData(values: any) {
         const errors: any = {}
@@ -19,6 +25,7 @@ export const RegisterPage: React.FC<RegisterPageProps> = () => {
             errors.password = "password and confirm-password dont match"
             errors.confirmPassword = "password and confirm-password dont match"
         }
+        if (values.password.length < 8) errors.password = "password must contaim atlest 8 characters"
         console.log(errors)
         return errors;
     }
@@ -43,12 +50,20 @@ export const RegisterPage: React.FC<RegisterPageProps> = () => {
                 }}
 
 
-                onSubmit={(values, { setSubmitting, setErrors }) => {
-                    const errors = validateData(values);
+                onSubmit={async (values, { setSubmitting, setErrors }) => {
+                    const validationErrors = validateData(values);
+                    let errors = validationErrors;
+                    if (Object.keys(validationErrors).length === 0) {
+                        const response = await register(values);
+                        const serverErrors = response.data?.register.errors;
+                        console.log(serverErrors)
+                        errors = mapErrors(serverErrors, validationErrors);
+                        if (Object.keys(errors).length === 0) {
+                            toast.success('user created successfully')
+                            navigate('/')
+                        }
+                    }
                     setErrors(errors)
-                    setTimeout(() => {
-                        console.log("formik values", values)
-                    }, 3000)
                     setSubmitting(false)
                 }}
             >

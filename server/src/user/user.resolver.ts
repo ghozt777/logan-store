@@ -10,14 +10,9 @@ import { CACHE_MANAGER, Inject, UseInterceptors } from "@nestjs/common";
 import { Cache } from 'cache-manager';
 import { v4 as uuidv4 } from 'uuid'
 import { LoggingInterceptor } from "./logging.interceptor";
+import { UserCreationResponse } from "./types/createUserResponse.type";
+import { LoginResponse } from "./types/loginResponse.type";
 
-
-@ObjectType()
-class LoginResponse {
-    @Field()
-    accessToken: string;
-    // errors: any[];
-}
 
 
 @UseInterceptors(LoggingInterceptor)
@@ -42,30 +37,50 @@ export class UserResolver {
     }
 
 
-    @Mutation(() => Boolean)
+    @Mutation(() => UserCreationResponse)
     async register(
         @Args({ name: "username", type: () => String }) username: string,
         @Args({ name: "email", type: () => String }) email: string,
         @Args({ name: "password", type: () => String }) password: string,
-    ) {
+    ): Promise<UserCreationResponse> {
         const payload = await this.userService.createUserPayload({ username, password, email });
-        let isOk = false;
         if (payload) {
-            const { username, password, email } = payload;
+            const { user, errors, isValid } = payload;
             try {
-                await this.userRepository.insert({
-                    username: username,
-                    email: email,
-                    password: password
-                });
-                isOk = true;
+                if (isValid) {
+                    const result = await this.userRepository.insert({
+                        username: user.username,
+                        email: user.email,
+                        password: user.password
+                    });
+                }
             } catch (err) {
                 console.error("USER CREATION FALIURE", err);
             } finally {
-                return isOk;
+                console.log(errors)
+                return {
+                    errors,
+                    message: isValid ? "user creation successful" : "user creation faliure"
+                };
             }
         }
-        return false;
+        return {
+            errors: [
+                {
+                    field: 'username',
+                    message: 'unknown error'
+                },
+                {
+                    field: 'email',
+                    message: 'unknown error'
+                },
+                {
+                    field: 'password',
+                    message: 'unknown error'
+                }
+            ],
+            message: "user creation faliure"
+        };;
     }
 
     @Mutation(() => LoginResponse)
