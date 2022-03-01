@@ -57,6 +57,7 @@ export type Query = {
   __typename?: 'Query';
   hello: Scalars['String'];
   me: User;
+  whoami: User;
 };
 
 export type User = {
@@ -93,6 +94,11 @@ export type HelloQueryVariables = Exact<{ [key: string]: never; }>;
 
 
 export type HelloQuery = { __typename?: 'Query', hello: string };
+
+export type WhoAmIQueryVariables = Exact<{ [key: string]: never; }>;
+
+
+export type WhoAmIQuery = { __typename?: 'Query', whoami: { __typename?: 'User', username: string, email: string } };
 
 
 export const LoginDocument = gql`
@@ -133,4 +139,16 @@ export const HelloDocument = gql`
 
 export function useHelloQuery(options: Omit<Urql.UseQueryArgs<HelloQueryVariables>, 'query'> = {}) {
   return Urql.useQuery<HelloQuery>({ query: HelloDocument, ...options });
+};
+export const WhoAmIDocument = gql`
+    query WhoAmI {
+  whoami {
+    username
+    email
+  }
+}
+    `;
+
+export function useWhoAmIQuery(options: Omit<Urql.UseQueryArgs<WhoAmIQueryVariables>, 'query'> = {}) {
+  return Urql.useQuery<WhoAmIQuery>({ query: WhoAmIDocument, ...options });
 };

@@ -26,6 +26,7 @@ type LoginResponse {
 type Query {
   hello: String!
   me: User!
+  whoami: User!
 }
 
 type Mutation {

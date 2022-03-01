@@ -1,5 +1,5 @@
 import { HamburgerIcon, SunIcon, TriangleDownIcon } from "@chakra-ui/icons";
-import { Box, Flex, Img, Text, theme } from "@chakra-ui/react";
+import { Box, Flex, Img, Text, theme, useMediaQuery } from "@chakra-ui/react";
 import { useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { RootState } from "../../app/store";
@@ -19,12 +19,13 @@ export const Navbar: React.FC<NavbarProps> = ({ title }) => {
     const themeState = useSelector((state: RootState) => state.theme);
     const dispatch = useDispatch();
     const [isDropdownOpen, setIsDropdownOpen] = useState(false);
+    const [isLagerThan800] = useMediaQuery(`(min-width: 800px)`)
 
     return (
         <Box
             bg={`main.${themeState.theme}`}
             h='13vh'
-            minHeight='60px'
+            minHeight='100px'
             w='100%'
             display="flex"
             alignItems="center"
@@ -49,12 +50,12 @@ export const Navbar: React.FC<NavbarProps> = ({ title }) => {
                 boxShadow={`0px 4px 4px -2px ${themeState.theme === "light" ? "#cbd5e1" : "#0C0705"}`} // 0C0705
             >
                 <HamburgerIcon cursor='pointer' />
-                <Text className="title-text" fontSize='lg' cursor='pointer' >{title}</Text>
+                <Text className="title-text" fontSize={isLagerThan800 ? 'lg' : 'md'} cursor='pointer' >{title}</Text>
                 <Text
-                    fontSize="20px"
+                    fontSize={isLagerThan800 ? "20px" : "12px"}
                     className="title-tagline"
                     letterSpacing="4px"
-                >we believe in minimalism<span style={{ fontSize: "4rem" }}>.</span></Text>
+                >we believe in minimalism<span style={{ fontSize: isLagerThan800 ? "4rem" : "1rem" }}>.</span></Text>
                 <Flex
                     ml='auto'
                     w='40%'

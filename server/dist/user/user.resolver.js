@@ -25,6 +25,7 @@ const uuid_1 = require("uuid");
 const logging_interceptor_1 = require("./logging.interceptor");
 const createUserResponse_type_1 = require("./types/createUserResponse.type");
 const loginResponse_type_1 = require("./types/loginResponse.type");
+const jwt = require("jsonwebtoken");
 let UserResolver = class UserResolver {
     constructor(userService, userRepository, cacheManager) {
         this.userService = userService;
@@ -142,6 +143,13 @@ let UserResolver = class UserResolver {
         const user = await this.userService.getUser(payload);
         return user;
     }
+    async whoami(req) {
+        const header = req.headers["authorization"];
+        console.log(req.headers);
+        const res = jwt.verify(header, process.env.JWT_SECRET);
+        const user = await this.userRepository.findOne({ id: res.id });
+        return user;
+    }
 };
 __decorate([
     (0, graphql_1.Query)(() => String),
@@ -188,6 +196,13 @@ __decorate([
     __metadata("design:paramtypes", [Object]),
     __metadata("design:returntype", Promise)
 ], UserResolver.prototype, "me", null);
+__decorate([
+    (0, graphql_1.Query)(() => user_entity_1.User),
+    __param(0, (0, graphql_1.Context)('req')),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [Object]),
+    __metadata("design:returntype", Promise)
+], UserResolver.prototype, "whoami", null);
 UserResolver = __decorate([
     (0, common_1.UseInterceptors)(logging_interceptor_1.LoggingInterceptor),
     (0, graphql_2.Resolver)(() => user_entity_1.User),

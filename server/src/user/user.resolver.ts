@@ -12,7 +12,7 @@ import { v4 as uuidv4 } from 'uuid'
 import { LoggingInterceptor } from "./logging.interceptor";
 import { UserCreationResponse } from "./types/createUserResponse.type";
 import { LoginResponse } from "./types/loginResponse.type";
-
+import * as jwt from 'jsonwebtoken'
 
 
 @UseInterceptors(LoggingInterceptor)
@@ -149,6 +149,17 @@ export class UserResolver {
         const payload = cookies['jid'];
         const user = await this.userService.getUser(payload);
         return user;
+    }
+
+    @Query(() => User)
+    async whoami(
+        @Context('req') req: Request
+    ): Promise<User> {
+        const header = req.headers["authorization"];
+        console.log(req.headers)
+        const res: any = jwt.verify(header, process.env.JWT_SECRET);
+        const user = await this.userRepository.findOne({ id: res.id });
+        return user
     }
 
 }

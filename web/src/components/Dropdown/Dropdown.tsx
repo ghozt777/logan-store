@@ -1,13 +1,16 @@
-import { Flex } from "@chakra-ui/react"
+import { Flex, useMediaQuery } from "@chakra-ui/react"
 import { useEffect, useRef } from "react";
 import { useSelector } from "react-redux"
 import { RootState } from "../../app/store";
+import { Card } from "../Navbar/components/Card";
 
 type DropDownProps = { isOpen: boolean; }
 
 export const Dropdown: React.FC<DropDownProps> = ({ isOpen }) => {
 
     const themeState = useSelector((state: RootState) => state.theme)
+    const [isGreaterThan800] = useMediaQuery(`(min-width: 800px)`)
+    
 
     useEffect(() => {
         if (!isOpen) {
@@ -25,8 +28,8 @@ export const Dropdown: React.FC<DropDownProps> = ({ isOpen }) => {
     return (
         <Flex
             ref={dropdownRef}
-            h='20rem'
-            w='15rem'
+            h={isGreaterThan800 ? '20rem' : '10rem'}
+            w={isGreaterThan800 ? '15rem' : '7.5rem'}
             flexDirection='column'
             alignItems='center'
             justifyContent='flex-start'
@@ -40,7 +43,7 @@ export const Dropdown: React.FC<DropDownProps> = ({ isOpen }) => {
             transition='350ms'
             opacity={isOpen ? 1 : 0}
         >
-            DropDown
+            <Card title="sup!" />
         </Flex >
     )
 }

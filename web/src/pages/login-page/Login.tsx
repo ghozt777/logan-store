@@ -1,11 +1,13 @@
 import { Button, Flex, FormControl, FormErrorMessage, FormHelperText, FormLabel, Input, Stack } from "@chakra-ui/react"
-import { Field, Form, Formik } from "formik"
+import { Form, Formik } from "formik"
 import { InputField } from "../../components"
 import { useLoginMutation } from "../../generated/graphql"
 import { mapErrors } from "../../utils/mapErrors"
 import { toast } from "react-toastify"
 import { useNavigate } from "react-router-dom"
 import { validateDataForLogin } from "../../utils/validateLoginFormData"
+import { useDispatch } from "react-redux"
+import { faliureAuth, successAuth } from "../../features/auth/authSlice"
 
 type LoginPageProps = {}
 
@@ -14,6 +16,7 @@ export const LoginPage: React.FC<LoginPageProps> = () => {
 
     const [, login] = useLoginMutation();
     const navigate = useNavigate();
+    const dispatch = useDispatch();
 
     return (
         <Flex
@@ -40,8 +43,11 @@ export const LoginPage: React.FC<LoginPageProps> = () => {
                         console.log(serverErrors)
                         errors = mapErrors(serverErrors, validationErrors);
                         if (Object.keys(errors).length === 0) {
-                            toast.success('user login success')
-                            navigate('/')
+                            toast.success('user login success');
+                            dispatch(successAuth({ accessToken: response.data?.login.accessToken as string }))
+                            navigate('/');
+                        } else {
+                            dispatch(faliureAuth({ errors }))
                         }
                     }
                     setErrors(errors)

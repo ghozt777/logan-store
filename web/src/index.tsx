@@ -8,9 +8,22 @@ import { ChakraProvider } from '@chakra-ui/react';
 import { theme } from './theme';
 import './index.css'
 import { createClient, Provider as URQLProvider } from 'urql'
+import { authExchange } from '@urql/exchange-auth'
+
 
 const client = createClient({
-  url: `${process.env.REACT_APP_URQL_HOST_URL}:${process.env.REACT_APP_URQL_HOST_PORT}/graphql`
+  url: `${process.env.REACT_APP_URQL_HOST_URL}:${process.env.REACT_APP_URQL_HOST_PORT}/graphql`,
+  fetchOptions: () => {
+    const storedAuthState = JSON.parse(localStorage.getItem('auth') as string);
+    if (storedAuthState) {
+      return {
+        headers: {
+          "Authorization": storedAuthState.token
+        }
+      }
+    }
+    return {}
+  }
 })
 
 
