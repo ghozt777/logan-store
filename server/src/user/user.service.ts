@@ -6,6 +6,7 @@ import * as jwt from 'jsonwebtoken'
 import { getManager, Repository } from "typeorm";
 import * as nodemailer from 'nodemailer'
 import { InjectRepository } from "@nestjs/typeorm";
+import { ESLint } from "eslint";
 
 @Injectable()
 export class UserService {
@@ -107,5 +108,10 @@ export class UserService {
         console.log("Preview URL: %s", nodemailer.getTestMessageUrl(info));
     }
 
+    async getUser(cookie: string) {
+        const res: any = jwt.verify(cookie, process.env.JWT_COOKIE_SECRET);
+        const user = await this.userRepository.findOne({ id: res.id });
+        return user;
+    }
 
 }

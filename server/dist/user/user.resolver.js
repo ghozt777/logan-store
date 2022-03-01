@@ -94,8 +94,17 @@ let UserResolver = class UserResolver {
         const user = await entityManager.query(queryString);
         if (Array.isArray(user) && user[0]) {
             const isPasswordValid = await argon2.verify(user[0].password, password);
-            if (!isPasswordValid)
-                throw new Error('invalid credentails');
+            if (!isPasswordValid) {
+                return {
+                    accessToken: "",
+                    errors: [
+                        {
+                            field: 'password',
+                            message: 'worng password !'
+                        }
+                    ]
+                };
+            }
             const accessToken = this.userService.createAccessToken(user[0]);
             const refreshToken = this.userService.createRefreshToken(user[0]);
             res.cookie('jid', refreshToken, {
@@ -103,11 +112,19 @@ let UserResolver = class UserResolver {
                 sameSite: 'lax',
             });
             return {
-                accessToken: accessToken
+                accessToken: accessToken,
+                errors: []
             };
         }
-        else
-            throw new Error('invalid credentails');
+        return {
+            accessToken: "",
+            errors: [
+                {
+                    field: "usernameOrEmail",
+                    message: "invalid creadentials"
+                }
+            ]
+        };
     }
     async forgotPassword(email) {
         const entityManager = (0, typeorm_2.getManager)();
@@ -119,6 +136,11 @@ let UserResolver = class UserResolver {
             await this.cacheManager.set(process.env.FORGOT_PASSWORD_PREFIX + token, user[0].id);
         }
         return true;
+    }
+    async me(cookies) {
+        const payload = cookies['jid'];
+        const user = await this.userService.getUser(payload);
+        return user;
     }
 };
 __decorate([
@@ -159,6 +181,13 @@ __decorate([
     __metadata("design:paramtypes", [String]),
     __metadata("design:returntype", Promise)
 ], UserResolver.prototype, "forgotPassword", null);
+__decorate([
+    (0, graphql_1.Query)(() => user_entity_1.User),
+    __param(0, (0, graphql_1.Context)('cookies')),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [Object]),
+    __metadata("design:returntype", Promise)
+], UserResolver.prototype, "me", null);
 UserResolver = __decorate([
     (0, common_1.UseInterceptors)(logging_interceptor_1.LoggingInterceptor),
     (0, graphql_2.Resolver)(() => user_entity_1.User),

@@ -96,7 +96,17 @@ export class UserResolver {
         const user = await entityManager.query(queryString);
         if (Array.isArray(user) && user[0]) {
             const isPasswordValid = await argon2.verify(user[0].password, password);
-            if (!isPasswordValid) throw new Error('invalid credentails');
+            if (!isPasswordValid) {
+                return {
+                    accessToken: "",
+                    errors: [
+                        {
+                            field: 'password',
+                            message: 'worng password !'
+                        }
+                    ]
+                }
+            }
             const accessToken = this.userService.createAccessToken(user[0]);
             const refreshToken = this.userService.createRefreshToken(user[0]);
             res.cookie('jid', refreshToken, {
@@ -104,10 +114,19 @@ export class UserResolver {
                 sameSite: 'lax',
             });
             return {
-                accessToken: accessToken
+                accessToken: accessToken,
+                errors: []
             };
         }
-        else throw new Error('invalid credentails');
+        return {
+            accessToken: "",
+            errors: [
+                {
+                    field: "usernameOrEmail",
+                    message: "invalid creadentials"
+                }
+            ]
+        }
     }
 
     @Mutation(() => Boolean)
@@ -123,6 +142,13 @@ export class UserResolver {
             await this.cacheManager.set(process.env.FORGOT_PASSWORD_PREFIX + token, user[0].id);
         }
         return true;
+    }
+
+    @Query(() => User)
+    async me(@Context('cookies') cookies: any): Promise<User> {
+        const payload = cookies['jid'];
+        const user = await this.userService.getUser(payload);
+        return user;
     }
 
 }

@@ -5,6 +5,7 @@ import { useRegisterMutation } from "../../generated/graphql"
 import { mapErrors } from "../../utils/mapErrors"
 import { toast } from "react-toastify"
 import { useNavigate } from "react-router-dom"
+import { validateDataForRegister } from "../../utils/validateRegisterFormData"
 
 type RegisterPageProps = {}
 
@@ -13,24 +14,6 @@ export const RegisterPage: React.FC<RegisterPageProps> = () => {
 
     const [, register] = useRegisterMutation();
     const navigate = useNavigate();
-
-    function validateData(values: any) {
-        const errors: any = {}
-        if (!values.username) errors.username = "username required!"
-        if (!values.email) errors.email = "email required!"
-        if (!values.password) errors.password = "password required!"
-        if (!/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i.test(values.email)) errors.email = "not a valid email address"
-        if (values.username.includes('@')) errors.username = "username cant contain @ !"
-        if (values.password != values.confirmPassword) {
-            errors.password = "password and confirm-password dont match"
-            errors.confirmPassword = "password and confirm-password dont match"
-        }
-        if (values.password.length < 8) errors.password = "password must contaim atlest 8 characters"
-        console.log(errors)
-        return errors;
-    }
-
-
 
     return (
         <Flex
@@ -51,7 +34,7 @@ export const RegisterPage: React.FC<RegisterPageProps> = () => {
 
 
                 onSubmit={async (values, { setSubmitting, setErrors }) => {
-                    const validationErrors = validateData(values);
+                    const validationErrors = validateDataForRegister(values);
                     let errors = validationErrors;
                     if (Object.keys(validationErrors).length === 0) {
                         const response = await register(values);
@@ -60,7 +43,7 @@ export const RegisterPage: React.FC<RegisterPageProps> = () => {
                         errors = mapErrors(serverErrors, validationErrors);
                         if (Object.keys(errors).length === 0) {
                             toast.success('user created successfully')
-                            navigate('/')
+                            navigate('/login')
                         }
                     }
                     setErrors(errors)

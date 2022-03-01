@@ -1,8 +1,13 @@
 import { ObjectType, Field } from "@nestjs/graphql";
+import { Errors } from "./errors.type";
+
+
 
 @ObjectType()
 export class LoginResponse {
     @Field(() => String)
     accessToken: string;
-    // errors: any[];
+
+    @Field(() => [Errors])
+    errors: Errors[]
 }

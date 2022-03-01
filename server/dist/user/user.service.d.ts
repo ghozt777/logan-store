@@ -22,4 +22,5 @@ export declare class UserService {
     };
     revokeRefreshTokenForUser(id: string): Promise<boolean>;
     sendEmail(to: string, html: string): Promise<void>;
+    getUser(cookie: string): Promise<User>;
 }

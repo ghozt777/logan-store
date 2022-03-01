@@ -1,18 +1,6 @@
 import { Field, ObjectType } from "@nestjs/graphql";
+import { Errors } from "./errors.type";
 
-// type Errors = {
-//     field: string;
-//     message: string;
-// }
-
-@ObjectType()
-class Errors {
-    @Field(() => String)
-    field: string;
-
-    @Field(() => String)
-    message: string;
-}
 
 @ObjectType()
 export class UserCreationResponse {

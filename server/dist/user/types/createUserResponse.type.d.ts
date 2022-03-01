@@ -1,9 +1,5 @@
-declare class Errors {
-    field: string;
-    message: string;
-}
+import { Errors } from "./errors.type";
 export declare class UserCreationResponse {
     errors: Errors[];
     message: string;
 }
-export {};

@@ -15,4 +15,5 @@ export declare class UserResolver {
     register(username: string, email: string, password: string): Promise<UserCreationResponse>;
     login(res: Response, usernameOrEmail: string, password: string): Promise<LoginResponse>;
     forgotPassword(email: string): Promise<boolean>;
+    me(cookies: any): Promise<User>;
 }

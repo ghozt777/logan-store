@@ -2,6 +2,12 @@
 # THIS FILE WAS AUTOMATICALLY GENERATED (DO NOT MODIFY)
 # ------------------------------------------------------
 
+type User {
+  id: String!
+  username: String!
+  email: String!
+}
+
 type Errors {
   field: String!
   message: String!
@@ -14,10 +20,12 @@ type UserCreationResponse {
 
 type LoginResponse {
   accessToken: String!
+  errors: [Errors!]!
 }
 
 type Query {
   hello: String!
+  me: User!
 }
 
 type Mutation {

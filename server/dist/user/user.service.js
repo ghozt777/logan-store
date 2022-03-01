@@ -108,6 +108,11 @@ let UserService = class UserService {
         console.log("Message sent: %s", info.messageId);
         console.log("Preview URL: %s", nodemailer.getTestMessageUrl(info));
     }
+    async getUser(cookie) {
+        const res = jwt.verify(cookie, process.env.JWT_COOKIE_SECRET);
+        const user = await this.userRepository.findOne({ id: res.id });
+        return user;
+    }
 };
 UserService = __decorate([
     (0, common_1.Injectable)(),

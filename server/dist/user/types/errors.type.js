@@ -9,21 +9,20 @@ var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.LoginResponse = void 0;
+exports.Errors = void 0;
 const graphql_1 = require("@nestjs/graphql");
-const errors_type_1 = require("./errors.type");
-let LoginResponse = class LoginResponse {
+let Errors = class Errors {
 };
 __decorate([
     (0, graphql_1.Field)(() => String),
     __metadata("design:type", String)
-], LoginResponse.prototype, "accessToken", void 0);
+], Errors.prototype, "field", void 0);
 __decorate([
-    (0, graphql_1.Field)(() => [errors_type_1.Errors]),
-    __metadata("design:type", Array)
-], LoginResponse.prototype, "errors", void 0);
-LoginResponse = __decorate([
+    (0, graphql_1.Field)(() => String),
+    __metadata("design:type", String)
+], Errors.prototype, "message", void 0);
+Errors = __decorate([
     (0, graphql_1.ObjectType)()
-], LoginResponse);
-exports.LoginResponse = LoginResponse;
-//# sourceMappingURL=loginResponse.type.js.map
+], Errors);
+exports.Errors = Errors;
+//# sourceMappingURL=errors.type.js.map

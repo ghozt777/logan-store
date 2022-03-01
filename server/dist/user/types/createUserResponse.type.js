@@ -11,23 +11,11 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.UserCreationResponse = void 0;
 const graphql_1 = require("@nestjs/graphql");
-let Errors = class Errors {
-};
-__decorate([
-    (0, graphql_1.Field)(() => String),
-    __metadata("design:type", String)
-], Errors.prototype, "field", void 0);
-__decorate([
-    (0, graphql_1.Field)(() => String),
-    __metadata("design:type", String)
-], Errors.prototype, "message", void 0);
-Errors = __decorate([
-    (0, graphql_1.ObjectType)()
-], Errors);
+const errors_type_1 = require("./errors.type");
 let UserCreationResponse = class UserCreationResponse {
 };
 __decorate([
-    (0, graphql_1.Field)(() => [Errors]),
+    (0, graphql_1.Field)(() => [errors_type_1.Errors]),
     __metadata("design:type", Array)
 ], UserCreationResponse.prototype, "errors", void 0);
 __decorate([
