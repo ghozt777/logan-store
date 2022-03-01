@@ -2,17 +2,36 @@
 # THIS FILE WAS AUTOMATICALLY GENERATED (DO NOT MODIFY)
 # ------------------------------------------------------
 
+type User {
+  id: String!
+  username: String!
+  email: String!
+}
+
+type Errors {
+  field: String!
+  message: String!
+}
+
+type UserCreationResponse {
+  errors: [Errors!]!
+  message: String!
+}
+
 type LoginResponse {
   accessToken: String!
+  errors: [Errors!]!
 }
 
 type Query {
   hello: String!
+  me: User!
+  whoami: User!
 }
 
 type Mutation {
   checkAuth: String!
-  register(password: String!, email: String!, username: String!): Boolean!
+  register(password: String!, email: String!, username: String!): UserCreationResponse!
   login(password: String!, usernameOrEmail: String!): LoginResponse!
   forgotPassword(email: String!): Boolean!
 }

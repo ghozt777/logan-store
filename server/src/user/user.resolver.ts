@@ -6,21 +6,16 @@ import { User } from "./user.entity";
 import { UserService } from "./user.service";
 import * as argon2 from 'argon2'
 import { Response, Request } from "express";
-import { Ctx } from "type-graphql";
-import { RedisContext } from "@nestjs/microservices";
-import { CACHE_MANAGER, Inject } from "@nestjs/common";
+import { CACHE_MANAGER, Inject, UseInterceptors } from "@nestjs/common";
 import { Cache } from 'cache-manager';
 import { v4 as uuidv4 } from 'uuid'
-
-@ObjectType()
-class LoginResponse {
-    @Field()
-    accessToken: string;
-    // errors: any[];
-}
+import { LoggingInterceptor } from "./logging.interceptor";
+import { UserCreationResponse } from "./types/createUserResponse.type";
+import { LoginResponse } from "./types/loginResponse.type";
+import * as jwt from 'jsonwebtoken'
 
 
-
+@UseInterceptors(LoggingInterceptor)
 @Resolver(() => User)
 export class UserResolver {
     constructor(private userService: UserService, @InjectRepository(User) private userRepository: Repository<User>, @Inject(CACHE_MANAGER) private cacheManager: Cache) { }
@@ -42,30 +37,50 @@ export class UserResolver {
     }
 
 
-    @Mutation(() => Boolean)
+    @Mutation(() => UserCreationResponse)
     async register(
         @Args({ name: "username", type: () => String }) username: string,
         @Args({ name: "email", type: () => String }) email: string,
         @Args({ name: "password", type: () => String }) password: string,
-    ) {
+    ): Promise<UserCreationResponse> {
         const payload = await this.userService.createUserPayload({ username, password, email });
-        let isOk = false;
         if (payload) {
-            const { username, password, email } = payload;
+            const { user, errors, isValid } = payload;
             try {
-                await this.userRepository.insert({
-                    username: username,
-                    email: email,
-                    password: password
-                });
-                isOk = true;
+                if (isValid) {
+                    const result = await this.userRepository.insert({
+                        username: user.username,
+                        email: user.email,
+                        password: user.password
+                    });
+                }
             } catch (err) {
                 console.error("USER CREATION FALIURE", err);
             } finally {
-                return isOk;
+                console.log(errors)
+                return {
+                    errors,
+                    message: isValid ? "user creation successful" : "user creation faliure"
+                };
             }
         }
-        return false;
+        return {
+            errors: [
+                {
+                    field: 'username',
+                    message: 'unknown error'
+                },
+                {
+                    field: 'email',
+                    message: 'unknown error'
+                },
+                {
+                    field: 'password',
+                    message: 'unknown error'
+                }
+            ],
+            message: "user creation faliure"
+        };;
     }
 
     @Mutation(() => LoginResponse)
@@ -81,7 +96,17 @@ export class UserResolver {
         const user = await entityManager.query(queryString);
         if (Array.isArray(user) && user[0]) {
             const isPasswordValid = await argon2.verify(user[0].password, password);
-            if (!isPasswordValid) throw new Error('invalid credentails');
+            if (!isPasswordValid) {
+                return {
+                    accessToken: "",
+                    errors: [
+                        {
+                            field: 'password',
+                            message: 'worng password !'
+                        }
+                    ]
+                }
+            }
             const accessToken = this.userService.createAccessToken(user[0]);
             const refreshToken = this.userService.createRefreshToken(user[0]);
             res.cookie('jid', refreshToken, {
@@ -89,10 +114,19 @@ export class UserResolver {
                 sameSite: 'lax',
             });
             return {
-                accessToken: accessToken
+                accessToken: accessToken,
+                errors: []
             };
         }
-        else throw new Error('invalid credentails');
+        return {
+            accessToken: "",
+            errors: [
+                {
+                    field: "usernameOrEmail",
+                    message: "invalid creadentials"
+                }
+            ]
+        }
     }
 
     @Mutation(() => Boolean)
@@ -108,6 +142,24 @@ export class UserResolver {
             await this.cacheManager.set(process.env.FORGOT_PASSWORD_PREFIX + token, user[0].id);
         }
         return true;
+    }
+
+    @Query(() => User)
+    async me(@Context('cookies') cookies: any): Promise<User> {
+        const payload = cookies['jid'];
+        const user = await this.userService.getUser(payload);
+        return user;
+    }
+
+    @Query(() => User)
+    async whoami(
+        @Context('req') req: Request
+    ): Promise<User> {
+        const header = req.headers["authorization"];
+        console.log(req.headers)
+        const res: any = jwt.verify(header, process.env.JWT_SECRET);
+        const user = await this.userRepository.findOne({ id: res.id });
+        return user
     }
 
 }

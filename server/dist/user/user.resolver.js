@@ -22,15 +22,10 @@ const user_service_1 = require("./user.service");
 const argon2 = require("argon2");
 const common_1 = require("@nestjs/common");
 const uuid_1 = require("uuid");
-let LoginResponse = class LoginResponse {
-};
-__decorate([
-    (0, graphql_1.Field)(),
-    __metadata("design:type", String)
-], LoginResponse.prototype, "accessToken", void 0);
-LoginResponse = __decorate([
-    (0, graphql_1.ObjectType)()
-], LoginResponse);
+const logging_interceptor_1 = require("./logging.interceptor");
+const createUserResponse_type_1 = require("./types/createUserResponse.type");
+const loginResponse_type_1 = require("./types/loginResponse.type");
+const jwt = require("jsonwebtoken");
 let UserResolver = class UserResolver {
     constructor(userService, userRepository, cacheManager) {
         this.userService = userService;
@@ -51,25 +46,46 @@ let UserResolver = class UserResolver {
     }
     async register(username, email, password) {
         const payload = await this.userService.createUserPayload({ username, password, email });
-        let isOk = false;
         if (payload) {
-            const { username, password, email } = payload;
+            const { user, errors, isValid } = payload;
             try {
-                await this.userRepository.insert({
-                    username: username,
-                    email: email,
-                    password: password
-                });
-                isOk = true;
+                if (isValid) {
+                    const result = await this.userRepository.insert({
+                        username: user.username,
+                        email: user.email,
+                        password: user.password
+                    });
+                }
             }
             catch (err) {
                 console.error("USER CREATION FALIURE", err);
             }
             finally {
-                return isOk;
+                console.log(errors);
+                return {
+                    errors,
+                    message: isValid ? "user creation successful" : "user creation faliure"
+                };
             }
         }
-        return false;
+        return {
+            errors: [
+                {
+                    field: 'username',
+                    message: 'unknown error'
+                },
+                {
+                    field: 'email',
+                    message: 'unknown error'
+                },
+                {
+                    field: 'password',
+                    message: 'unknown error'
+                }
+            ],
+            message: "user creation faliure"
+        };
+        ;
     }
     async login(res, usernameOrEmail, password) {
         const isEmail = usernameOrEmail.includes('@');
@@ -79,8 +95,17 @@ let UserResolver = class UserResolver {
         const user = await entityManager.query(queryString);
         if (Array.isArray(user) && user[0]) {
             const isPasswordValid = await argon2.verify(user[0].password, password);
-            if (!isPasswordValid)
-                throw new Error('invalid credentails');
+            if (!isPasswordValid) {
+                return {
+                    accessToken: "",
+                    errors: [
+                        {
+                            field: 'password',
+                            message: 'worng password !'
+                        }
+                    ]
+                };
+            }
             const accessToken = this.userService.createAccessToken(user[0]);
             const refreshToken = this.userService.createRefreshToken(user[0]);
             res.cookie('jid', refreshToken, {
@@ -88,11 +113,19 @@ let UserResolver = class UserResolver {
                 sameSite: 'lax',
             });
             return {
-                accessToken: accessToken
+                accessToken: accessToken,
+                errors: []
             };
         }
-        else
-            throw new Error('invalid credentails');
+        return {
+            accessToken: "",
+            errors: [
+                {
+                    field: "usernameOrEmail",
+                    message: "invalid creadentials"
+                }
+            ]
+        };
     }
     async forgotPassword(email) {
         const entityManager = (0, typeorm_2.getManager)();
@@ -104,6 +137,18 @@ let UserResolver = class UserResolver {
             await this.cacheManager.set(process.env.FORGOT_PASSWORD_PREFIX + token, user[0].id);
         }
         return true;
+    }
+    async me(cookies) {
+        const payload = cookies['jid'];
+        const user = await this.userService.getUser(payload);
+        return user;
+    }
+    async whoami(req) {
+        const header = req.headers["authorization"];
+        console.log(req.headers);
+        const res = jwt.verify(header, process.env.JWT_SECRET);
+        const user = await this.userRepository.findOne({ id: res.id });
+        return user;
     }
 };
 __decorate([
@@ -120,7 +165,7 @@ __decorate([
     __metadata("design:returntype", void 0)
 ], UserResolver.prototype, "checkAuth", null);
 __decorate([
-    (0, graphql_1.Mutation)(() => Boolean),
+    (0, graphql_1.Mutation)(() => createUserResponse_type_1.UserCreationResponse),
     __param(0, (0, graphql_1.Args)({ name: "username", type: () => String })),
     __param(1, (0, graphql_1.Args)({ name: "email", type: () => String })),
     __param(2, (0, graphql_1.Args)({ name: "password", type: () => String })),
@@ -129,7 +174,7 @@ __decorate([
     __metadata("design:returntype", Promise)
 ], UserResolver.prototype, "register", null);
 __decorate([
-    (0, graphql_1.Mutation)(() => LoginResponse),
+    (0, graphql_1.Mutation)(() => loginResponse_type_1.LoginResponse),
     __param(0, (0, graphql_1.Context)('res')),
     __param(1, (0, graphql_1.Args)({ name: 'usernameOrEmail', type: () => String })),
     __param(2, (0, graphql_1.Args)({ name: 'password', type: () => String })),
@@ -144,7 +189,22 @@ __decorate([
     __metadata("design:paramtypes", [String]),
     __metadata("design:returntype", Promise)
 ], UserResolver.prototype, "forgotPassword", null);
+__decorate([
+    (0, graphql_1.Query)(() => user_entity_1.User),
+    __param(0, (0, graphql_1.Context)('cookies')),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [Object]),
+    __metadata("design:returntype", Promise)
+], UserResolver.prototype, "me", null);
+__decorate([
+    (0, graphql_1.Query)(() => user_entity_1.User),
+    __param(0, (0, graphql_1.Context)('req')),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [Object]),
+    __metadata("design:returntype", Promise)
+], UserResolver.prototype, "whoami", null);
 UserResolver = __decorate([
+    (0, common_1.UseInterceptors)(logging_interceptor_1.LoggingInterceptor),
     (0, graphql_2.Resolver)(() => user_entity_1.User),
     __param(1, (0, typeorm_1.InjectRepository)(user_entity_1.User)),
     __param(2, (0, common_1.Inject)(common_1.CACHE_MANAGER)),

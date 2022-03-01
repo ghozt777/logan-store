@@ -3,21 +3,37 @@ import { CreateUserDTO } from "./types/createUser.dto";
 import * as argon2 from 'argon2'
 import { User } from "./user.entity";
 import * as jwt from 'jsonwebtoken'
-import { getManager } from "typeorm";
+import { getManager, Repository } from "typeorm";
 import * as nodemailer from 'nodemailer'
+import { InjectRepository } from "@nestjs/typeorm";
+import { ESLint } from "eslint";
 
 @Injectable()
 export class UserService {
-    constructor() { }
+    constructor(@InjectRepository(User) private userRepository: Repository<User>) { }
 
     async createUserPayload(dto: CreateUserDTO) {
         const { username, password, email } = dto;
         const errors = [];
+        const isThereUsername = await this.userRepository.findOne({ username });
+        const isThereEmail = await this.userRepository.findOne({ email });
+        if (isThereUsername) errors.push({
+            field: "username",
+            message: "username already exsists"
+        })
+        if (isThereEmail) errors.push({
+            field: "email",
+            message: "email already in use"
+        })
         const hashedPassword = await argon2.hash(password);
         const payload = {
-            username: username,
-            password: hashedPassword,
-            email: email
+            user: {
+                username: username,
+                password: hashedPassword,
+                email: email
+            },
+            errors,
+            isValid: errors.length === 0
         }
         return payload;
     }
@@ -29,7 +45,7 @@ export class UserService {
             },
             process.env.JWT_SECRET,
             {
-                expiresIn: '15m'
+                expiresIn: '2d'
             }
         )
     }
@@ -92,5 +108,10 @@ export class UserService {
         console.log("Preview URL: %s", nodemailer.getTestMessageUrl(info));
     }
 
+    async getUser(cookie: string) {
+        const res: any = jwt.verify(cookie, process.env.JWT_COOKIE_SECRET);
+        const user = await this.userRepository.findOne({ id: res.id });
+        return user;
+    }
 
 }

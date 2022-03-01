@@ -8,14 +8,15 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.DatabaseModule = void 0;
 const common_1 = require("@nestjs/common");
+const config_1 = require("@nestjs/config");
 const typeorm_1 = require("@nestjs/typeorm");
-const dotenv = require("dotenv");
-dotenv.config();
 let DatabaseModule = class DatabaseModule {
 };
 DatabaseModule = __decorate([
     (0, common_1.Module)({
-        imports: [typeorm_1.TypeOrmModule.forRoot({
+        imports: [
+            config_1.ConfigModule.forRoot({ isGlobal: true }),
+            typeorm_1.TypeOrmModule.forRoot({
                 type: 'mysql',
                 host: `${process.env.DB_HOST}`,
                 port: parseInt(process.env.DB_PORT),
@@ -26,7 +27,8 @@ DatabaseModule = __decorate([
                 autoLoadEntities: true,
                 synchronize: true,
                 logging: true
-            }),],
+            }),
+        ],
         controllers: [],
         providers: [],
     })

@@ -1,5 +1,7 @@
 import { Field, ObjectType } from "@nestjs/graphql";
-import { Column, Entity, PrimaryGeneratedColumn } from "typeorm";
+import { Column, Entity, PrimaryGeneratedColumn, CreateDateColumn, UpdateDateColumn } from "typeorm";
+
+
 
 @ObjectType()
 @Entity('users')
@@ -23,7 +25,13 @@ export class User {
     @Column({ nullable: true, unique: true })
     cartId: number;
 
-    @Column({ nullable: true })
+    @Column({ nullable: true, default: 0 })
     tokenVersion: number;
+
+    @CreateDateColumn({ type: "timestamp", default: () => "CURRENT_TIMESTAMP(6)" })
+    public created_at: Date;
+
+    @UpdateDateColumn({ type: "timestamp", default: () => "CURRENT_TIMESTAMP(6)", onUpdate: "CURRENT_TIMESTAMP(6)" })
+    public updated_at: Date;
 
 }

@@ -5,13 +5,24 @@ import { AppService } from './app.service';
 import { DatabaseModule } from './database/database.module';
 import { UserModule } from './user/user.module';
 import { ClientsModule, Transport } from '@nestjs/microservices'
+import { ConfigModule } from '@nestjs/config';
+
 
 @Module({
   imports: [
+    ConfigModule.forRoot() ,
     GraphQLModule.forRoot({
       autoSchemaFile: 'schema.gql',
-      context: ({ req, res }) => ({ req, res }),
-      cors: { origin: true, credentials: true },
+      context: async ({ req, res }) => {
+
+        return { 
+          req, 
+          res , 
+          headers : req.headers  ,
+          cookies : req.cookies ?? [] 
+        }
+      },
+      cors: { origin: true, credentials: true }
     }),
     ClientsModule.register([
       {

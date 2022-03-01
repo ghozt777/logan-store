@@ -15,16 +15,29 @@ export type Scalars = {
   Float: number;
 };
 
+export type Errors = {
+  __typename?: 'Errors';
+  field: Scalars['String'];
+  message: Scalars['String'];
+};
+
 export type LoginResponse = {
   __typename?: 'LoginResponse';
   accessToken: Scalars['String'];
+  errors: Array<Errors>;
 };
 
 export type Mutation = {
   __typename?: 'Mutation';
   checkAuth: Scalars['String'];
+  forgotPassword: Scalars['Boolean'];
   login: LoginResponse;
-  register: Scalars['Boolean'];
+  register: UserCreationResponse;
+};
+
+
+export type MutationForgotPasswordArgs = {
+  email: Scalars['String'];
 };
 
 
@@ -43,14 +56,81 @@ export type MutationRegisterArgs = {
 export type Query = {
   __typename?: 'Query';
   hello: Scalars['String'];
+  me: User;
+  whoami: User;
 };
+
+export type User = {
+  __typename?: 'User';
+  email: Scalars['String'];
+  id: Scalars['String'];
+  username: Scalars['String'];
+};
+
+export type UserCreationResponse = {
+  __typename?: 'UserCreationResponse';
+  errors: Array<Errors>;
+  message: Scalars['String'];
+};
+
+export type LoginMutationVariables = Exact<{
+  usernameOrEmail: Scalars['String'];
+  password: Scalars['String'];
+}>;
+
+
+export type LoginMutation = { __typename?: 'Mutation', login: { __typename?: 'LoginResponse', accessToken: string, errors: Array<{ __typename?: 'Errors', field: string, message: string }> } };
+
+export type RegisterMutationVariables = Exact<{
+  username: Scalars['String'];
+  password: Scalars['String'];
+  email: Scalars['String'];
+}>;
+
+
+export type RegisterMutation = { __typename?: 'Mutation', register: { __typename?: 'UserCreationResponse', message: string, errors: Array<{ __typename?: 'Errors', field: string, message: string }> } };
 
 export type HelloQueryVariables = Exact<{ [key: string]: never; }>;
 
 
 export type HelloQuery = { __typename?: 'Query', hello: string };
 
+export type WhoAmIQueryVariables = Exact<{ [key: string]: never; }>;
 
+
+export type WhoAmIQuery = { __typename?: 'Query', whoami: { __typename?: 'User', username: string, email: string } };
+
+
+export const LoginDocument = gql`
+    mutation Login($usernameOrEmail: String!, $password: String!) {
+  login(usernameOrEmail: $usernameOrEmail, password: $password) {
+    accessToken
+    errors {
+      field
+      message
+    }
+  }
+}
+    `;
+
+export function useLoginMutation() {
+  return Urql.useMutation<LoginMutation, LoginMutationVariables>(LoginDocument);
+};
+export const RegisterDocument = gql`
+    mutation Register($username: String!, $password: String!, $email: String!) {
+  register(username: $username, password: $password, email: $email) {
+    errors {
+      field
+      message
+    }
+    message
+  }
+}
+    `;
+
+export function useRegisterMutation() {
+  return Urql.useMutation<RegisterMutation, RegisterMutationVariables>(RegisterDocument);
+};
 export const HelloDocument = gql`
     query Hello {
   hello
@@ -59,4 +139,16 @@ export const HelloDocument = gql`
 
 export function useHelloQuery(options: Omit<Urql.UseQueryArgs<HelloQueryVariables>, 'query'> = {}) {
   return Urql.useQuery<HelloQuery>({ query: HelloDocument, ...options });
+};
+export const WhoAmIDocument = gql`
+    query WhoAmI {
+  whoami {
+    username
+    email
+  }
+}
+    `;
+
+export function useWhoAmIQuery(options: Omit<Urql.UseQueryArgs<WhoAmIQueryVariables>, 'query'> = {}) {
+  return Urql.useQuery<WhoAmIQuery>({ query: WhoAmIDocument, ...options });
 };

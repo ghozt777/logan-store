@@ -10,4 +10,6 @@ import { UserService } from "./user.service";
     providers: [UserResolver, UserService],
     controllers: [AuthController]
 })
-export class UserModule { }
+export class UserModule { 
+    constructor(){}
+}

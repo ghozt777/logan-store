@@ -1,0 +1,6 @@
+query WhoAmI{
+  whoami{
+    username,
+    email
+  }
+}
