@@ -11,7 +11,13 @@ export const LandingPage: React.FC<LaandingPageProps> = () => {
 
     return (
 
-        <Box bg={`main.${themeState.theme}`} w='100%' h='93vh' overflowX={"hidden"}>
+        <Box
+            bg={`main.${themeState.theme}`} w='100%' h='100vh' overflowX={"hidden"}
+            backgroundImage="url('https://images.unsplash.com/photo-1627856013091-fed6e4e30025')"
+            backgroundRepeat="no-repeat"
+            backgroundPosition="center"
+            backgroundSize="cover"
+        >
 
             <Routes>
 

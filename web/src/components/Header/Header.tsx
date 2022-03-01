@@ -15,7 +15,7 @@ type NavbarProps = {
     // links: JSX.Element[];
 }
 
-export const Navbar: React.FC<NavbarProps> = ({ title }) => {
+export const Header: React.FC<NavbarProps> = ({ title }) => {
     const themeState = useSelector((state: RootState) => state.theme);
     const dispatch = useDispatch();
     const [isDropdownOpen, setIsDropdownOpen] = useState(false);
@@ -23,16 +23,19 @@ export const Navbar: React.FC<NavbarProps> = ({ title }) => {
 
     return (
         <Box
-            bg={`main.${themeState.theme}`}
+            // bg={`main.${themeState.theme}`}
+            bg="transparent"
             h='13vh'
             minHeight='100px'
             w='100%'
             display="flex"
+            position="fixed"
             alignItems="center"
             justifyContent="center"
         >
             <Flex
-                bg={`nav.${themeState.theme}`}
+                className='blur'
+                bg="hsl(0 0% 0% / 0.3)"
                 h="80%"
                 w="98%"
                 p='20px'
@@ -47,15 +50,15 @@ export const Navbar: React.FC<NavbarProps> = ({ title }) => {
                 transition='350ms'
                 borderStyle="none"
                 borderRadius="10px"
-                boxShadow={`0px 4px 4px -2px ${themeState.theme === "light" ? "#cbd5e1" : "#0C0705"}`} // 0C0705
+                boxShadow={`0px 4px 4px -2px #0C0705`}
             >
                 <HamburgerIcon cursor='pointer' />
-                <Text className="title-text" fontSize={isLagerThan800 ? 'lg' : 'md'} cursor='pointer' >{title}</Text>
+                <Text fontWeight={700} className="title-text" fontSize={isLagerThan800 ? '2rem' : 'md'} cursor='pointer' >{title}</Text>
                 <Text
                     fontSize={isLagerThan800 ? "20px" : "12px"}
                     className="title-tagline"
                     letterSpacing="4px"
-                >we believe in minimalism<span style={{ fontSize: isLagerThan800 ? "4rem" : "1rem" }}>.</span></Text>
+                >Be a Maverick<span style={{ fontSize: isLagerThan800 ? "4rem" : "1rem" }}>.</span></Text>
                 <Flex
                     ml='auto'
                     w='40%'
@@ -63,12 +66,13 @@ export const Navbar: React.FC<NavbarProps> = ({ title }) => {
                     alignItems='center'
                     gap='20px'
                 >
-                    <Box cursor='pointer' onClick={() => dispatch(changeTheme())} >
+                    <Box color="#FF69B4" cursor='pointer' onClick={() => dispatch(changeTheme())} >
                         {
                             themeState.theme === 'dark' ? <TiWeatherNight size={"1.6rem"} /> : <SunIcon />
                         }
                     </Box>
                     <TriangleDownIcon
+                        color="#FF69B4"
                         cursor='pointer'
                         transition='350ms'
                         transform={isDropdownOpen ? 'rotate(-90deg)' : 'rotate(0deg)'}

@@ -6,8 +6,9 @@ import { mapErrors } from "../../utils/mapErrors"
 import { toast } from "react-toastify"
 import { useNavigate } from "react-router-dom"
 import { validateDataForLogin } from "../../utils/validateLoginFormData"
-import { useDispatch } from "react-redux"
+import { useDispatch, useSelector } from "react-redux"
 import { faliureAuth, successAuth } from "../../features/auth/authSlice"
+import { RootState } from "../../app/store"
 
 type LoginPageProps = {}
 
@@ -17,14 +18,16 @@ export const LoginPage: React.FC<LoginPageProps> = () => {
     const [, login] = useLoginMutation();
     const navigate = useNavigate();
     const dispatch = useDispatch();
+    const themeState = useSelector((state: RootState) => state.theme)
 
     return (
         <Flex
-            h="50vh"
+            h="100vh"
             w="100%"
             alignItems="center"
             justifyContent="center"
             gap="1rem"
+            bg={themeState.theme === "light" ? "" : "#171717"}
         >
             <Formik
 

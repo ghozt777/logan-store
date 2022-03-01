@@ -1,6 +1,5 @@
 import { Route, Routes } from 'react-router-dom'
 import { ToastContainer, Slide, Zoom, Flip, Bounce } from 'react-toastify';
-import { Navbar } from '../components/index';
 import 'react-toastify/dist/ReactToastify.css';
 import {
   LandingPage,
@@ -10,6 +9,7 @@ import {
 import { useSelector } from 'react-redux';
 import { RootState } from './store';
 import { usePingServer } from '../hooks/pingServer';
+import { Header } from '../components/Header/Header';
 
 
 function App() {
@@ -31,7 +31,7 @@ function App() {
         theme="colored"
       // theme={`${themeState.theme === "light" ? "colored" : "dark"}`} 
       />
-      <Navbar title='Logan Store' />
+      <Header title='Logan Store' />
       <Routes>
         <Route path='/' element={<LandingPage />} />
         <Route path='/login' element={<LoginPage />} />

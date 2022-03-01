@@ -1,0 +1,34 @@
+@import url('https://fonts.googleapis.com/css2?family=Major+Mono+Display&family=Syne+Mono&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Amatic+SC:wght@700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Lobster&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Architects+Daughter&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Patrick+Hand&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Noto+Sans&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Odibee+Sans&display=swap');
+@import url('http://fonts.cdnfonts.com/css/debug-free-trial');
+@import url('http://fonts.cdnfonts.com/css/moto-verse');
+
+:root{
+    --text-monospace-one : 'Syne Mono', monospace;
+    --text-monospace-two : 'Major Mono Display', monospace;
+    --text-monospace-three : 'Noto Sans', sans-serif;
+    --text-cursive-one : 'Amatic SC', cursive; 
+    --text-cursive-two : 'Lobster', cursive;
+    --text-cursive-three : 'Architects Daughter', cursive;  
+    --text-cursive-four : 'Patrick Hand', cursive;
+    --text-gaming-one : 'Odibee Sans', cursive;
+    --text-gaming-two : 'DEBUG FREE TRIAL', sans-serif;
+    --text-gaming-three : 'MOTO VERSE', sans-serif;
+}
+
+.title-text{
+    font-family: var(--text-gaming-two);
+}
+
+.title-tagline{
+    font-family: var(--text-gaming-three);
+}
+
+.blur{
+    backdrop-filter: blur(1rem);
+}
