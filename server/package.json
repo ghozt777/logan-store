@@ -7,7 +7,8 @@
   "license": "UNLICENSED",
   "engines": {
     "npm": ">=8.5.1",
-    "node": ">=15.6.0"
+    "node": ">=15.6.0",
+    "yarn": "1.22.17"
   },
   "scripts": {
     "prebuild": "rimraf dist",
@@ -23,8 +24,8 @@
     "test:cov": "jest --coverage",
     "test:debug": "node --inspect-brk -r tsconfig-paths/register -r ts-node/register node_modules/.bin/jest --runInBand",
     "test:e2e": "jest --config ./test/jest-e2e.json",
-    "prestart:prod": "npm install",
-    "heroku-postbuild": "npm install --no-shrinkwrap && npm run build"
+    "prestart:prod": "yarn install",
+    "heroku-postbuild": "yarn install --no-shrinkwrap && yarn run build"
   },
   "dependencies": {
     "@nestjs/common": "^8.0.0",
@@ -53,7 +54,7 @@
     "typeorm": "^0.2.41"
   },
   "devDependencies": {
-    "@nestjs/cli": "^8.0.0",
+    "@nestjs/cli": "^8.2.1",
     "@nestjs/schematics": "^8.0.0",
     "@nestjs/testing": "^8.0.0",
     "@types/cache-manager": "^3.4.3",
