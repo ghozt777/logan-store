@@ -6,8 +6,8 @@
   "private": true,
   "license": "UNLICENSED",
   "engines": {
-    "npm": ">=8.5.1",
-    "node": ">=15.6.0",
+    "npm": "8.5.1",
+    "node": "15.6.0",
     "yarn": "1.22.17"
   },
   "scripts": {
