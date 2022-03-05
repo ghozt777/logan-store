@@ -8,6 +8,19 @@
 @import url('http://fonts.cdnfonts.com/css/debug-free-trial');
 @import url('http://fonts.cdnfonts.com/css/moto-verse');
 
+@font-face {
+    font-family: 'debug';
+    src: url('../../assets/fonts/debug.otf');
+    font-style: normal;
+    font-weight: 100;
+}
+
+@font-face {
+    font-family: 'Tele-Marines';
+    src: url('../../assets/fonts/Telev2b.ttf');
+    font-style: normal;
+    font-weight: 100;
+}
 :root{
     --text-monospace-one : 'Syne Mono', monospace;
     --text-monospace-two : 'Major Mono Display', monospace;
@@ -18,11 +31,14 @@
     --text-cursive-four : 'Patrick Hand', cursive;
     --text-gaming-one : 'Odibee Sans', cursive;
     --text-gaming-two : 'DEBUG FREE TRIAL', sans-serif;
-    --text-gaming-three : 'MOTO VERSE', sans-serif;
+    --text-gaming-three : 'Tele-Marines';
+    --text-gaming-debug : 'debug'
 }
 
+
+
 .title-text{
-    font-family: var(--text-gaming-two);
+    font-family: var(--text-gaming-debug);
 }
 
 .title-tagline{
