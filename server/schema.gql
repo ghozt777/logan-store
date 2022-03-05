@@ -34,4 +34,5 @@ type Mutation {
   register(password: String!, email: String!, username: String!): UserCreationResponse!
   login(password: String!, usernameOrEmail: String!): LoginResponse!
   forgotPassword(email: String!): Boolean!
+  resetPassword(newPassword: String!, token: String!): UserCreationResponse!
 }

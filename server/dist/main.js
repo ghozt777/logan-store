@@ -9,8 +9,8 @@ dotenv.config();
 async function bootstrap() {
     const app = await core_1.NestFactory.create(app_module_1.AppModule);
     app.use(cookieParser());
-    await app.listen(5001);
-    console.log(`server started at http://localhost:5001`);
+    await app.listen(process.env.PORT || 5001);
+    console.log(`server started`);
 }
 bootstrap();
 //# sourceMappingURL=main.js.map

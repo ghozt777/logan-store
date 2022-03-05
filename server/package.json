@@ -5,6 +5,11 @@
   "author": "",
   "private": true,
   "license": "UNLICENSED",
+  "engines": {
+    "npm": ">=8.5.1",
+    "node": ">=16.00.0",
+    "yarn": ">=1.22.17"
+  },
   "scripts": {
     "prebuild": "rimraf dist",
     "build": "nest build",
@@ -12,13 +17,15 @@
     "start": "nest start",
     "start:dev": "nest start --watch",
     "start:debug": "nest start --debug --watch",
-    "start:prod": "node dist/main",
+    "start:prod": "node dist/main.js",
     "lint": "eslint \"{src,apps,libs,test}/**/*.ts\" --fix",
     "test": "jest",
     "test:watch": "jest --watch",
     "test:cov": "jest --coverage",
     "test:debug": "node --inspect-brk -r tsconfig-paths/register -r ts-node/register node_modules/.bin/jest --runInBand",
-    "test:e2e": "jest --config ./test/jest-e2e.json"
+    "test:e2e": "jest --config ./test/jest-e2e.json",
+    "prestart:prod": "yarn install",
+    "heroku-postbuild": "yarn install --no-shrinkwrap && yarn run build"
   },
   "dependencies": {
     "@nestjs/common": "^8.0.0",
@@ -44,10 +51,11 @@
     "rimraf": "^3.0.2",
     "rxjs": "^7.2.0",
     "type-graphql": "^1.1.1",
-    "typeorm": "^0.2.41"
+    "typeorm": "^0.2.41",
+    "uuid": "^8.3.2"
   },
   "devDependencies": {
-    "@nestjs/cli": "^8.0.0",
+    "@nestjs/cli": "^8.2.1",
     "@nestjs/schematics": "^8.0.0",
     "@nestjs/testing": "^8.0.0",
     "@types/cache-manager": "^3.4.3",
@@ -59,6 +67,7 @@
     "@types/node": "^16.0.0",
     "@types/nodemailer": "^6.4.4",
     "@types/supertest": "^2.0.11",
+    "@types/uuid": "^8.3.4",
     "@typescript-eslint/eslint-plugin": "^5.0.0",
     "@typescript-eslint/parser": "^5.0.0",
     "eslint": "^8.0.1",
@@ -90,5 +99,6 @@
     ],
     "coverageDirectory": "../coverage",
     "testEnvironment": "node"
-  }
+  },
+  "heroku-run-build-script": true
 }

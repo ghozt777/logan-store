@@ -2,9 +2,11 @@ import { CreateUserDTO } from "./types/createUser.dto";
 import { User } from "./user.entity";
 import * as jwt from 'jsonwebtoken';
 import { Repository } from "typeorm";
+import { Cache } from "cache-manager";
 export declare class UserService {
     private userRepository;
-    constructor(userRepository: Repository<User>);
+    private cacheManager;
+    constructor(userRepository: Repository<User>, cacheManager: Cache);
     createUserPayload(dto: CreateUserDTO): Promise<{
         user: {
             username: string;
@@ -23,4 +25,10 @@ export declare class UserService {
     revokeRefreshTokenForUser(id: string): Promise<boolean>;
     sendEmail(to: string, html: string): Promise<void>;
     getUser(cookie: string): Promise<User>;
+    forgotPassword(email: string): Promise<Boolean>;
+    resetPassword(token: string, password: string): Promise<{
+        errors: any[];
+        message: string;
+    }>;
+    genTemplate: (url: string) => string;
 }

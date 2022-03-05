@@ -4,13 +4,14 @@ import 'react-toastify/dist/ReactToastify.css';
 import {
   LandingPage,
   LoginPage,
-  RegisterPage
+  RegisterPage,
+  ForgotPasswordPage,
+  ResetPasswordPage
 } from "../pages/index"
 import { useSelector } from 'react-redux';
 import { RootState } from './store';
 import { usePingServer } from '../hooks/pingServer';
 import { Header } from '../components/Header/Header';
-
 
 function App() {
   const themeState = useSelector((state: RootState) => state.theme)
@@ -36,6 +37,8 @@ function App() {
         <Route path='/' element={<LandingPage />} />
         <Route path='/login' element={<LoginPage />} />
         <Route path='/register' element={<RegisterPage />} />
+        <Route path='/forgot-password' element={<ForgotPasswordPage />} />
+        <Route path='/reset-password/:token' element={<ResetPasswordPage />} />
       </Routes>
     </>
   );
