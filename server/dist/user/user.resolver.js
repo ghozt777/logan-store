@@ -21,7 +21,6 @@ const user_entity_1 = require("./user.entity");
 const user_service_1 = require("./user.service");
 const argon2 = require("argon2");
 const common_1 = require("@nestjs/common");
-const uuid_1 = require("uuid");
 const logging_interceptor_1 = require("./logging.interceptor");
 const createUserResponse_type_1 = require("./types/createUserResponse.type");
 const loginResponse_type_1 = require("./types/loginResponse.type");
@@ -127,17 +126,6 @@ let UserResolver = class UserResolver {
             ]
         };
     }
-    async forgotPassword(email) {
-        const entityManager = (0, typeorm_2.getManager)();
-        const user = await entityManager.query(`SELECT * FROM users WHERE email='${email}'`);
-        if (user && user[0]) {
-            const token = (0, uuid_1.v4)();
-            const html = `<a href="http://localhost:3000/change-password/${token}">reset password</a>`;
-            await this.userService.sendEmail(user[0].email, html);
-            await this.cacheManager.set(process.env.FORGOT_PASSWORD_PREFIX + token, user[0].id);
-        }
-        return true;
-    }
     async me(cookies) {
         const payload = cookies['jid'];
         const user = await this.userService.getUser(payload);
@@ -149,6 +137,10 @@ let UserResolver = class UserResolver {
         const res = jwt.verify(header, process.env.JWT_SECRET);
         const user = await this.userRepository.findOne({ id: res.id });
         return user;
+    }
+    async forgotPassword(email) {
+        const response = await this.userService.forgotPassword(email);
+        return response;
     }
 };
 __decorate([
@@ -183,13 +175,6 @@ __decorate([
     __metadata("design:returntype", Promise)
 ], UserResolver.prototype, "login", null);
 __decorate([
-    (0, graphql_1.Mutation)(() => Boolean),
-    __param(0, (0, graphql_1.Args)({ name: 'email', type: () => String })),
-    __metadata("design:type", Function),
-    __metadata("design:paramtypes", [String]),
-    __metadata("design:returntype", Promise)
-], UserResolver.prototype, "forgotPassword", null);
-__decorate([
     (0, graphql_1.Query)(() => user_entity_1.User),
     __param(0, (0, graphql_1.Context)('cookies')),
     __metadata("design:type", Function),
@@ -203,6 +188,13 @@ __decorate([
     __metadata("design:paramtypes", [Object]),
     __metadata("design:returntype", Promise)
 ], UserResolver.prototype, "whoami", null);
+__decorate([
+    (0, graphql_1.Mutation)(() => Boolean),
+    __param(0, (0, graphql_1.Args)({ name: 'email', type: () => String })),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [String]),
+    __metadata("design:returntype", Promise)
+], UserResolver.prototype, "forgotPassword", null);
 UserResolver = __decorate([
     (0, common_1.UseInterceptors)(logging_interceptor_1.LoggingInterceptor),
     (0, graphql_2.Resolver)(() => user_entity_1.User),

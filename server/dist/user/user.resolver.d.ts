@@ -14,7 +14,7 @@ export declare class UserResolver {
     checkAuth(req: Request): "auth passed" | "auth failed";
     register(username: string, email: string, password: string): Promise<UserCreationResponse>;
     login(res: Response, usernameOrEmail: string, password: string): Promise<LoginResponse>;
-    forgotPassword(email: string): Promise<boolean>;
     me(cookies: any): Promise<User>;
     whoami(req: Request): Promise<User>;
+    forgotPassword(email: string): Promise<Boolean>;
 }

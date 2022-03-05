@@ -14,7 +14,6 @@ import { UserCreationResponse } from "./types/createUserResponse.type";
 import { LoginResponse } from "./types/loginResponse.type";
 import * as jwt from 'jsonwebtoken'
 
-
 @UseInterceptors(LoggingInterceptor)
 @Resolver(() => User)
 export class UserResolver {
@@ -129,21 +128,6 @@ export class UserResolver {
         }
     }
 
-    @Mutation(() => Boolean)
-    async forgotPassword(
-        @Args({ name: 'email', type: () => String }) email: string
-    ) {
-        const entityManager = getManager();
-        const user = await entityManager.query(`SELECT * FROM users WHERE email='${email}'`);
-        if (user && user[0]) {
-            const token = uuidv4();
-            const html = `<a href="http://localhost:3000/change-password/${token}">reset password</a>`;
-            await this.userService.sendEmail(user[0].email, html);
-            await this.cacheManager.set(process.env.FORGOT_PASSWORD_PREFIX + token, user[0].id);
-        }
-        return true;
-    }
-
     @Query(() => User)
     async me(@Context('cookies') cookies: any): Promise<User> {
         const payload = cookies['jid'];
@@ -160,6 +144,14 @@ export class UserResolver {
         const res: any = jwt.verify(header, process.env.JWT_SECRET);
         const user = await this.userRepository.findOne({ id: res.id });
         return user
+    }
+
+    @Mutation(() => Boolean)
+    async forgotPassword(
+        @Args({ name: 'email', type: () => String }) email: string
+    ): Promise<Boolean> {
+        const response = await this.userService.forgotPassword(email);
+        return response;
     }
 
 }

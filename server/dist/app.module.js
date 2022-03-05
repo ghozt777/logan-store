@@ -13,13 +13,16 @@ const app_controller_1 = require("./app.controller");
 const app_service_1 = require("./app.service");
 const database_module_1 = require("./database/database.module");
 const user_module_1 = require("./user/user.module");
-const microservices_1 = require("@nestjs/microservices");
 const config_1 = require("@nestjs/config");
 let AppModule = class AppModule {
 };
 AppModule = __decorate([
     (0, common_1.Module)({
         imports: [
+            common_1.CacheModule.register({
+                isGlobal: true,
+                ttl: 60 * 60 * 24
+            }),
             config_1.ConfigModule.forRoot(),
             graphql_1.GraphQLModule.forRoot({
                 autoSchemaFile: 'schema.gql',
@@ -34,15 +37,6 @@ AppModule = __decorate([
                 },
                 cors: { origin: true, credentials: true }
             }),
-            microservices_1.ClientsModule.register([
-                {
-                    name: 'logan-store',
-                    transport: microservices_1.Transport.REDIS,
-                    options: {
-                        url: 'redis://localhost:6379',
-                    }
-                },
-            ]),
             database_module_1.DatabaseModule,
             user_module_1.UserModule
         ],

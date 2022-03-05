@@ -6,9 +6,9 @@
   "private": true,
   "license": "UNLICENSED",
   "engines": {
-    "npm": "8.5.1",
-    "node": "16.10.0",
-    "yarn": "1.22.17"
+    "npm": ">=8.5.1",
+    "node": ">=16.00.0",
+    "yarn": ">=1.22.17"
   },
   "scripts": {
     "prebuild": "rimraf dist",
@@ -51,7 +51,8 @@
     "rimraf": "^3.0.2",
     "rxjs": "^7.2.0",
     "type-graphql": "^1.1.1",
-    "typeorm": "^0.2.41"
+    "typeorm": "^0.2.41",
+    "uuid": "^8.3.2"
   },
   "devDependencies": {
     "@nestjs/cli": "^8.2.1",
@@ -66,6 +67,7 @@
     "@types/node": "^16.0.0",
     "@types/nodemailer": "^6.4.4",
     "@types/supertest": "^2.0.11",
+    "@types/uuid": "^8.3.4",
     "@typescript-eslint/eslint-plugin": "^5.0.0",
     "@typescript-eslint/parser": "^5.0.0",
     "eslint": "^8.0.1",

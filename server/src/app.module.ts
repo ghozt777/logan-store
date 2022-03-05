@@ -1,38 +1,32 @@
-import { Module } from '@nestjs/common';
+import { CacheModule, Module } from '@nestjs/common';
 import { GraphQLModule } from '@nestjs/graphql';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { DatabaseModule } from './database/database.module';
 import { UserModule } from './user/user.module';
-import { ClientsModule, Transport } from '@nestjs/microservices'
 import { ConfigModule } from '@nestjs/config';
 
 
 @Module({
   imports: [
-    ConfigModule.forRoot() ,
+    CacheModule.register({
+      isGlobal: true,
+      ttl: 60 * 60 * 24 // ttl in sec -> 1d expiration for all cached tokens 
+    }),
+    ConfigModule.forRoot(),
     GraphQLModule.forRoot({
       autoSchemaFile: 'schema.gql',
       context: async ({ req, res }) => {
 
-        return { 
-          req, 
-          res , 
-          headers : req.headers  ,
-          cookies : req.cookies ?? [] 
+        return {
+          req,
+          res,
+          headers: req.headers,
+          cookies: req.cookies ?? []
         }
       },
       cors: { origin: true, credentials: true }
     }),
-    ClientsModule.register([
-      {
-        name: 'logan-store',
-        transport: Transport.REDIS,
-        options: {
-          url: 'redis://localhost:6379',
-        }
-      },
-    ]),
     DatabaseModule,
     UserModule
   ],
