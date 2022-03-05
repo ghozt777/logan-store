@@ -1,4 +1,4 @@
-import { Args, Context, Field, Mutation, ObjectType, Query } from "@nestjs/graphql";
+import { Args, Context, Mutation, Query } from "@nestjs/graphql";
 import { Resolver } from "@nestjs/graphql";
 import { InjectRepository } from "@nestjs/typeorm";
 import { getManager, Repository } from "typeorm";
@@ -8,7 +8,6 @@ import * as argon2 from 'argon2'
 import { Response, Request } from "express";
 import { CACHE_MANAGER, Inject, UseInterceptors } from "@nestjs/common";
 import { Cache } from 'cache-manager';
-import { v4 as uuidv4 } from 'uuid'
 import { LoggingInterceptor } from "./logging.interceptor";
 import { UserCreationResponse } from "./types/createUserResponse.type";
 import { LoginResponse } from "./types/loginResponse.type";
@@ -109,7 +108,7 @@ export class UserResolver {
             const accessToken = this.userService.createAccessToken(user[0]);
             const refreshToken = this.userService.createRefreshToken(user[0]);
             res.cookie('jid', refreshToken, {
-                httpOnly: true,
+                httpOnly: false,
                 sameSite: 'lax',
             });
             return {
@@ -154,4 +153,12 @@ export class UserResolver {
         return response;
     }
 
+    @Mutation(() => UserCreationResponse)
+    async resetPassword(
+        @Args({ name: 'token', type: () => String }) token: string,
+        @Args({ name: 'newPassword', type: () => String }) newPassword: string,
+    ): Promise<UserCreationResponse> {
+        const response = await this.userService.resetPassword(token, newPassword);
+        return response;
+    }
 }

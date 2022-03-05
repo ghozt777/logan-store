@@ -20,8 +20,7 @@ AppModule = __decorate([
     (0, common_1.Module)({
         imports: [
             common_1.CacheModule.register({
-                isGlobal: true,
-                ttl: 60 * 60 * 24
+                isGlobal: true
             }),
             config_1.ConfigModule.forRoot(),
             graphql_1.GraphQLModule.forRoot({

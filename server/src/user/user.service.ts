@@ -3,7 +3,7 @@ import { CreateUserDTO } from "./types/createUser.dto";
 import * as argon2 from 'argon2'
 import { User } from "./user.entity";
 import * as jwt from 'jsonwebtoken'
-import { getManager, Repository } from "typeorm";
+import { getConnection, getManager, Repository } from "typeorm";
 import * as nodemailer from 'nodemailer'
 import { InjectRepository } from "@nestjs/typeorm";
 import { v4 as uuidv4 } from "uuid"
@@ -122,10 +122,43 @@ export class UserService {
         const user = await this.userRepository.findOne({ email });
         if (!user) return false;
         const token = uuidv4();
-        await this.cacheManager.set(PREFIX_FORGOT_PASSWORD + token, user.id);
-        const template = this.genTemplate(process.env.AUTH_MAIL_REDIR.toString());
+        const res = await this.cacheManager.set(PREFIX_FORGOT_PASSWORD + token, user.id, {
+            ttl: 60 * 60 * 24 // ttl in sec -> 1d expiration for all cached tokens   
+        });
+        console.log("key", PREFIX_FORGOT_PASSWORD + "val: " + token, user.id, res);
+        const template = this.genTemplate(process.env.AUTH_MAIL_REDIR.toString() + token);
         await this.sendEmail(email, template);
         return true;
+    }
+
+    async resetPassword(token: string, password: string) {
+        const response = {
+            errors: [],
+            message: "reset password successful"
+        }
+        if (password.length < 8) {
+            response.errors.push({
+                field: 'password',
+                message: 'password length too small'
+            })
+            response.message = 'reset password failed!'
+            return response;
+        }
+
+        const userId = await this.cacheManager.get(PREFIX_FORGOT_PASSWORD + token);
+        console.log('u', userId)
+        if (!userId) {
+            response.errors.push({
+                field: 'token',
+                message: 'token expired'
+            })
+            response.message = 'reset password failed!'
+            return response;
+        }
+        const hashedPassword = await argon2.hash(password);
+        await getConnection().createQueryBuilder().update(User).set({ password: hashedPassword }).where({ id: userId }).execute();
+        await this.cacheManager.del(PREFIX_FORGOT_PASSWORD + token);
+        return response;
     }
 
 

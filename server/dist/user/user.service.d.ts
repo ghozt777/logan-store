@@ -26,5 +26,9 @@ export declare class UserService {
     sendEmail(to: string, html: string): Promise<void>;
     getUser(cookie: string): Promise<User>;
     forgotPassword(email: string): Promise<Boolean>;
+    resetPassword(token: string, password: string): Promise<{
+        errors: any[];
+        message: string;
+    }>;
     genTemplate: (url: string) => string;
 }

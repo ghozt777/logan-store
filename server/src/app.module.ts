@@ -10,8 +10,7 @@ import { ConfigModule } from '@nestjs/config';
 @Module({
   imports: [
     CacheModule.register({
-      isGlobal: true,
-      ttl: 60 * 60 * 24 // ttl in sec -> 1d expiration for all cached tokens 
+      isGlobal: true
     }),
     ConfigModule.forRoot(),
     GraphQLModule.forRoot({

@@ -203,10 +203,41 @@ let UserService = class UserService {
         if (!user)
             return false;
         const token = (0, uuid_1.v4)();
-        await this.cacheManager.set(constants_1.PREFIX_FORGOT_PASSWORD + token, user.id);
-        const template = this.genTemplate(process.env.AUTH_MAIL_REDIR.toString());
+        const res = await this.cacheManager.set(constants_1.PREFIX_FORGOT_PASSWORD + token, user.id, {
+            ttl: 60 * 60 * 24
+        });
+        console.log("key", constants_1.PREFIX_FORGOT_PASSWORD + "val: " + token, user.id, res);
+        const template = this.genTemplate(process.env.AUTH_MAIL_REDIR.toString() + token);
         await this.sendEmail(email, template);
         return true;
+    }
+    async resetPassword(token, password) {
+        const response = {
+            errors: [],
+            message: "reset password successful"
+        };
+        if (password.length < 8) {
+            response.errors.push({
+                field: 'password',
+                message: 'password length too small'
+            });
+            response.message = 'reset password failed!';
+            return response;
+        }
+        const userId = await this.cacheManager.get(constants_1.PREFIX_FORGOT_PASSWORD + token);
+        console.log('u', userId);
+        if (!userId) {
+            response.errors.push({
+                field: 'token',
+                message: 'token expired'
+            });
+            response.message = 'reset password failed!';
+            return response;
+        }
+        const hashedPassword = await argon2.hash(password);
+        await (0, typeorm_1.getConnection)().createQueryBuilder().update(user_entity_1.User).set({ password: hashedPassword }).where({ id: userId }).execute();
+        await this.cacheManager.del(constants_1.PREFIX_FORGOT_PASSWORD + token);
+        return response;
     }
 };
 UserService = __decorate([

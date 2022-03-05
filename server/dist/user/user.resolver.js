@@ -108,7 +108,7 @@ let UserResolver = class UserResolver {
             const accessToken = this.userService.createAccessToken(user[0]);
             const refreshToken = this.userService.createRefreshToken(user[0]);
             res.cookie('jid', refreshToken, {
-                httpOnly: true,
+                httpOnly: false,
                 sameSite: 'lax',
             });
             return {
@@ -140,6 +140,10 @@ let UserResolver = class UserResolver {
     }
     async forgotPassword(email) {
         const response = await this.userService.forgotPassword(email);
+        return response;
+    }
+    async resetPassword(token, newPassword) {
+        const response = await this.userService.resetPassword(token, newPassword);
         return response;
     }
 };
@@ -195,6 +199,14 @@ __decorate([
     __metadata("design:paramtypes", [String]),
     __metadata("design:returntype", Promise)
 ], UserResolver.prototype, "forgotPassword", null);
+__decorate([
+    (0, graphql_1.Mutation)(() => createUserResponse_type_1.UserCreationResponse),
+    __param(0, (0, graphql_1.Args)({ name: 'token', type: () => String })),
+    __param(1, (0, graphql_1.Args)({ name: 'newPassword', type: () => String })),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [String, String]),
+    __metadata("design:returntype", Promise)
+], UserResolver.prototype, "resetPassword", null);
 UserResolver = __decorate([
     (0, common_1.UseInterceptors)(logging_interceptor_1.LoggingInterceptor),
     (0, graphql_2.Resolver)(() => user_entity_1.User),
