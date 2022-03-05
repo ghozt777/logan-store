@@ -1,4 +1,4 @@
-import { Button, Flex, FormControl, FormErrorMessage, FormHelperText, FormLabel, Input, Stack } from "@chakra-ui/react"
+import { Box, Button, Flex, FormControl, FormErrorMessage, FormHelperText, FormLabel, Input, Stack } from "@chakra-ui/react"
 import { Form, Formik } from "formik"
 import { InputField } from "../../components"
 import { useLoginMutation } from "../../generated/graphql"
@@ -24,79 +24,87 @@ export const LoginPage: React.FC<LoginPageProps> = () => {
         <Flex
             h="100vh"
             w="100%"
+            pt={'8vh'}
             alignItems="center"
             justifyContent="center"
             gap="1rem"
-            bg={themeState.theme === "light" ? "" : "#171717"}
+            bg={`main.${themeState.theme}`}
         >
-            <Formik
+            <Box
+                h="50%"
+                w="40%"
+            >
+                <Formik
 
-                initialValues={{
-                    usernameOrEmail: "",
-                    password: "",
-                }}
+                    initialValues={{
+                        usernameOrEmail: "",
+                        password: "",
+                    }}
 
 
-                onSubmit={async (values, { setSubmitting, setErrors }) => {
-                    const validationErrors = validateDataForLogin(values);
-                    let errors = validationErrors;
-                    if (Object.keys(validationErrors).length === 0) {
-                        const response = await login(values);
-                        const serverErrors = response.data?.login.errors;
-                        console.log(serverErrors)
-                        errors = mapErrors(serverErrors, validationErrors);
-                        if (Object.keys(errors).length === 0) {
-                            toast.success('user login success');
-                            dispatch(successAuth({ accessToken: response.data?.login.accessToken as string }))
-                            navigate('/');
-                        } else {
-                            dispatch(faliureAuth({ errors }))
+                    onSubmit={async (values, { setSubmitting, setErrors }) => {
+                        const validationErrors = validateDataForLogin(values);
+                        let errors = validationErrors;
+                        if (Object.keys(validationErrors).length === 0) {
+                            const response = await login(values);
+                            const serverErrors = response.data?.login.errors;
+                            console.log(serverErrors)
+                            errors = mapErrors(serverErrors, validationErrors);
+                            if (Object.keys(errors).length === 0) {
+                                toast.success('user login success');
+                                dispatch(successAuth({ accessToken: response.data?.login.accessToken as string }))
+                                navigate('/');
+                            } else {
+                                dispatch(faliureAuth({ errors }))
+                            }
+                        }
+                        setErrors(errors)
+                        setSubmitting(false)
+                    }}
+                >
+                    {
+                        ({
+                            values,
+                            errors,
+                            touched,
+                            handleChange,
+                            handleBlur,
+                            handleSubmit,
+                            isSubmitting
+                        }) => {
+                            return (
+                                <Form>
+                                    <Stack spacing={3} >
+                                        <InputField
+                                            variant={themeState.theme}
+                                            name="usernameOrEmail"
+                                            placeholder="enter your username or registered email"
+                                            label="username or email"
+                                            type="text"
+                                        />
+                                        <InputField
+                                            variant={themeState.theme}
+                                            name="password"
+                                            placeholder="password"
+                                            label="password"
+                                            type="password"
+                                        />
+                                        <Button
+                                            colorScheme={`${themeState.theme === "light" ? "telegram" : "purple"}`}
+                                            variant='solid'
+                                            isLoading={isSubmitting}
+                                            loadingText='Submitting'
+                                            type="submit"
+                                        >
+                                            Login
+                                        </Button>
+                                    </Stack>
+                                </Form>
+                            )
                         }
                     }
-                    setErrors(errors)
-                    setSubmitting(false)
-                }}
-            >
-                {
-                    ({
-                        values,
-                        errors,
-                        touched,
-                        handleChange,
-                        handleBlur,
-                        handleSubmit,
-                        isSubmitting
-                    }) => {
-                        return (
-                            <Form>
-                                <Stack spacing={3} >
-                                    <InputField
-                                        name="usernameOrEmail"
-                                        placeholder="enter your username or registered email"
-                                        label="username or email"
-                                        type="text"
-                                    />
-                                    <InputField
-                                        name="password"
-                                        placeholder="password"
-                                        label="password"
-                                        type="password"
-                                    />
-                                    <Button
-                                        colorScheme='teal'
-                                        variant='solid'
-                                        isLoading={isSubmitting}
-                                        loadingText='Submitting'
-                                        type="submit"
-                                    >
-                                        Login
-                                    </Button>
-                                </Stack>
-                            </Form>
-                        )
-                    }
-                }
-            </Formik>
+                </Formik>
+            </Box>
         </Flex >
     )
 }

@@ -11,8 +11,16 @@ export const theme = extendTheme({
             dark: "#7c3aed"
         },
         main: {
-            light: "#EDECFB",
-            dark: "#262626"
+            light: "#fff",
+            dark: "#18181b"
         },
+        text: {
+            light: "black",
+            dark: "white"
+        },
+        "btn-primary" : {
+            light : 'black' ,
+            dark : 'white'
+        }
     }
 })

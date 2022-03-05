@@ -5,18 +5,20 @@ import { useSelector, useDispatch } from "react-redux";
 import { RootState } from "../../app/store";
 import { changeTheme } from '../../features/theme/themeSlice'
 import { Dropdown } from "../Dropdown/Dropdown";
-import { TiWeatherNight } from "react-icons/ti"
+import { TiWeatherNight, TiWeatherSunny } from "react-icons/ti"
 import "./style.css"
+import { Link } from "../Link/Link";
 
 
 type NavbarProps = {
     title: string;
     // dropdown: JSX.Element;
-    // links: JSX.Element[];
+    links?: JSX.Element[];
 }
 
-export const Header: React.FC<NavbarProps> = ({ title }) => {
+export const Header: React.FC<NavbarProps> = ({ title, links }) => {
     const themeState = useSelector((state: RootState) => state.theme);
+    const authState = useSelector((state: RootState) => state.auth);
     const dispatch = useDispatch();
     const [isDropdownOpen, setIsDropdownOpen] = useState(false);
     const [isLagerThan800] = useMediaQuery(`(min-width: 800px)`)
@@ -25,7 +27,7 @@ export const Header: React.FC<NavbarProps> = ({ title }) => {
         <Box
             // bg={`main.${themeState.theme}`}
             bg="transparent"
-            h='13vh'
+            h='8vh'
             minHeight='100px'
             w='100%'
             display="flex"
@@ -35,9 +37,8 @@ export const Header: React.FC<NavbarProps> = ({ title }) => {
         >
             <Flex
                 className='blur'
-                bg="hsl(0 0% 0% / 0.3)"
-                h="80%"
-                w="98%"
+                h="100%"
+                w="100%"
                 p='20px'
                 color="white"
                 fontWeight='bold'
@@ -48,16 +49,17 @@ export const Header: React.FC<NavbarProps> = ({ title }) => {
                 alignItems='center'
                 gap='1rem'
                 transition='350ms'
-                borderStyle="none"
-                borderRadius="10px"
-                boxShadow={`0px 4px 4px -2px #0C0705`}
+            // borderStyle={"solid"}
+            // borderColor="red"
+            // borderWidth={"1rem"}
             >
-                <HamburgerIcon cursor='pointer' />
-                <Text fontWeight={700} className="title-text" fontSize={isLagerThan800 ? '2rem' : 'md'} cursor='pointer' >{title}</Text>
+                <HamburgerIcon color={`text.${themeState.theme}`} cursor='pointer' />
+                <Text fontWeight={700} className="title-text" color={`text.${themeState.theme}`} fontSize={isLagerThan800 ? '1rem' : 'sm'} cursor='pointer' >{title}</Text>
                 <Text
-                    fontSize={isLagerThan800 ? "20px" : "12px"}
+                    fontSize={isLagerThan800 ? "0.8rem" : "0.6rem"}
+                    color={`text.${themeState.theme}`}
                     className="title-tagline"
-                    letterSpacing="4px"
+                // letterSpacing="4px"
                 >Be a Maverick<span style={{ fontSize: isLagerThan800 ? "4rem" : "1rem" }}>.</span></Text>
                 <Flex
                     ml='auto'
@@ -66,15 +68,17 @@ export const Header: React.FC<NavbarProps> = ({ title }) => {
                     alignItems='center'
                     gap='20px'
                 >
-                    <Box color="#FF69B4" cursor='pointer' onClick={() => dispatch(changeTheme())} >
+                    {!authState.isLoggedIn ? <Link to='/login' name='login' /> : <Link to='/' name='logout' />}
+                    <Box color={`text.${themeState.theme}`} cursor='pointer' onClick={() => dispatch(changeTheme())} >
                         {
-                            themeState.theme === 'dark' ? <TiWeatherNight size={"1.6rem"} /> : <SunIcon />
+                            themeState.theme === 'dark' ? <TiWeatherNight /> : <TiWeatherSunny />
                         }
                     </Box>
                     <TriangleDownIcon
-                        color="#FF69B4"
+                        color={`text.${themeState.theme}`}
                         cursor='pointer'
                         transition='350ms'
+                        transitionProperty={"transform"}
                         transform={isDropdownOpen ? 'rotate(-90deg)' : 'rotate(0deg)'}
                         onClick={() => setIsDropdownOpen(s => !s)}
                     />

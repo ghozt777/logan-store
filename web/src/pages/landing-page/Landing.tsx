@@ -13,10 +13,6 @@ export const LandingPage: React.FC<LaandingPageProps> = () => {
 
         <Box
             bg={`main.${themeState.theme}`} w='100%' h='100vh' overflowX={"hidden"}
-            backgroundImage="url('https://ik.imagekit.io/dnoyrwmg9i9o/photo-1627856013091-fed6e4e30025-min_ZbO2fciiS.jpeg?ik-sdk-version=javascript-1.4.3&updatedAt=1646503804698')"
-            backgroundRepeat="no-repeat"
-            backgroundPosition="center"
-            backgroundSize="cover"
         >
 
             <Routes>
