@@ -1,6 +1,6 @@
 import { Field, ObjectType } from "@nestjs/graphql";
-import { Column, CreateDateColumn, Entity, PrimaryGeneratedColumn, UpdateDateColumn } from "typeorm";
-
+import { Column, CreateDateColumn, Entity, OneToMany, PrimaryGeneratedColumn, UpdateDateColumn } from "typeorm";
+import { Image } from "./../images/image.entity"
 @ObjectType()
 @Entity('products')
 export class Product {
@@ -32,6 +32,9 @@ export class Product {
 
     @Column({ nullable: true })
     discountId: string;
+
+    @OneToMany(() => Image, (image: Image) => image.product)
+    images: Image[];
 
     @CreateDateColumn({ type: "timestamp", default: () => "CURRENT_TIMESTAMP(6)" })
     public created_at: Date;

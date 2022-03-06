@@ -1,0 +1,7 @@
+{
+    "avatar-url": "https://avatars.dicebear.com/api/:sprites/:seed.svg",
+    "urql": {
+        "host": "http://0.0.0.0",
+        "port": "5001"
+    }
+}

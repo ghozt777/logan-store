@@ -1,0 +1,14 @@
+.card.dark{
+    border-radius: 36px;
+    background: #111113;
+    box-shadow:  27px 27px 54px #070708,
+                 -27px -27px 54px #1b1b1e;
+}
+
+
+.card.light{
+    border-radius: 50px;
+background: #e9e7e7;
+box-shadow:  27px 27px 54px #8c8b8b,
+             -27px -27px 54px #ffffff;
+}

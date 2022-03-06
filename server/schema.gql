@@ -29,10 +29,19 @@ type LoginResponse {
   errors: [Errors!]!
 }
 
+type Product {
+  productId: String!
+  name: String!
+  description: String!
+  SKU: String!
+  price: Float!
+}
+
 type Query {
   hello: String!
   me: User!
   whoami: User!
+  getProducts: Product!
 }
 
 type Mutation {

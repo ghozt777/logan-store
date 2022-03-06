@@ -6,6 +6,7 @@ import { DatabaseModule } from './database/database.module';
 import { UserModule } from './user/user.module';
 import { ConfigModule } from '@nestjs/config';
 import { ProductModule } from './product/product.module';
+import { ImageModule } from './images/image.module';
 
 
 @Module({
@@ -29,7 +30,8 @@ import { ProductModule } from './product/product.module';
     }),
     DatabaseModule,
     UserModule,
-    ProductModule
+    ProductModule,
+    ImageModule
   ],
   controllers: [AppController],
   providers: [AppService],

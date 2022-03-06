@@ -15,6 +15,7 @@ const database_module_1 = require("./database/database.module");
 const user_module_1 = require("./user/user.module");
 const config_1 = require("@nestjs/config");
 const product_module_1 = require("./product/product.module");
+const image_module_1 = require("./images/image.module");
 let AppModule = class AppModule {
 };
 AppModule = __decorate([
@@ -39,7 +40,8 @@ AppModule = __decorate([
             }),
             database_module_1.DatabaseModule,
             user_module_1.UserModule,
-            product_module_1.ProductModule
+            product_module_1.ProductModule,
+            image_module_1.ImageModule
         ],
         controllers: [app_controller_1.AppController],
         providers: [app_service_1.AppService],

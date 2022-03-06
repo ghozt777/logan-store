@@ -1,5 +1,5 @@
 import { HamburgerIcon, SunIcon, TriangleDownIcon } from "@chakra-ui/icons";
-import { Box, Flex, Img, Text, theme, useMediaQuery } from "@chakra-ui/react";
+import { Box, Flex, Img, Text, theme, useDisclosure, useMediaQuery } from "@chakra-ui/react";
 import { useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { RootState } from "../../app/store";
@@ -25,7 +25,8 @@ export const Header: React.FC<NavbarProps> = ({ title, links }) => {
     const [isDropdownOpen, setIsDropdownOpen] = useState(false);
     const [, logout] = useLogoutMutation();
     const [isLagerThan800] = useMediaQuery(`(min-width: 800px)`)
-
+    
+    
     return (
         <Box
             // bg={`main.${themeState.theme}`}
@@ -85,7 +86,7 @@ export const Header: React.FC<NavbarProps> = ({ title, links }) => {
                         transform={isDropdownOpen ? 'rotate(-90deg)' : 'rotate(0deg)'}
                         onClick={() => setIsDropdownOpen(s => !s)}
                     />
-                    <Dropdown isOpen={isDropdownOpen} />
+                    <Dropdown isOpen={isDropdownOpen} setIsDropdownOpen={setIsDropdownOpen} />
                 </Flex>
             </Flex >
         </Box>

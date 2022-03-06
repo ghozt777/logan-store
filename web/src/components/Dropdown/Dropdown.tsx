@@ -3,10 +3,14 @@ import { useEffect, useRef } from "react";
 import { useSelector } from "react-redux"
 import { RootState } from "../../app/store";
 import { Card } from "./components/Card";
+import './style.css'
 
-type DropDownProps = { isOpen: boolean; }
+type DropDownProps = { 
+    isOpen: boolean;
+    setIsDropdownOpen: React.Dispatch<React.SetStateAction<boolean>>
+}
 
-export const Dropdown: React.FC<DropDownProps> = ({ isOpen }) => {
+export const Dropdown: React.FC<DropDownProps> = ({ isOpen , setIsDropdownOpen }) => {
 
     const themeState = useSelector((state: RootState) => state.theme)
     const [isGreaterThan800] = useMediaQuery(`(min-width: 800px)`)
@@ -27,24 +31,23 @@ export const Dropdown: React.FC<DropDownProps> = ({ isOpen }) => {
 
     return (
         <Flex
+            className={`card ${themeState.theme}`}
             ref={dropdownRef}
-            h={isGreaterThan800 ? '20rem' : '10rem'}
-            w={isGreaterThan800 ? '15rem' : '7.5rem'}
+            h={isGreaterThan800 ? '10rem' : '7.5rem'}
+            w={isGreaterThan800 ? '25rem' : '12rem'}
             flexDirection='column'
             alignItems='center'
             justifyContent='flex-start'
             gap='12px'
-            // bg={`dropdown.${themeState.theme}`}
-            bg="hsl(274 66% 32% / 0.6)"
+            bg={`dropdown.${themeState.theme}`}
             position='absolute'
             top='80%'
             right='5px'
             borderStyle='none'
-            borderRadius='10px'
             transition='350ms'
             opacity={isOpen ? 1 : 0}
         >
-            <Card title="sup!" />
+            <Card title="sup!" setIsDropdownOpen={setIsDropdownOpen}  />
         </Flex >
     )
 }

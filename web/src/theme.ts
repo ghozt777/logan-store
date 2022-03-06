@@ -7,8 +7,8 @@ export const theme = extendTheme({
             dark: "#171717"
         },
         dropdown: {
-            light: "#fb923c",
-            dark: "#7c3aed"
+            light: "#fff",
+            dark: "#18181b"
         },
         main: {
             light: "#fff",
@@ -18,9 +18,9 @@ export const theme = extendTheme({
             light: "black",
             dark: "white"
         },
-        "btn-primary" : {
-            light : 'black' ,
-            dark : 'white'
+        "btn-primary": {
+            light: 'black',
+            dark: 'white'
         }
     }
 })
