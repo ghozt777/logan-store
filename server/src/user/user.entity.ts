@@ -28,6 +28,30 @@ export class User {
     @Column({ nullable: true, default: 0 })
     tokenVersion: number;
 
+    @Field()
+    @Column({ nullable: true })
+    addressLine1: string;
+
+    @Field()
+    @Column({ nullable: true })
+    addressLine2: string;
+
+    @Field()
+    @Column({ nullable: true })
+    city: string;
+
+    @Field()
+    @Column({ nullable: true })
+    zipcode: number;
+
+    @Field()
+    @Column({ nullable: true })
+    country: string;
+
+    @Field()
+    @Column({ nullable: true })
+    mobile: number;
+
     @CreateDateColumn({ type: "timestamp", default: () => "CURRENT_TIMESTAMP(6)" })
     public created_at: Date;
 

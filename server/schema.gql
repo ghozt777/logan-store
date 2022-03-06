@@ -6,6 +6,12 @@ type User {
   id: String!
   username: String!
   email: String!
+  addressLine1: String!
+  addressLine2: String!
+  city: String!
+  zipcode: Float!
+  country: String!
+  mobile: Float!
 }
 
 type Errors {

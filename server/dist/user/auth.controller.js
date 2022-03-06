@@ -98,7 +98,7 @@ __decorate([
     __metadata("design:returntype", Promise)
 ], AuthController.prototype, "revoke", null);
 AuthController = __decorate([
-    (0, common_1.Controller)('/'),
+    (0, common_1.Controller)('/auth'),
     __metadata("design:paramtypes", [user_service_1.UserService])
 ], AuthController);
 exports.AuthController = AuthController;

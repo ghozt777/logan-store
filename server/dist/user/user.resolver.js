@@ -108,9 +108,10 @@ let UserResolver = class UserResolver {
             const accessToken = this.userService.createAccessToken(user[0]);
             const refreshToken = this.userService.createRefreshToken(user[0]);
             res.cookie('jid', refreshToken, {
-                httpOnly: false,
+                httpOnly: true,
                 sameSite: 'lax',
             });
+            res.setHeader("Access-Control-Expose-Headers", "Set-Cookie");
             return {
                 accessToken: accessToken,
                 errors: []
@@ -145,6 +146,16 @@ let UserResolver = class UserResolver {
     async resetPassword(token, newPassword) {
         const response = await this.userService.resetPassword(token, newPassword);
         return response;
+    }
+    async logout(res) {
+        try {
+            res.clearCookie('jid');
+        }
+        catch (err) {
+            console.log('error deleting cookie', err);
+            return false;
+        }
+        return true;
     }
 };
 __decorate([
@@ -207,6 +218,13 @@ __decorate([
     __metadata("design:paramtypes", [String, String]),
     __metadata("design:returntype", Promise)
 ], UserResolver.prototype, "resetPassword", null);
+__decorate([
+    (0, graphql_1.Mutation)(() => Boolean),
+    __param(0, (0, graphql_1.Context)('res')),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [Object]),
+    __metadata("design:returntype", Promise)
+], UserResolver.prototype, "logout", null);
 UserResolver = __decorate([
     (0, common_1.UseInterceptors)(logging_interceptor_1.LoggingInterceptor),
     (0, graphql_2.Resolver)(() => user_entity_1.User),

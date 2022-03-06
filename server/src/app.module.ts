@@ -5,6 +5,7 @@ import { AppService } from './app.service';
 import { DatabaseModule } from './database/database.module';
 import { UserModule } from './user/user.module';
 import { ConfigModule } from '@nestjs/config';
+import { ProductModule } from './product/product.module';
 
 
 @Module({
@@ -27,7 +28,8 @@ import { ConfigModule } from '@nestjs/config';
       cors: { origin: true, credentials: true }
     }),
     DatabaseModule,
-    UserModule
+    UserModule,
+    ProductModule
   ],
   controllers: [AppController],
   providers: [AppService],
