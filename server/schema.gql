@@ -35,4 +35,5 @@ type Mutation {
   login(password: String!, usernameOrEmail: String!): LoginResponse!
   forgotPassword(email: String!): Boolean!
   resetPassword(newPassword: String!, token: String!): UserCreationResponse!
+  logout: Boolean!
 }

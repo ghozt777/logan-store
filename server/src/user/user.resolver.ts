@@ -108,9 +108,10 @@ export class UserResolver {
             const accessToken = this.userService.createAccessToken(user[0]);
             const refreshToken = this.userService.createRefreshToken(user[0]);
             res.cookie('jid', refreshToken, {
-                httpOnly: false,
+                httpOnly: true,
                 sameSite: 'lax',
             });
+            res.setHeader("Access-Control-Expose-Headers", "Set-Cookie");
             return {
                 accessToken: accessToken,
                 errors: []
@@ -160,5 +161,18 @@ export class UserResolver {
     ): Promise<UserCreationResponse> {
         const response = await this.userService.resetPassword(token, newPassword);
         return response;
+    }
+
+    @Mutation(() => Boolean)
+    async logout(
+        @Context('res') res: Response
+    ) {
+        try {
+            res.clearCookie('jid');
+        } catch (err) {
+            console.log('error deleting cookie', err);
+            return false;
+        }
+        return true;
     }
 }

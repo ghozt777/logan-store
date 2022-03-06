@@ -18,4 +18,5 @@ export declare class UserResolver {
     whoami(req: Request): Promise<User>;
     forgotPassword(email: string): Promise<Boolean>;
     resetPassword(token: string, newPassword: string): Promise<UserCreationResponse>;
+    logout(res: Response): Promise<boolean>;
 }
