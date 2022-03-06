@@ -8,6 +8,8 @@ import { Dropdown } from "../Dropdown/Dropdown";
 import { TiWeatherNight, TiWeatherSunny } from "react-icons/ti"
 import "./style.css"
 import { Link } from "../Link/Link";
+import { useLogoutMutation } from "../../generated/graphql";
+import { logout as logoutReducer } from "../../features/auth/authSlice"
 
 
 type NavbarProps = {
@@ -21,6 +23,7 @@ export const Header: React.FC<NavbarProps> = ({ title, links }) => {
     const authState = useSelector((state: RootState) => state.auth);
     const dispatch = useDispatch();
     const [isDropdownOpen, setIsDropdownOpen] = useState(false);
+    const [, logout] = useLogoutMutation();
     const [isLagerThan800] = useMediaQuery(`(min-width: 800px)`)
 
     return (
@@ -68,7 +71,7 @@ export const Header: React.FC<NavbarProps> = ({ title, links }) => {
                     alignItems='center'
                     gap='20px'
                 >
-                    {!authState.isLoggedIn ? <Link to='/login' name='login' /> : <Link to='/' name='logout' />}
+                    {!authState.isLoggedIn ? <Link to='/login' name='login' /> : <Box onClick={() => dispatch(logoutReducer(logout))} ><Link to='/' name='logout' /></Box>}
                     <Box color={`text.${themeState.theme}`} cursor='pointer' onClick={() => dispatch(changeTheme())} >
                         {
                             themeState.theme === 'dark' ? <TiWeatherNight /> : <TiWeatherSunny />

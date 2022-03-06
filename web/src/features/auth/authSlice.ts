@@ -1,4 +1,4 @@
-import { createSlice, PayloadAction } from '@reduxjs/toolkit'
+import { createAsyncThunk, createSlice, PayloadAction } from '@reduxjs/toolkit'
 
 export interface AuthSlice {
     isLoggedIn: boolean;
@@ -6,6 +6,11 @@ export interface AuthSlice {
     errors: any[];
     token: string;
 }
+
+export const logout = createAsyncThunk(`users/logout`, async (logoutQueryExe: any, thunkAPI) => {
+    const res = await logoutQueryExe();
+    return res;
+})
 
 
 const getInitialState = () => {
@@ -39,7 +44,23 @@ export const authSlice = createSlice({
             state.errors = action.payload.errors
             state.token = ""
             localStorage.setItem('auth', JSON.stringify(state))
-        }
+        },
+
+    },
+    extraReducers: (builder) => {
+        builder.addCase(logout.fulfilled, (state, action) => {
+            state.errors = [];
+            state.isLoggedIn = false;
+            state.token = "";
+            state.isMakingRequest = false;
+            if (action.payload.data.logout) {
+                localStorage.removeItem('auth');
+                console.log('logout success', state);
+            }
+        })
+        builder.addCase(logout.rejected, (state, action) => {
+            console.error('logout unsuccessful with response: ', action.payload);
+        })
     }
 })
 
