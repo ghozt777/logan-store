@@ -10,7 +10,7 @@ export declare class UserResolver {
     private userRepository;
     private cacheManager;
     constructor(userService: UserService, userRepository: Repository<User>, cacheManager: Cache);
-    hello(): string;
+    hello(isAuth: boolean): string;
     checkAuth(req: Request): "auth passed" | "auth failed";
     register(username: string, email: string, password: string): Promise<UserCreationResponse>;
     login(res: Response, usernameOrEmail: string, password: string): Promise<LoginResponse>;

@@ -25,13 +25,15 @@ const logging_interceptor_1 = require("./logging.interceptor");
 const createUserResponse_type_1 = require("./types/createUserResponse.type");
 const loginResponse_type_1 = require("./types/loginResponse.type");
 const jwt = require("jsonwebtoken");
+const auth_decorator_1 = require("./auth.decorator");
 let UserResolver = class UserResolver {
     constructor(userService, userRepository, cacheManager) {
         this.userService = userService;
         this.userRepository = userRepository;
         this.cacheManager = cacheManager;
     }
-    hello() {
+    hello(isAuth) {
+        console.log('is authenticated', isAuth);
         return 'Hello From User';
     }
     checkAuth(req) {
@@ -160,8 +162,9 @@ let UserResolver = class UserResolver {
 };
 __decorate([
     (0, graphql_1.Query)(() => String),
+    __param(0, (0, auth_decorator_1.Auth)()),
     __metadata("design:type", Function),
-    __metadata("design:paramtypes", []),
+    __metadata("design:paramtypes", [Boolean]),
     __metadata("design:returntype", void 0)
 ], UserResolver.prototype, "hello", null);
 __decorate([

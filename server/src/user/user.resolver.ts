@@ -12,6 +12,7 @@ import { LoggingInterceptor } from "./logging.interceptor";
 import { UserCreationResponse } from "./types/createUserResponse.type";
 import { LoginResponse } from "./types/loginResponse.type";
 import * as jwt from 'jsonwebtoken'
+import { Auth } from "./auth.decorator";
 
 
 @UseInterceptors(LoggingInterceptor)
@@ -20,7 +21,8 @@ export class UserResolver {
     constructor(private userService: UserService, @InjectRepository(User) private userRepository: Repository<User>, @Inject(CACHE_MANAGER) private cacheManager: Cache) { }
 
     @Query(() => String)
-    hello() {
+    hello(@Auth() isAuth : boolean) {
+        console.log('is authenticated', isAuth);
         return 'Hello From User'
     }
 

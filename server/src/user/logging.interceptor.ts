@@ -8,7 +8,7 @@ export class LoggingInterceptor implements NestInterceptor {
   intercept(context: ExecutionContext, next: CallHandler): Observable<any> {
     console.log('Before...');
     const ctx = GqlExecutionContext.create(context);
-    console.log(ctx.getContext().req)
+    console.log('incomming request ....', ctx)
     const now = Date.now();
     return next
       .handle()

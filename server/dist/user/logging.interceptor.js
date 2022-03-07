@@ -14,7 +14,7 @@ let LoggingInterceptor = class LoggingInterceptor {
     intercept(context, next) {
         console.log('Before...');
         const ctx = graphql_1.GqlExecutionContext.create(context);
-        console.log(ctx.getContext().req);
+        console.log('incomming request ....', ctx);
         const now = Date.now();
         return next
             .handle()
