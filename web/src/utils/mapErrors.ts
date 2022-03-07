@@ -13,6 +13,5 @@ export function mapErrors(serverErrors: Errors[] | undefined, frontEndErrors: an
         if (frontEndErrors[field]) message += " and " + frontEndErrors[field]
         errors[field] = message
     })
-    console.log('errors', errors)
     return errors
 }

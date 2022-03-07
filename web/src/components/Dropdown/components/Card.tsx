@@ -17,7 +17,6 @@ export const Card: React.FC<CardProps> = ({ title, setIsDropdownOpen }) => {
     const [res, retrigger] = useWhoAmIQuery()
     const themeState = useSelector((state: RootState) => state.theme);
     let url: string = getAavatarUrl(res.data?.whoami.username.split(' ')[0] ?? "unknown")
-    console.log(url, res)
     return (
         <Flex
             h="100%"

@@ -13,6 +13,7 @@ import { UserCreationResponse } from "./types/createUserResponse.type";
 import { LoginResponse } from "./types/loginResponse.type";
 import * as jwt from 'jsonwebtoken'
 
+
 @UseInterceptors(LoggingInterceptor)
 @Resolver(() => User)
 export class UserResolver {
@@ -175,4 +176,5 @@ export class UserResolver {
         }
         return true;
     }
+
 }
