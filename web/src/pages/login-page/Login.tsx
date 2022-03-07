@@ -1,10 +1,10 @@
-import { Box, Button, Flex, FormControl, FormErrorMessage, FormHelperText, FormLabel, Input, Stack } from "@chakra-ui/react"
+import { Box, Button, Flex, FormControl, FormErrorMessage, FormHelperText, FormLabel, Input, Link, Stack, useMediaQuery } from "@chakra-ui/react"
 import { Form, Formik } from "formik"
 import { InputField } from "../../components"
 import { useLoginMutation } from "../../generated/graphql"
 import { mapErrors } from "../../utils/mapErrors"
 import { toast } from "react-toastify"
-import { useNavigate } from "react-router-dom"
+import { useNavigate, Link as RouterLink } from "react-router-dom"
 import { validateDataForLogin } from "../../utils/validateLoginFormData"
 import { useDispatch, useSelector } from "react-redux"
 import { faliureAuth, successAuth } from "../../features/auth/authSlice"
@@ -19,6 +19,7 @@ export const LoginPage: React.FC<LoginPageProps> = () => {
     const navigate = useNavigate();
     const dispatch = useDispatch();
     const themeState = useSelector((state: RootState) => state.theme)
+    const [isGreaterThan800] = useMediaQuery(`(min-width: 800px)`);
 
     return (
         <Flex
@@ -27,7 +28,7 @@ export const LoginPage: React.FC<LoginPageProps> = () => {
             pt={'8vh'}
             alignItems="center"
             justifyContent="center"
-            gap="1rem"
+            flexDirection={"column"}
             bg={`main.${themeState.theme}`}
         >
             <Box
@@ -98,6 +99,21 @@ export const LoginPage: React.FC<LoginPageProps> = () => {
                                         >
                                             Login
                                         </Button>
+                                        <Box
+                                            w="100%"
+                                        >
+                                            <Flex
+                                                h="5rem"
+                                                w={isGreaterThan800 ? "35%" : "100%"}
+                                                ml="auto"
+                                                flexDirection={"row"}
+                                                alignItems="center"
+                                                justifyContent="space-evenly"
+                                            >
+                                                <Button onClick={() => navigate('/register')} size={"xs"} variant={"solid"}>Register</Button>
+                                                <Button onClick={() => navigate('/forgot-password')} size={"xs"} variant={"link"}>forgot password</Button>
+                                            </Flex>
+                                        </Box>
                                     </Stack>
                                 </Form>
                             )

@@ -1,10 +1,11 @@
-import { Box, Button, Flex, Img, Text, useMediaQuery } from "@chakra-ui/react"
+import { Badge, Box, Button, Flex, Img, Text, useMediaQuery } from "@chakra-ui/react"
 import { useSelector } from "react-redux"
 import { RootState } from "../../../../app/store"
 import { useWhoAmIQuery } from "../../../../generated/graphql"
 import { getAavatarUrl } from "../../../../utils/getAvatarUrl"
 import { AiOutlineShoppingCart } from "react-icons/ai"
 import { CloseButton } from '@chakra-ui/react'
+import "./style.css"
 
 interface CardProps {
     title: string,
@@ -29,31 +30,43 @@ export const Card: React.FC<CardProps> = ({ title, setIsDropdownOpen }) => {
             color={themeState.theme === 'light' ? "black" : "white"}
             position="relative"
         >
-            <CloseButton
+            <Flex
                 position={"absolute"}
                 top="10%"
                 right="10%"
-                size={isGreaterThan800 ? "md" : "sm"}
-                onClick={() => setIsDropdownOpen(s => !s)}
-            />
-            <Img h={"40%"} src={url} alt='profile' />
+                w="40%"
+                flexDirection={"row"}
+                alignItems="center"
+                justifyContent="space-between"
+            >
+                <Text className="title" >{title}</Text>
+                <CloseButton
+                    size={isGreaterThan800 ? "md" : "sm"}
+                    onClick={() => setIsDropdownOpen(s => !s)}
+                />
+            </Flex>
             <Flex
                 h="100%"
                 w="60%"
-                flexDirection={"column"}
+                flexDirection={"row"}
                 alignItems="center"
                 justifyContent="space-evenly"
             >
-                <Text>{title}</Text>
+                <Img h={"40%"} src={url} alt='profile' />
+                <Flex
+                    w="100%"
+                    h="40%"
+                    flexDirection={"column"}
+                    justifyContent={"space-evenly"}
+                    alignItems="center"
+                >
+                    <Text className='details'>{res.fetching ? "Loading..." : res.data?.whoami.username ?? "not signed in"}</Text>
+                    <Text className='details'>{res.fetching ? "Loading..." : res.data?.whoami.email}</Text>
+                </Flex>
+            </Flex>
+            <Flex>
                 {
-                    authState.isLoggedIn &&
-                    <Flex
-                        gap="20%"
-                    >
-                        <Box><AiOutlineShoppingCart /></Box>
-                        <Box><AiOutlineShoppingCart /></Box>
-                        <Box><AiOutlineShoppingCart /></Box>
-                    </Flex>
+                    <AiOutlineShoppingCart />
                 }
             </Flex>
         </Flex>

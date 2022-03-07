@@ -1,13 +1,12 @@
-import { Button, Flex , Text } from "@chakra-ui/react"
+import { Flex } from "@chakra-ui/react"
 import React from "react"
 import { useSelector } from "react-redux"
 import { RootState } from "../../../../app/store"
-import { CategoryButton } from "../categor-button/CategoryButton"
 import "./style.css"
 
 interface CategoryBarProps { }
 
-export const CategoryBar: React.FC<CategoryBarProps> = ({children}) => {
+export const CategoryBar: React.FC<CategoryBarProps> = ({ children }) => {
     const themeState = useSelector((state: RootState) => state.theme)
     return (
         <Flex
@@ -16,7 +15,7 @@ export const CategoryBar: React.FC<CategoryBarProps> = ({children}) => {
             alignItems="center"
             justifyContent="space-evenly"
         >
-           {children}
+            {children}
         </Flex>
     )
 }

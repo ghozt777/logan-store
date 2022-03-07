@@ -15,17 +15,21 @@ export const CategoryButton: React.FC<CategoryBtnProps> = ({ name, abbr, HoverCa
     const themeState = useSelector((state: RootState) => state.theme);
     const [iseGreaterThan1100, iseGreaterThan600] = useMediaQuery([`(min-width: 1100px)`, `(min-width: 600px)`])
     const [isHover, setIsHover] = useState(false);
-    return <Button
-        className='btn-category-link'
-        color={themeState.theme === "light" ? "black" : "white"}
-        variant='link'
-    >
-        {
-            iseGreaterThan600 && <Text onMouseOver={() => setIsHover(true)} onMouseLeave={() => setIsHover(false)} className='category-link' >{iseGreaterThan1100 ? name : abbr + "..."}</Text>
-        }
-        {
-            isHover && <HoverCard />
-        }
-    </Button>
+    return <>
+        <Button
+            className='btn-category-link'
+            color={themeState.theme === "light" ? "black" : "white"}
+            variant='link'
+        >
+            {
+                iseGreaterThan600 && <Text onMouseOver={() => setIsHover(true)} onMouseLeave={() => setIsHover(false)} className='category-link' >{iseGreaterThan1100 ? name : abbr + "..."}</Text>
+            }
+            {
+                isHover && <HoverCard />
+            }
+        </Button>
+    </>
 
 }
+
+// onMouseLeave={() => setIsHover(false)}

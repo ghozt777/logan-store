@@ -1,0 +1,27 @@
+@font-face {
+    font-family: 'Gogoia';
+    src: url('../../../../assets//fonts//GOGOIA-Regular.ttf');
+    font-style: normal;
+    font-weight: 100;
+}
+
+.title{
+    font-family: 'Gogoia';
+    font-size: 1.4rem;
+    letter-spacing: 2px;
+}
+
+.details{
+    font-weight: bold;
+    font-size: 0.8rem ;
+}
+
+@media (max-width: 800px){
+    .details{
+        font-size: 0.6rem;
+    }
+
+    .title{
+        font-size: 0.8rem;
+    }
+}
