@@ -1,8 +1,8 @@
 import { Box, Button, Flex, Img, Text, useMediaQuery } from "@chakra-ui/react"
 import { useSelector } from "react-redux"
-import { RootState } from "../../../app/store"
-import { useWhoAmIQuery } from "../../../generated/graphql"
-import { getAavatarUrl } from "../../../utils/getAvatarUrl"
+import { RootState } from "../../../../app/store"
+import { useWhoAmIQuery } from "../../../../generated/graphql"
+import { getAavatarUrl } from "../../../../utils/getAvatarUrl"
 import { AiOutlineShoppingCart } from "react-icons/ai"
 import { CloseButton } from '@chakra-ui/react'
 

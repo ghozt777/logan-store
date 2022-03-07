@@ -2,7 +2,7 @@ import { Flex, useMediaQuery } from "@chakra-ui/react"
 import { useEffect, useRef } from "react";
 import { useSelector } from "react-redux"
 import { RootState } from "../../app/store";
-import { Card } from "./components/Card";
+import { Card } from "./components/Card/Card";
 import './style.css'
 
 type DropDownProps = { 

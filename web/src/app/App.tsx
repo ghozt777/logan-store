@@ -1,20 +1,18 @@
+import * as React from 'react'
 import { Route, Routes } from 'react-router-dom'
 import { ToastContainer, Slide, Zoom, Flip, Bounce } from 'react-toastify';
-import 'react-toastify/dist/ReactToastify.css';
 import {
   LandingPage,
-  LoginPage,
   RegisterPage,
   ForgotPasswordPage,
-  ResetPasswordPage
+  ResetPasswordPage,
+  LoginPage
 } from "../pages/index"
-import { useSelector } from 'react-redux';
-import { RootState } from './store';
 import { usePingServer } from '../hooks/pingServer';
 import { Header } from '../components/Header/Header';
+import 'react-toastify/dist/ReactToastify.css';
 
 function App() {
-  const themeState = useSelector((state: RootState) => state.theme)
   usePingServer();
   return (
     <>
@@ -30,7 +28,6 @@ function App() {
         draggable
         pauseOnHover
         theme="colored"
-      // theme={`${themeState.theme === "light" ? "colored" : "dark"}`} 
       />
       <Header title='Logan Store' />
       <Routes>

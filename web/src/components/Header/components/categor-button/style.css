@@ -1,0 +1,19 @@
+@font-face {
+    font-family: 'Comfortaa';
+    src: url('../../../../assets/fonts/Comfortaa-Regular.ttf');
+    font-style: normal;
+    font-weight: 100;
+}
+
+
+
+.category-link{
+    font-family: 'Comfortaa' !important;
+    font-size: 0.8rem;
+}
+
+@media (max-width: 800px){
+    .category-link{
+        font-size: 0.5rem;
+    }
+}

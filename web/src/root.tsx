@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo } from 'react';
+import React, { useMemo } from 'react';
 import App from './app/App';
 import { RootState } from './app/store'
 import { useSelector } from 'react-redux'
