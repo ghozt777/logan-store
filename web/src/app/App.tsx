@@ -8,12 +8,10 @@ import {
   ResetPasswordPage,
   LoginPage
 } from "../pages/index"
-import { usePingServer } from '../hooks/pingServer';
 import { Header } from '../components/Header/Header';
 import 'react-toastify/dist/ReactToastify.css';
 
 function App() {
-  usePingServer();
   return (
     <>
       <ToastContainer

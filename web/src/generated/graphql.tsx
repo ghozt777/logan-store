@@ -21,6 +21,20 @@ export type Errors = {
   message: Scalars['String'];
 };
 
+export type Image = {
+  __typename?: 'Image';
+  id: Scalars['String'];
+  name: Scalars['String'];
+  owner?: Maybe<Scalars['String']>;
+  url: Scalars['String'];
+};
+
+export type ImageResponse = {
+  __typename?: 'ImageResponse';
+  images: Array<Image>;
+  message: Scalars['String'];
+};
+
 export type LoginResponse = {
   __typename?: 'LoginResponse';
   accessToken: Scalars['String'];
@@ -29,12 +43,19 @@ export type LoginResponse = {
 
 export type Mutation = {
   __typename?: 'Mutation';
+  addImage: Scalars['Boolean'];
   checkAuth: Scalars['String'];
   forgotPassword: Scalars['Boolean'];
   login: LoginResponse;
   logout: Scalars['Boolean'];
   register: UserCreationResponse;
   resetPassword: UserCreationResponse;
+};
+
+
+export type MutationAddImageArgs = {
+  name: Scalars['String'];
+  url: Scalars['String'];
 };
 
 
@@ -61,8 +82,19 @@ export type MutationResetPasswordArgs = {
   token: Scalars['String'];
 };
 
+export type Product = {
+  __typename?: 'Product';
+  SKU: Scalars['String'];
+  description: Scalars['String'];
+  name: Scalars['String'];
+  price: Scalars['Float'];
+  productId: Scalars['String'];
+};
+
 export type Query = {
   __typename?: 'Query';
+  getImages: ImageResponse;
+  getProducts: Product;
   hello: Scalars['String'];
   me: User;
   whoami: User;
@@ -70,9 +102,15 @@ export type Query = {
 
 export type User = {
   __typename?: 'User';
+  addressLine1: Scalars['String'];
+  addressLine2: Scalars['String'];
+  city: Scalars['String'];
+  country: Scalars['String'];
   email: Scalars['String'];
   id: Scalars['String'];
+  mobile: Scalars['Float'];
   username: Scalars['String'];
+  zipcode: Scalars['Float'];
 };
 
 export type UserCreationResponse = {

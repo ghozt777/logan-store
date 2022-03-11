@@ -29,6 +29,13 @@ type LoginResponse {
   errors: [Errors!]!
 }
 
+type Image {
+  id: String!
+  name: String!
+  url: String!
+  owner: String
+}
+
 type Product {
   productId: String!
   name: String!
@@ -37,11 +44,17 @@ type Product {
   price: Float!
 }
 
+type ImageResponse {
+  images: [Image!]!
+  message: String!
+}
+
 type Query {
   hello: String!
   me: User!
   whoami: User!
   getProducts: Product!
+  getImages: ImageResponse!
 }
 
 type Mutation {
@@ -51,4 +64,5 @@ type Mutation {
   forgotPassword(email: String!): Boolean!
   resetPassword(newPassword: String!, token: String!): UserCreationResponse!
   logout: Boolean!
+  addImage(name: String!, url: String!): Boolean!
 }

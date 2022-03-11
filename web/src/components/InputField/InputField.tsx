@@ -30,6 +30,7 @@ export const InputField: React.FC<InputFieldProps> = ({
         <FormControl isInvalid={!!error}>
             <FormLabel className="label" color={variant === "light" ? "black" : "white"} htmlFor={props.name}>{label}</FormLabel>
             <Input
+                autoComplete="on"
                 _focus={{
                     borderColor: variant === "light" ? "" : "#c084fc"
                 }}

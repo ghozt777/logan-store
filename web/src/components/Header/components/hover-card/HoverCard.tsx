@@ -1,7 +1,12 @@
 import { Box, Heading, Stack } from "@chakra-ui/react"
 import { Fade } from "react-awesome-reveal";
 
-export const HoverCard: React.FC<{}> = () => {
+
+export interface HoverCardProps  {
+    title : string ;
+}
+
+export const HoverCard: React.FC<HoverCardProps> = (props) => {
     console.log(window.innerWidth)
     return (
         <Box
@@ -14,7 +19,7 @@ export const HoverCard: React.FC<{}> = () => {
         >
             <Fade>
                 <Stack>
-                    <Heading>Test Card</Heading>
+                    <Heading>{props.title}</Heading>
                 </Stack>
             </Fade>
         </Box>
