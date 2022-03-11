@@ -6,6 +6,12 @@ type User {
   id: String!
   username: String!
   email: String!
+  addressLine1: String!
+  addressLine2: String!
+  city: String!
+  zipcode: Float!
+  country: String!
+  mobile: Float!
 }
 
 type Errors {
@@ -23,10 +29,32 @@ type LoginResponse {
   errors: [Errors!]!
 }
 
+type Image {
+  id: String!
+  name: String!
+  url: String!
+  owner: String
+}
+
+type Product {
+  productId: String!
+  name: String!
+  description: String!
+  SKU: String!
+  price: Float!
+}
+
+type ImageResponse {
+  images: [Image!]!
+  message: String!
+}
+
 type Query {
   hello: String!
   me: User!
   whoami: User!
+  getProducts: Product!
+  getImages: ImageResponse!
 }
 
 type Mutation {
@@ -35,4 +63,6 @@ type Mutation {
   login(password: String!, usernameOrEmail: String!): LoginResponse!
   forgotPassword(email: String!): Boolean!
   resetPassword(newPassword: String!, token: String!): UserCreationResponse!
+  logout: Boolean!
+  addImage(name: String!, url: String!): Boolean!
 }

@@ -5,6 +5,8 @@ import { AppService } from './app.service';
 import { DatabaseModule } from './database/database.module';
 import { UserModule } from './user/user.module';
 import { ConfigModule } from '@nestjs/config';
+import { ProductModule } from './product/product.module';
+import { ImageModule } from './images/image.module';
 
 
 @Module({
@@ -16,7 +18,6 @@ import { ConfigModule } from '@nestjs/config';
     GraphQLModule.forRoot({
       autoSchemaFile: 'schema.gql',
       context: async ({ req, res }) => {
-
         return {
           req,
           res,
@@ -27,7 +28,9 @@ import { ConfigModule } from '@nestjs/config';
       cors: { origin: true, credentials: true }
     }),
     DatabaseModule,
-    UserModule
+    UserModule,
+    ProductModule,
+    ImageModule,
   ],
   controllers: [AppController],
   providers: [AppService],

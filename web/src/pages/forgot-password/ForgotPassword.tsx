@@ -1,4 +1,4 @@
-import { Flex, Stack, Button } from "@chakra-ui/react";
+import { Flex, Stack, Button, Box } from "@chakra-ui/react";
 import { Formik, Form } from "formik";
 import { useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
@@ -19,64 +19,71 @@ export const ForgotPasswordPage: React.FC<ForgotPasswordProps> = () => {
         <Flex
             h="100vh"
             w="100%"
+            pt={'8vh'}
             alignItems="center"
             justifyContent="center"
             gap="1rem"
-            bg={themeState.theme === "light" ? "" : "#171717"}
+            bg={`main.${themeState.theme}`}
         >
-            <Formik
-
-                initialValues={{
-                    email: ""
-                }}
-
-
-                onSubmit={async (values, { setSubmitting, setErrors }) => {
-                    setSubmitting(true);
-                    if (values.email === "") setErrors({ email: "this field can't be empty" });
-                    const response = await forgotPassword({ email: values.email });
-                    if (response.data?.forgotPassword) {
-                        toast.success('Email Sent !');
-                        navigate('/');
-                    }
-                    else toast.warning('Email Not Sent ! Please check your email address');
-                    setSubmitting(false);
-                }}
+            <Box
+                h="50%"
+                w="40%"
             >
-                {
-                    ({
-                        values,
-                        errors,
-                        touched,
-                        handleChange,
-                        handleBlur,
-                        handleSubmit,
-                        isSubmitting
-                    }) => {
-                        return (
-                            <Form>
-                                <Stack spacing={3} >
-                                    <InputField
-                                        name="email"
-                                        placeholder="enter your registered email"
-                                        label="email"
-                                        type="email"
-                                    />
-                                    <Button
-                                        colorScheme='teal'
-                                        variant='solid'
-                                        isLoading={isSubmitting}
-                                        loadingText='Submitting'
-                                        type="submit"
-                                    >
-                                        Send Email
-                                    </Button>
-                                </Stack>
-                            </Form>
-                        )
+                <Formik
+
+                    initialValues={{
+                        email: ""
+                    }}
+
+
+                    onSubmit={async (values, { setSubmitting, setErrors }) => {
+                        setSubmitting(true);
+                        if (values.email === "") setErrors({ email: "this field can't be empty" });
+                        const response = await forgotPassword({ email: values.email });
+                        if (response.data?.forgotPassword) {
+                            toast.success('Email Sent !');
+                            navigate('/');
+                        }
+                        else toast.warning('Email Not Sent ! Please check your email address');
+                        setSubmitting(false);
+                    }}
+                >
+                    {
+                        ({
+                            values,
+                            errors,
+                            touched,
+                            handleChange,
+                            handleBlur,
+                            handleSubmit,
+                            isSubmitting
+                        }) => {
+                            return (
+                                <Form>
+                                    <Stack spacing={3} >
+                                        <InputField
+                                            variant={themeState.theme}
+                                            name="email"
+                                            placeholder="enter your registered email"
+                                            label="email"
+                                            type="email"
+                                        />
+                                        <Button
+                                            colorScheme={`${themeState.theme === "light" ? "telegram" : "purple"}`}
+                                            variant='solid'
+                                            isLoading={isSubmitting}
+                                            loadingText='Submitting'
+                                            type="submit"
+                                        >
+                                            Send Email
+                                        </Button>
+                                    </Stack>
+                                </Form>
+                            )
+                        }
                     }
-                }
-            </Formik>
+                </Formik>
+            </Box>
         </Flex >
     )
 }

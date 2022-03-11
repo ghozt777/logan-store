@@ -1,84 +1,113 @@
-import { HamburgerIcon, SunIcon, TriangleDownIcon } from "@chakra-ui/icons";
-import { Box, Flex, Img, Text, theme, useMediaQuery } from "@chakra-ui/react";
-import { useState } from "react";
+import { HamburgerIcon, TriangleDownIcon } from "@chakra-ui/icons";
+import { Box, Flex, Text, useMediaQuery } from "@chakra-ui/react";
+import React, { useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { RootState } from "../../app/store";
 import { changeTheme } from '../../features/theme/themeSlice'
 import { Dropdown } from "../Dropdown/Dropdown";
-import { TiWeatherNight } from "react-icons/ti"
+import { TiWeatherNight, TiWeatherSunny } from "react-icons/ti"
 import "./style.css"
-
+import { Link } from "../Link/Link";
+import { useLogoutMutation } from "../../generated/graphql";
+import { logout as logoutReducer } from "../../features/auth/authSlice"
+import { CategoryBar } from "./components/category-bar/CategoryBar";
+import { CategoryButton } from "./components/categor-button/CategoryButton";
+import { HoverCard, HoverCardProps } from "./components/hover-card/HoverCard";
+import config from './../../config/config.json'
+import { v4 as uuidv4 } from 'uuid';
 
 type NavbarProps = {
     title: string;
     // dropdown: JSX.Element;
-    // links: JSX.Element[];
+    links?: JSX.Element[];
 }
 
-export const Header: React.FC<NavbarProps> = ({ title }) => {
+function EnhancedHoverCard(HoverCard: React.ComponentType<HoverCardProps> , props: React.PropsWithChildren<HoverCardProps>){
+    const Component : React.FC<{}> = () => {
+        return(
+            <HoverCard {...props} />
+        )
+    }
+    return Component ;
+}
+
+export const Header: React.FC<NavbarProps> = ({ title, links }) => {
     const themeState = useSelector((state: RootState) => state.theme);
+    const authState = useSelector((state: RootState) => state.auth);
     const dispatch = useDispatch();
     const [isDropdownOpen, setIsDropdownOpen] = useState(false);
-    const [isLagerThan800] = useMediaQuery(`(min-width: 800px)`)
-
+    const [, logout] = useLogoutMutation();
+    const [isLagerThan800, isLagerThan1000] = useMediaQuery([`(min-width: 800px)`, `(min-width: 1000px)`])
+    const catrgories = config.header.categories ;
     return (
         <Box
-            // bg={`main.${themeState.theme}`}
             bg="transparent"
-            h='13vh'
+            h='8vh'
             minHeight='100px'
             w='100%'
-            display="flex"
             position="fixed"
-            alignItems="center"
-            justifyContent="center"
         >
             <Flex
                 className='blur'
-                bg="hsl(0 0% 0% / 0.3)"
-                h="80%"
-                w="98%"
+                h="100%"
+                w="100%"
                 p='20px'
-                color="white"
                 fontWeight='bold'
                 fontFamily='sans-serif'
                 fontSize='1.3rem'
                 position='relative'
-                justifyContent='flex-start'
+                justifyContent='space-evenly'
                 alignItems='center'
-                gap='1rem'
                 transition='350ms'
-                borderStyle="none"
-                borderRadius="10px"
-                boxShadow={`0px 4px 4px -2px #0C0705`}
             >
-                <HamburgerIcon cursor='pointer' />
-                <Text fontWeight={700} className="title-text" fontSize={isLagerThan800 ? '2rem' : 'md'} cursor='pointer' >{title}</Text>
-                <Text
-                    fontSize={isLagerThan800 ? "20px" : "12px"}
-                    className="title-tagline"
-                    letterSpacing="4px"
-                >Be a Maverick<span style={{ fontSize: isLagerThan800 ? "4rem" : "1rem" }}>.</span></Text>
+                <Flex
+                    alignItems={"center"}
+                    justifyContent="flex-start"
+                    gap="1rem"
+                    h="100%"
+                    w="30%"
+                >
+                    <HamburgerIcon fontSize={isLagerThan1000 ? "1rem" : "0.7rem"} color={`text.${themeState.theme}`} cursor='pointer' />
+                    <Text fontWeight={700} className="title-text" color={`text.${themeState.theme}`} fontSize={isLagerThan800 ? '1rem' : '0.6rem'} cursor='pointer' >{title}</Text>
+                    {isLagerThan1000 && <Text
+                        fontSize={isLagerThan800 ? "0.8rem" : "0.6rem"}
+                        color={`text.${themeState.theme}`}
+                        className="title-tagline"
+                    // letterSpacing="4px"
+                    >Be a Maverick<span style={{ fontSize: isLagerThan800 ? "4rem" : "1rem" }}>.</span></Text>}
+                </Flex>
+                <CategoryBar>
+                    {
+                        catrgories.map(category => {
+                            return(
+                                <CategoryButton key={uuidv4()} HoverCard={EnhancedHoverCard(HoverCard , {title: category["hover-card"].title})} name={category["category-name"]} abbr="C1" />
+                            )
+                        })
+                    }
+                </CategoryBar>
                 <Flex
                     ml='auto'
-                    w='40%'
+                    w='30%'
                     justifyContent='flex-end'
                     alignItems='center'
                     gap='20px'
                 >
-                    <Box color="#FF69B4" cursor='pointer' onClick={() => dispatch(changeTheme())} >
+                    {!authState.isLoggedIn ? <Link to='/login' name='login' /> : <Box onClick={() => dispatch(logoutReducer(logout))} ><Link to='/' name='logout' /></Box>}
+                    <Box fontSize={isLagerThan1000 ? "1.2rem" : "1rem"} color={`text.${themeState.theme}`} cursor='pointer' onClick={() => dispatch(changeTheme())} >
                         {
-                            themeState.theme === 'dark' ? <TiWeatherNight size={"1.6rem"} /> : <SunIcon />
+                            themeState.theme === 'dark' ? <TiWeatherNight /> : <TiWeatherSunny />
                         }
                     </Box>
                     <TriangleDownIcon
-                        color="#FF69B4"
+                        fontSize={isLagerThan1000 ? "1rem" : "0.7rem"}
+                        color={`text.${themeState.theme}`}
                         cursor='pointer'
                         transition='350ms'
+                        transitionProperty={"transform"}
                         transform={isDropdownOpen ? 'rotate(-90deg)' : 'rotate(0deg)'}
                         onClick={() => setIsDropdownOpen(s => !s)}
                     />
-                    <Dropdown isOpen={isDropdownOpen} />
+                    <Dropdown isOpen={isDropdownOpen} setIsDropdownOpen={setIsDropdownOpen} />
                 </Flex>
             </Flex >
         </Box>

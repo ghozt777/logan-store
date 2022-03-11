@@ -10,7 +10,7 @@ export function validateDataForRegister(values: any) {
         errors.password = "password and confirm-password dont match"
         errors.confirmPassword = "password and confirm-password dont match"
     }
-    if (values.password.length < 8) errors.password = "password must contaim atlest 8 characters"
+    if (values.password.length < 8) errors.password = "password must contain atlest 8 characters"
     console.log(errors)
     return errors;
 }

@@ -1,0 +1,35 @@
+{
+    "avatar-url": "https://avatars.dicebear.com/api/:sprites/:seed.svg",
+    "urql": {
+        "host": "http://0.0.0.0",
+        "port": "5001"
+    },
+    "header": {
+        "categories": [
+            {
+                "category-name" : "category1",
+                "hover-card": {
+                    "title" : "HC1"
+                } 
+            },
+            {
+                "category-name" : "category2",
+                "hover-card": {
+                    "title" : "HC2"
+                } 
+            },
+            {
+                "category-name" : "category3",
+                "hover-card": {
+                    "title" : "HC3"
+                } 
+            },
+            {
+                "category-name" : "category4",
+                "hover-card": {
+                    "title" : "HC4"
+                } 
+            }
+        ]
+    }
+}

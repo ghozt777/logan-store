@@ -4,7 +4,7 @@ import * as jwt from 'jsonwebtoken';
 import { getManager } from "typeorm";
 import { UserService } from "./user.service";
 
-@Controller('/')
+@Controller('/auth')
 export class AuthController {
     constructor(private userService: UserService) { }
 

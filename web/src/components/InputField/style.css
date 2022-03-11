@@ -1,0 +1,10 @@
+@font-face {
+    font-family: 'Source Pro';
+    src: url('../../assets/fonts/CodeDemo-Bold.otf');
+    font-style: normal;
+    font-weight: 100;
+}
+
+.label{
+    font-family: 'Source Pro';
+}

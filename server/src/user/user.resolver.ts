@@ -12,6 +12,8 @@ import { LoggingInterceptor } from "./logging.interceptor";
 import { UserCreationResponse } from "./types/createUserResponse.type";
 import { LoginResponse } from "./types/loginResponse.type";
 import * as jwt from 'jsonwebtoken'
+import { Auth } from "./auth.decorator";
+
 
 @UseInterceptors(LoggingInterceptor)
 @Resolver(() => User)
@@ -19,7 +21,8 @@ export class UserResolver {
     constructor(private userService: UserService, @InjectRepository(User) private userRepository: Repository<User>, @Inject(CACHE_MANAGER) private cacheManager: Cache) { }
 
     @Query(() => String)
-    hello() {
+    hello(@Auth() isAuth : boolean) {
+        console.log('is authenticated', isAuth);
         return 'Hello From User'
     }
 
@@ -108,9 +111,10 @@ export class UserResolver {
             const accessToken = this.userService.createAccessToken(user[0]);
             const refreshToken = this.userService.createRefreshToken(user[0]);
             res.cookie('jid', refreshToken, {
-                httpOnly: false,
+                httpOnly: true,
                 sameSite: 'lax',
             });
+            res.setHeader("Access-Control-Expose-Headers", "Set-Cookie");
             return {
                 accessToken: accessToken,
                 errors: []
@@ -161,4 +165,18 @@ export class UserResolver {
         const response = await this.userService.resetPassword(token, newPassword);
         return response;
     }
+
+    @Mutation(() => Boolean)
+    async logout(
+        @Context('res') res: Response
+    ) {
+        try {
+            res.clearCookie('jid');
+        } catch (err) {
+            console.log('error deleting cookie', err);
+            return false;
+        }
+        return true;
+    }
+
 }

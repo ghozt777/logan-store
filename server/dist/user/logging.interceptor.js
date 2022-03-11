@@ -8,10 +8,13 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.LoggingInterceptor = void 0;
 const common_1 = require("@nestjs/common");
+const graphql_1 = require("@nestjs/graphql");
 const operators_1 = require("rxjs/operators");
 let LoggingInterceptor = class LoggingInterceptor {
     intercept(context, next) {
         console.log('Before...');
+        const ctx = graphql_1.GqlExecutionContext.create(context);
+        console.log('incomming request ....', ctx);
         const now = Date.now();
         return next
             .handle()

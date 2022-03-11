@@ -1,12 +1,3 @@
-@import url('https://fonts.googleapis.com/css2?family=Major+Mono+Display&family=Syne+Mono&display=swap');
-@import url('https://fonts.googleapis.com/css2?family=Amatic+SC:wght@700&display=swap');
-@import url('https://fonts.googleapis.com/css2?family=Lobster&display=swap');
-@import url('https://fonts.googleapis.com/css2?family=Architects+Daughter&display=swap');
-@import url('https://fonts.googleapis.com/css2?family=Patrick+Hand&display=swap');
-@import url('https://fonts.googleapis.com/css2?family=Noto+Sans&display=swap');
-@import url('https://fonts.googleapis.com/css2?family=Odibee+Sans&display=swap');
-@import url('http://fonts.cdnfonts.com/css/debug-free-trial');
-@import url('http://fonts.cdnfonts.com/css/moto-verse');
 
 @font-face {
     font-family: 'debug';
@@ -21,28 +12,36 @@
     font-style: normal;
     font-weight: 100;
 }
+
+@font-face {
+    font-family: 'Comfortaa';
+    src: url('../../assets/fonts/Comfortaa-Regular.ttf');
+    font-style: normal;
+    font-weight: 100;
+}
+
+@font-face {
+    font-family: 'Gogoia';
+    src: url('../../assets/fonts/GOGOIA-Regular.ttf');
+    font-style: normal;
+    font-weight: 100;
+}
+
 :root{
-    --text-monospace-one : 'Syne Mono', monospace;
-    --text-monospace-two : 'Major Mono Display', monospace;
-    --text-monospace-three : 'Noto Sans', sans-serif;
-    --text-cursive-one : 'Amatic SC', cursive; 
-    --text-cursive-two : 'Lobster', cursive;
-    --text-cursive-three : 'Architects Daughter', cursive;  
-    --text-cursive-four : 'Patrick Hand', cursive;
-    --text-gaming-one : 'Odibee Sans', cursive;
-    --text-gaming-two : 'DEBUG FREE TRIAL', sans-serif;
     --text-gaming-three : 'Tele-Marines';
     --text-gaming-debug : 'debug'
+    --text-minimal-one : 'Comfortaa'
+    --tetx-minimal-two : 'Gogoia'
 }
 
 
 
 .title-text{
-    font-family: var(--text-gaming-debug);
+    font-family: var(--text-minimal-one);
 }
 
 .title-tagline{
-    font-family: var(--text-gaming-three);
+    font-family: var(--text-minimal-two);
 }
 
 .blur{
