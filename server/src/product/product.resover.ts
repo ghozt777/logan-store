@@ -10,12 +10,12 @@ import { Product } from "./product.entity";
 export class ProductResolver {
     constructor(@InjectRepository(Product) private productRepository: Repository<Product>) { }
 
-    @Query(() => Product)
+    @Query(() => Product) // no auth required as we wanna show the products for all the customers wether they are logged in or not
     async getProducts(): Promise<Product> {
         const products = await this.productRepository.query(`SELECT * FROM products`);
         return products;
     }
 
-    
+    @Query(() => ProductResponse)
 
 }

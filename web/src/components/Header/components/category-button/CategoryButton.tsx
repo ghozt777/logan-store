@@ -31,5 +31,3 @@ export const CategoryButton: React.FC<CategoryBtnProps> = ({ name, abbr, HoverCa
     </>
 
 }
-
-// onMouseLeave={() => setIsHover(false)}

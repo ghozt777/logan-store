@@ -13,7 +13,6 @@ import { LoginResponse } from "./types/loginResponse.type";
 import * as jwt from 'jsonwebtoken'
 import { Auth } from "./auth.decorator";
 
-
 @UseInterceptors(LoggingInterceptor)
 @Resolver(() => User)
 export class UserResolver {
