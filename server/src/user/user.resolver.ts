@@ -4,7 +4,6 @@ import { InjectRepository } from "@nestjs/typeorm";
 import { getManager, Repository } from "typeorm";
 import { User } from "./user.entity";
 import { UserService } from "./user.service";
-import * as argon2 from 'argon2'
 import { Response, Request } from "express";
 import { CACHE_MANAGER, Inject, UseInterceptors } from "@nestjs/common";
 import { Cache } from 'cache-manager';
@@ -44,44 +43,13 @@ export class UserResolver {
         @Args({ name: "email", type: () => String }) email: string,
         @Args({ name: "password", type: () => String }) password: string,
     ): Promise<UserCreationResponse> {
-        const payload = await this.userService.createUserPayload({ username, password, email });
-        if (payload) {
-            const { user, errors, isValid } = payload;
-            try {
-                if (isValid) {
-                    const result = await this.userRepository.insert({
-                        username: user.username,
-                        email: user.email,
-                        password: user.password
-                    });
-                }
-            } catch (err) {
-                console.error("USER CREATION FALIURE", err);
-            } finally {
-                console.log(errors)
-                return {
-                    errors,
-                    message: isValid ? "user creation successful" : "user creation faliure"
-                };
-            }
+        const dto = {
+            username ,
+            email , 
+            password 
         }
-        return {
-            errors: [
-                {
-                    field: 'username',
-                    message: 'unknown error'
-                },
-                {
-                    field: 'email',
-                    message: 'unknown error'
-                },
-                {
-                    field: 'password',
-                    message: 'unknown error'
-                }
-            ],
-            message: "user creation faliure"
-        };;
+        const response = await this.userService.createUser(dto) ;
+        return response ;
     }
 
     @Mutation(() => LoginResponse)
@@ -90,45 +58,13 @@ export class UserResolver {
         @Args({ name: 'usernameOrEmail', type: () => String }) usernameOrEmail: string,
         @Args({ name: 'password', type: () => String }) password: string,
     ): Promise<LoginResponse> {
-        const isEmail = usernameOrEmail.includes('@');
-        const entityManager = getManager();
-        const queryString = `SELECT * FROM users
-        WHERE ${isEmail ? `email='${usernameOrEmail}'` : `username='${usernameOrEmail}'`}`
-        const user = await entityManager.query(queryString);
-        if (Array.isArray(user) && user[0]) {
-            const isPasswordValid = await argon2.verify(user[0].password, password);
-            if (!isPasswordValid) {
-                return {
-                    accessToken: "",
-                    errors: [
-                        {
-                            field: 'password',
-                            message: 'worng password !'
-                        }
-                    ]
-                }
-            }
-            const accessToken = this.userService.createAccessToken(user[0]);
-            const refreshToken = this.userService.createRefreshToken(user[0]);
-            res.cookie('jid', refreshToken, {
-                httpOnly: true,
-                sameSite: 'lax',
-            });
-            res.setHeader("Access-Control-Expose-Headers", "Set-Cookie");
-            return {
-                accessToken: accessToken,
-                errors: []
-            };
-        }
-        return {
-            accessToken: "",
-            errors: [
-                {
-                    field: "usernameOrEmail",
-                    message: "invalid creadentials"
-                }
-            ]
-        }
+        const dto = {
+            usernameOrEmail , 
+            password,
+            res
+        } ;
+        const response = await this.userService.logInUser(dto) ;
+        return response ;
     }
 
     @Query(() => User)
@@ -170,13 +106,8 @@ export class UserResolver {
     async logout(
         @Context('res') res: Response
     ) {
-        try {
-            res.clearCookie('jid');
-        } catch (err) {
-            console.log('error deleting cookie', err);
-            return false;
-        }
-        return true;
+        const response = await this.userService.logoutUser(res) ;
+        return response ;
     }
 
 }
