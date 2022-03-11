@@ -11,7 +11,7 @@ import { Link } from "../Link/Link";
 import { useLogoutMutation } from "../../generated/graphql";
 import { logout as logoutReducer } from "../../features/auth/authSlice"
 import { CategoryBar } from "./components/category-bar/CategoryBar";
-import { CategoryButton } from "./components/categor-button/CategoryButton";
+import { CategoryButton } from "./components/category-button/CategoryButton";
 import { HoverCard } from "./components/hover-card/HoverCard";
 
 
