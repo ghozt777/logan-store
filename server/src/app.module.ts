@@ -18,7 +18,6 @@ import { ImageModule } from './images/image.module';
     GraphQLModule.forRoot({
       autoSchemaFile: 'schema.gql',
       context: async ({ req, res }) => {
-
         return {
           req,
           res,
@@ -31,7 +30,7 @@ import { ImageModule } from './images/image.module';
     DatabaseModule,
     UserModule,
     ProductModule,
-    ImageModule
+    ImageModule,
   ],
   controllers: [AppController],
   providers: [AppService],

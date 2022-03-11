@@ -1,5 +1,5 @@
-import { HamburgerIcon, SunIcon, TriangleDownIcon } from "@chakra-ui/icons";
-import { Box, Flex, Img, Text, theme, useDisclosure, useMediaQuery } from "@chakra-ui/react";
+import { HamburgerIcon, TriangleDownIcon } from "@chakra-ui/icons";
+import { Box, Flex, Text, useMediaQuery } from "@chakra-ui/react";
 import React, { useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { RootState } from "../../app/store";
@@ -11,14 +11,24 @@ import { Link } from "../Link/Link";
 import { useLogoutMutation } from "../../generated/graphql";
 import { logout as logoutReducer } from "../../features/auth/authSlice"
 import { CategoryBar } from "./components/category-bar/CategoryBar";
-import { CategoryButton } from "./components/category-button/CategoryButton";
-import { HoverCard } from "./components/hover-card/HoverCard";
-
+import { CategoryButton } from "./components/categor-button/CategoryButton";
+import { HoverCard, HoverCardProps } from "./components/hover-card/HoverCard";
+import config from './../../config/config.json'
+import { v4 as uuidv4 } from 'uuid';
 
 type NavbarProps = {
     title: string;
     // dropdown: JSX.Element;
     links?: JSX.Element[];
+}
+
+function EnhancedHoverCard(HoverCard: React.ComponentType<HoverCardProps> , props: React.PropsWithChildren<HoverCardProps>){
+    const Component : React.FC<{}> = () => {
+        return(
+            <HoverCard {...props} />
+        )
+    }
+    return Component ;
 }
 
 export const Header: React.FC<NavbarProps> = ({ title, links }) => {
@@ -28,7 +38,7 @@ export const Header: React.FC<NavbarProps> = ({ title, links }) => {
     const [isDropdownOpen, setIsDropdownOpen] = useState(false);
     const [, logout] = useLogoutMutation();
     const [isLagerThan800, isLagerThan1000] = useMediaQuery([`(min-width: 800px)`, `(min-width: 1000px)`])
-
+    const catrgories = config.header.categories ;
     return (
         <Box
             bg="transparent"
@@ -67,10 +77,13 @@ export const Header: React.FC<NavbarProps> = ({ title, links }) => {
                     >Be a Maverick<span style={{ fontSize: isLagerThan800 ? "4rem" : "1rem" }}>.</span></Text>}
                 </Flex>
                 <CategoryBar>
-                    <CategoryButton HoverCard={HoverCard} name="*Category1*" abbr="C1" />
-                    <CategoryButton HoverCard={HoverCard} name="*Category2*" abbr="C1" />
-                    <CategoryButton HoverCard={HoverCard} name="*Category3*" abbr="C1" />
-                    <CategoryButton HoverCard={HoverCard} name="*Category4*" abbr="C1" />
+                    {
+                        catrgories.map(category => {
+                            return(
+                                <CategoryButton key={uuidv4()} HoverCard={EnhancedHoverCard(HoverCard , {title: category["hover-card"].title})} name={category["category-name"]} abbr="C1" />
+                            )
+                        })
+                    }
                 </CategoryBar>
                 <Flex
                     ml='auto'

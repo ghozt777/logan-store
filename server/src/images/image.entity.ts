@@ -1,7 +1,6 @@
 import { Field, ObjectType } from "@nestjs/graphql";
 import { Product } from "../product/product.entity";
-import { Column, Entity, ManyToOne, PrimaryGeneratedColumn } from "typeorm";
-import { Injectable } from "@nestjs/common";
+import { Column, Entity, ManyToOne, OneToMany, PrimaryGeneratedColumn } from "typeorm";
 
 @ObjectType()
 @Entity('image')
@@ -12,9 +11,13 @@ export class Image {
 
     @Field()
     @Column()
-    url: string;
+    name: string;
 
     @Field()
+    @Column()
+    url: string;
+
+    @Field({nullable: true})
     @Column({ nullable: true })
     owner: string;
 

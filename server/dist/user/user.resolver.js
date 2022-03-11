@@ -19,7 +19,6 @@ const typeorm_1 = require("@nestjs/typeorm");
 const typeorm_2 = require("typeorm");
 const user_entity_1 = require("./user.entity");
 const user_service_1 = require("./user.service");
-const argon2 = require("argon2");
 const common_1 = require("@nestjs/common");
 const logging_interceptor_1 = require("./logging.interceptor");
 const createUserResponse_type_1 = require("./types/createUserResponse.type");
@@ -46,88 +45,22 @@ let UserResolver = class UserResolver {
         return 'auth failed';
     }
     async register(username, email, password) {
-        const payload = await this.userService.createUserPayload({ username, password, email });
-        if (payload) {
-            const { user, errors, isValid } = payload;
-            try {
-                if (isValid) {
-                    const result = await this.userRepository.insert({
-                        username: user.username,
-                        email: user.email,
-                        password: user.password
-                    });
-                }
-            }
-            catch (err) {
-                console.error("USER CREATION FALIURE", err);
-            }
-            finally {
-                console.log(errors);
-                return {
-                    errors,
-                    message: isValid ? "user creation successful" : "user creation faliure"
-                };
-            }
-        }
-        return {
-            errors: [
-                {
-                    field: 'username',
-                    message: 'unknown error'
-                },
-                {
-                    field: 'email',
-                    message: 'unknown error'
-                },
-                {
-                    field: 'password',
-                    message: 'unknown error'
-                }
-            ],
-            message: "user creation faliure"
+        const dto = {
+            username,
+            email,
+            password
         };
-        ;
+        const response = await this.userService.createUser(dto);
+        return response;
     }
     async login(res, usernameOrEmail, password) {
-        const isEmail = usernameOrEmail.includes('@');
-        const entityManager = (0, typeorm_2.getManager)();
-        const queryString = `SELECT * FROM users
-        WHERE ${isEmail ? `email='${usernameOrEmail}'` : `username='${usernameOrEmail}'`}`;
-        const user = await entityManager.query(queryString);
-        if (Array.isArray(user) && user[0]) {
-            const isPasswordValid = await argon2.verify(user[0].password, password);
-            if (!isPasswordValid) {
-                return {
-                    accessToken: "",
-                    errors: [
-                        {
-                            field: 'password',
-                            message: 'worng password !'
-                        }
-                    ]
-                };
-            }
-            const accessToken = this.userService.createAccessToken(user[0]);
-            const refreshToken = this.userService.createRefreshToken(user[0]);
-            res.cookie('jid', refreshToken, {
-                httpOnly: true,
-                sameSite: 'lax',
-            });
-            res.setHeader("Access-Control-Expose-Headers", "Set-Cookie");
-            return {
-                accessToken: accessToken,
-                errors: []
-            };
-        }
-        return {
-            accessToken: "",
-            errors: [
-                {
-                    field: "usernameOrEmail",
-                    message: "invalid creadentials"
-                }
-            ]
+        const dto = {
+            usernameOrEmail,
+            password,
+            res
         };
+        const response = await this.userService.logInUser(dto);
+        return response;
     }
     async me(cookies) {
         const payload = cookies['jid'];
@@ -150,14 +83,8 @@ let UserResolver = class UserResolver {
         return response;
     }
     async logout(res) {
-        try {
-            res.clearCookie('jid');
-        }
-        catch (err) {
-            console.log('error deleting cookie', err);
-            return false;
-        }
-        return true;
+        const response = await this.userService.logoutUser(res);
+        return response;
     }
 };
 __decorate([

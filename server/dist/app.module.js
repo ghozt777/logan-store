@@ -41,7 +41,7 @@ AppModule = __decorate([
             database_module_1.DatabaseModule,
             user_module_1.UserModule,
             product_module_1.ProductModule,
-            image_module_1.ImageModule
+            image_module_1.ImageModule,
         ],
         controllers: [app_controller_1.AppController],
         providers: [app_service_1.AppService],
