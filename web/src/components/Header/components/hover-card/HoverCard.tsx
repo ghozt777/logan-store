@@ -9,13 +9,14 @@ export interface HoverCardProps  {
 }
 
 export const HoverCard: React.FC<HoverCardProps> = (props) => {
-    console.log(window.innerWidth)
+    const [width] = useWindowSize() ;
     return (
         <Box
             position={"fixed"}
+            top="5rem"
             h="15rem"
             left="0"
-            w={window.innerWidth}
+            w={width}
             bg="white"
         >
             <Fade>
