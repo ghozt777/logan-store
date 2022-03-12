@@ -42,6 +42,7 @@ type Product {
   description: String!
   SKU: String!
   price: Float!
+  images: [Image!]
 }
 
 type ImageResponse {

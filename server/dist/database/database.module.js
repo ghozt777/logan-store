@@ -10,6 +10,7 @@ exports.DatabaseModule = void 0;
 const common_1 = require("@nestjs/common");
 const config_1 = require("@nestjs/config");
 const typeorm_1 = require("@nestjs/typeorm");
+const config_2 = require("../config");
 let DatabaseModule = class DatabaseModule {
 };
 DatabaseModule = __decorate([
@@ -26,7 +27,12 @@ DatabaseModule = __decorate([
                 entities: [],
                 autoLoadEntities: true,
                 synchronize: true,
-                logging: true
+                logging: !config_2.__prod__,
+                migrationsRun: true,
+                migrations: ["src/migrations/*.ts"],
+                cli: {
+                    migrationsDir: "src/migrations"
+                }
             }),
         ],
         controllers: [],

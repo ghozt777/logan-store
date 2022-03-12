@@ -16,6 +16,4 @@ export class ProductResolver {
         return products;
     }
 
-    @Query(() => ProductResponse)
-
 }

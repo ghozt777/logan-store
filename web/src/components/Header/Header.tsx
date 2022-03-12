@@ -6,15 +6,15 @@ import { RootState } from "../../app/store";
 import { changeTheme } from '../../features/theme/themeSlice'
 import { Dropdown } from "../Dropdown/Dropdown";
 import { TiWeatherNight, TiWeatherSunny } from "react-icons/ti"
-import "./style.css"
 import { Link } from "../Link/Link";
 import { useLogoutMutation } from "../../generated/graphql";
 import { logout as logoutReducer } from "../../features/auth/authSlice"
 import { CategoryBar } from "./components/category-bar/CategoryBar";
 import { CategoryButton } from "./components/category-button/CategoryButton";
 import { HoverCard, HoverCardProps } from "./components/hover-card/HoverCard";
-import config from './../../config/config.json'
 import { v4 as uuidv4 } from 'uuid';
+import config from './../../config/config.json'
+import "./style.css"
 
 type NavbarProps = {
     title: string;
@@ -22,13 +22,13 @@ type NavbarProps = {
     links?: JSX.Element[];
 }
 
-function EnhancedHoverCard(HoverCard: React.ComponentType<HoverCardProps> , props: React.PropsWithChildren<HoverCardProps>){
-    const Component : React.FC<{}> = () => {
-        return(
-            <HoverCard {...props} />
+function EnhancedHoverCard(HoverCard: React.ComponentType<HoverCardProps>, props: React.PropsWithChildren<HoverCardProps>) {
+    const Component: React.FC<{ setIsHover?: React.Dispatch<React.SetStateAction<boolean>> }> = ({ setIsHover }) => {
+        return (
+            <HoverCard {...props} setIsHover={setIsHover} />
         )
     }
-    return Component ;
+    return Component;
 }
 
 export const Header: React.FC<NavbarProps> = ({ title, links }) => {
@@ -38,7 +38,8 @@ export const Header: React.FC<NavbarProps> = ({ title, links }) => {
     const [isDropdownOpen, setIsDropdownOpen] = useState(false);
     const [, logout] = useLogoutMutation();
     const [isLagerThan800, isLagerThan1000] = useMediaQuery([`(min-width: 800px)`, `(min-width: 1000px)`])
-    const catrgories = config.header.categories ;
+    const catrgories = config.header.categories;
+    const tagline = config.header.tagline;
     return (
         <Box
             bg="transparent"
@@ -48,7 +49,6 @@ export const Header: React.FC<NavbarProps> = ({ title, links }) => {
             position="fixed"
         >
             <Flex
-                className='blur'
                 h="100%"
                 w="100%"
                 p='20px'
@@ -68,19 +68,35 @@ export const Header: React.FC<NavbarProps> = ({ title, links }) => {
                     w="30%"
                 >
                     <HamburgerIcon fontSize={isLagerThan1000 ? "1rem" : "0.7rem"} color={`text.${themeState.theme}`} cursor='pointer' />
-                    <Text fontWeight={700} className="title-text" color={`text.${themeState.theme}`} fontSize={isLagerThan800 ? '1rem' : '0.6rem'} cursor='pointer' >{title}</Text>
-                    {isLagerThan1000 && <Text
-                        fontSize={isLagerThan800 ? "0.8rem" : "0.6rem"}
+                    <Text
+                        fontWeight={700}
+                        className="title-text"
                         color={`text.${themeState.theme}`}
-                        className="title-tagline"
-                    // letterSpacing="4px"
-                    >Be a Maverick<span style={{ fontSize: isLagerThan800 ? "4rem" : "1rem" }}>.</span></Text>}
+                        fontSize={isLagerThan800 ? '1rem' : '0.6rem'}
+                        cursor='pointer' >{title}
+                    </Text>
+                    {
+                        isLagerThan1000 &&
+                        <Text
+                            fontSize={isLagerThan800 ? "0.8rem" : "0.6rem"}
+                            color={`text.${themeState.theme}`}
+                            className="title-tagline"
+                        // letterSpacing="4px"
+                        >{tagline}
+                            <span style={{ fontSize: isLagerThan800 ? "4rem" : "1rem" }}>.</span>
+                        </Text>
+                    }
                 </Flex>
                 <CategoryBar>
                     {
                         catrgories.map(category => {
-                            return(
-                                <CategoryButton key={uuidv4()} HoverCard={EnhancedHoverCard(HoverCard , {title: category["hover-card"].title})} name={category["category-name"]} abbr="C1" />
+                            return (
+                                <CategoryButton
+                                    key={uuidv4()}
+                                    HoverCard={EnhancedHoverCard(HoverCard, { title: category["hover-card"].title })}
+                                    name={category["category-name"]}
+                                    abbr="C1"
+                                />
                             )
                         })
                     }
@@ -92,7 +108,9 @@ export const Header: React.FC<NavbarProps> = ({ title, links }) => {
                     alignItems='center'
                     gap='20px'
                 >
-                    {!authState.isLoggedIn ? <Link to='/login' name='login' /> : <Box onClick={() => dispatch(logoutReducer(logout))} ><Link to='/' name='logout' /></Box>}
+                    {
+                        !authState.isLoggedIn ? <Link to='/login' name='login' /> : <Box onClick={() => dispatch(logoutReducer(logout))} ><Link to='/' name='logout' /></Box>
+                    }
                     <Box fontSize={isLagerThan1000 ? "1.2rem" : "1rem"} color={`text.${themeState.theme}`} cursor='pointer' onClick={() => dispatch(changeTheme())} >
                         {
                             themeState.theme === 'dark' ? <TiWeatherNight /> : <TiWeatherSunny />
