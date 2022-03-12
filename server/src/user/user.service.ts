@@ -10,7 +10,7 @@ import { v4 as uuidv4 } from "uuid"
 import { PREFIX_FORGOT_PASSWORD } from "src/constants";
 import { Cache } from "cache-manager"
 import { Response } from "express";
-import {template as emailTemplate} from "./template"
+import { template as emailTemplate } from "./template"
 
 @Injectable()
 export class UserService {
@@ -42,12 +42,12 @@ export class UserService {
         return payload;
     }
 
-    async createUser(dto:{
-        username: string ;
-        email : string ;
-        password: string ;
-    }){
-        const { username , password , email } = dto ;
+    async createUser(dto: {
+        username: string;
+        email: string;
+        password: string;
+    }) {
+        const { username, password, email } = dto;
         const payload = await this.createUserPayload({ username, password, email });
         if (payload) {
             const { user, errors, isValid } = payload;
@@ -70,18 +70,18 @@ export class UserService {
             }
         }
         return {
-            errors: [{field: 'username',message: 'unknown error'},{field: 'email',message: 'unknown error'},{field: 'password',message: 'unknown error'}],
+            errors: [{ field: 'username', message: 'unknown error' }, { field: 'email', message: 'unknown error' }, { field: 'password', message: 'unknown error' }],
             message: "user creation faliure"
         };
     }
 
 
-    async logInUser(dto:{
-        usernameOrEmail: string ; 
-        password: string ;
+    async logInUser(dto: {
+        usernameOrEmail: string;
+        password: string;
         res: Response
-    }){
-        const { usernameOrEmail , res , password } = dto ;
+    }) {
+        const { usernameOrEmail, res, password } = dto;
         const isEmail = usernameOrEmail.includes('@');
         const entityManager = getManager();
         const queryString = `SELECT * FROM users
@@ -123,7 +123,7 @@ export class UserService {
         }
     }
 
-    async logoutUser(res: Response){
+    async logoutUser(res: Response) {
         try {
             res.clearCookie('jid');
         } catch (err) {
@@ -256,8 +256,8 @@ export class UserService {
 
 
     genTemplate = (url: string) => {
-        let template = emailTemplate ;
-        template = template.replace(/%URL_TO_ADD%/g , url);
+        let template = emailTemplate;
+        template = template.replace(/%URL_TO_ADD%/g, url);
         return template;
     }
 

@@ -12,8 +12,9 @@ import { getURQLClient } from "./utils/getURQLClient"
 export const Root = () => {
 
     const authState = useSelector((state: RootState) => state.auth);
+    /*eslint-disable */
     const client = useMemo(() => getURQLClient(), [authState]); // client creation optimization
-
+    /*eslint-enable */
     return (
         <React.StrictMode>
             <URQLProvider value={client ?? getURQLClient()} >

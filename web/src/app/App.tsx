@@ -10,8 +10,10 @@ import {
 } from "../pages/index"
 import { Header } from '../components/Header/Header';
 import 'react-toastify/dist/ReactToastify.css';
+import config from "../config/config.json"
 
 function App() {
+  const productName = config.header['product-name'];
   return (
     <>
       <ToastContainer
@@ -27,7 +29,7 @@ function App() {
         pauseOnHover
         theme="colored"
       />
-      <Header title='Logan Store' />
+      <Header title={productName} />
       <Routes>
         <Route path='/' element={<LandingPage />} />
         <Route path='/login' element={<LoginPage />} />
