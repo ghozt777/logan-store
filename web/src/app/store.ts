@@ -2,9 +2,9 @@ import { combineReducers, configureStore } from '@reduxjs/toolkit'
 import authReducer from '../features/auth/authSlice'
 import themeReducer from '../features/theme/themeSlice'
 
-const rootReducer = combineReducers({ 
+const rootReducer = combineReducers({
     auth: authReducer,
-    theme: themeReducer
+    theme: themeReducer,
 })
 
 export const store = configureStore({

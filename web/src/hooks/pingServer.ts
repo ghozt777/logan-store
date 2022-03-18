@@ -3,16 +3,18 @@ import { toast } from "react-toastify";
 import { useHelloQuery } from "../generated/graphql"
 
 export const usePingServer = () => {
-    const data = useHelloQuery();
+    const [data] = useHelloQuery();
     useEffect(() => {
-        if (data[0].fetching) {
+        if (data.fetching) {
             console.log('fetching data ..')
         }
         else {
-            if (data[0].error) {
+            if (data.error) {
                 toast.error(`Server Connection Lost ...`);
-                console.error(`Error While Connecting to GraphQL Server ... with error ->${data[0].error.name} :  ${data[0].error.message}`)
+                console.log(data);
+                console.error(`Error While Connecting to GraphQL Server ... with error ->${data.error.name} :  ${data.error.message}`)
             }
         }
     }, [data])
+    return data;
 }

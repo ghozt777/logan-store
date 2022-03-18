@@ -18,6 +18,10 @@ export const theme = extendTheme({
             light: "black",
             dark: "white"
         },
+        text2: {
+            light: "#334155",
+            dark: "#d4d4d8"
+        },
         "btn-primary": {
             light: 'black',
             dark: 'white'

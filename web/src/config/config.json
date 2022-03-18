@@ -8,6 +8,11 @@
         "header":{
             "title" : "Logan Store" ,
             "tagline" : "Be a Maverick"
+        },
+        "banner": {
+            "title" : "Less is More" ,
+            "tagline-web" : "Live the minimal lifestyle. Choose from 1000+ products" ,
+            "tagline-mobile" : "Live the minimal lifestyle." 
         }
     },
     "header": {

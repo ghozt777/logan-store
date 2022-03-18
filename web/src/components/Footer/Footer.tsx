@@ -8,7 +8,7 @@ export const Footer: React.FC<{}> = () => {
         <Flex
             h='8%'
             w='100%'
-            position='fixed'
+            position='sticky'
             bottom='0'
             p='10px'
             flexDir='column'

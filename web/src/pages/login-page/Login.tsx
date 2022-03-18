@@ -51,11 +51,13 @@ export const LoginPage: React.FC<LoginPageProps> = () => {
                             const serverErrors = response.data?.login.errors;
                             console.log(serverErrors)
                             errors = mapErrors(serverErrors, validationErrors);
-                            if (Object.keys(errors).length === 0) {
+                            if (!response.error && Object.keys(errors).length === 0) {
                                 toast.success('user login success');
                                 dispatch(successAuth({ accessToken: response.data?.login.accessToken as string }))
-                                navigate('/');
+                                navigate('/shop');
                             } else {
+                                const errorMessage = response.error?.message ?? "" + " Login failed";
+                                toast.error(errorMessage);
                                 dispatch(faliureAuth({ errors }))
                             }
                         }
@@ -77,6 +79,7 @@ export const LoginPage: React.FC<LoginPageProps> = () => {
                                 <Form>
                                     <Stack spacing={3} >
                                         <InputField
+                                            value={values.usernameOrEmail}
                                             variant={themeState.theme}
                                             name="usernameOrEmail"
                                             placeholder="enter your username or registered email"
@@ -84,6 +87,7 @@ export const LoginPage: React.FC<LoginPageProps> = () => {
                                             type="text"
                                         />
                                         <InputField
+                                            value={values.password}
                                             variant={themeState.theme}
                                             name="password"
                                             placeholder="password"
