@@ -1,0 +1,22 @@
+@font-face {
+    font-family: 'Gogoia';
+    src: url('../../assets/fonts/GOGOIA-Regular.ttf');
+    font-style: normal;
+    font-weight: 100;
+}
+
+@font-face {
+    font-family: 'Lato';
+    src: url('../../assets/fonts/lato.regular.ttf');
+    font-style: normal;
+    font-weight: 100;
+}
+
+.title {
+    font-family: 'Gogoia';
+    font-weight: bold;
+}
+
+.tagline {
+    font-family: 'Lato';
+}

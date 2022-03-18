@@ -1,13 +1,10 @@
--- global styles
-* {
+-- global styles * {
     box-sizing: border-box;
-    padding: 0;
-    margin: 0;
     text-decoration: none;
     border-style: none;
 }
 
-body{
+body {
     width: 100%;
-    font-size: 62.5% ;
+    font-size: 62.5%;
 }
