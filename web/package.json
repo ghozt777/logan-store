@@ -47,7 +47,7 @@
     "eject": "react-scripts eject",
     "generate": "graphql-codegen",
     "gen": "graphql-codegen --config codegen.yml",
-    "dev": "webpack-dev-server",
+    "dev": "webpack-dev-server --config webpack.config.js",
     "compile": "tsc src/*.tsx"
   },
   "eslintConfig": {
@@ -74,6 +74,7 @@
     "@babel/plugin-syntax-dynamic-import": "^7.8.3",
     "@babel/preset-env": "^7.16.11",
     "@babel/preset-react": "^7.16.7",
+    "@babel/preset-typescript": "^7.16.7",
     "@graphql-codegen/cli": "2.4.0",
     "@graphql-codegen/introspection": "2.1.1",
     "@graphql-codegen/typescript": "2.4.2",

@@ -1,6 +1,6 @@
 import * as React from 'react'
-import { Route, Routes } from 'react-router-dom'
-import { ToastContainer, Slide, Zoom, Flip, Bounce } from 'react-toastify';
+import { Route, Routes, useLocation } from 'react-router-dom'
+import { ToastContainer, Slide, } from 'react-toastify';
 import {
   LandingPage,
   RegisterPage,
@@ -14,6 +14,7 @@ import config from "../config/config.json"
 
 function App() {
   const productName = config.header['product-name'];
+  const location = useLocation();
   return (
     <>
       <ToastContainer
@@ -29,7 +30,7 @@ function App() {
         pauseOnHover
         theme="colored"
       />
-      <Header title={productName} />
+      {location.pathname !== '/' && <Header title={productName} />}
       <Routes>
         <Route path='/' element={<LandingPage />} />
         <Route path='/login' element={<LoginPage />} />

@@ -16,21 +16,28 @@ module.exports = {
                 exclude: /node_modules/,
             },
             {
-                test: /\.css$/,
-                use: [
-                    {
-                        loader: 'style-loader'
-                    },
-                    {
-                        loader: 'css-loader',
-                        options: {
-                            modules: true,
-                            localsConvention: 'camelCase',
-                            sourceMap: true
-                        }
-                    }
-                ]
+                test: /\.(ts|js)x?$/,
+                exclude: /node_modules/,
+                use: {
+                  loader: "babel-loader",
+                  options: {
+                    presets: [
+                      "@babel/preset-env",
+                      "@babel/preset-react",
+                      "@babel/preset-typescript",
+                    ],
+                  },
+                },
+            },
+            {
+                test: '/\.css$/' ,
+                use: ['style-loader' , 'css-loader']
+            },
+            {
+                test: /\.(sass|less|css)$/,
+                use: ['style-loader', 'css-loader']
             }
+
         ],
     },
     resolve: {
@@ -49,8 +56,8 @@ module.exports = {
     ],
     devServer: {
         host: 'localhost',
-        port: port,
+        port: 3000,
         historyApiFallback: true,
-        open: true
+        open: true,
     }
 };
