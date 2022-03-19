@@ -1,7 +1,8 @@
 import { Field, ObjectType } from "@nestjs/graphql";
-import { Category } from "src/category/category.entity";
+import { EntityCategory } from "src/category/category.entity";
 import { Column, Entity, PrimaryGeneratedColumn, CreateDateColumn, UpdateDateColumn, OneToMany, OneToOne } from "typeorm";
 import { Address } from "../address/address.entity";
+import { WishList } from "./wisthlist.entity";
 
 @ObjectType()
 @Entity('users')
@@ -33,9 +34,14 @@ export class User {
     address: Address[];
 
     @Field()
-    @OneToOne(() => Category, category => category.categoryId, { nullable: true })
+    @OneToOne(() => EntityCategory, category => category.categoryId, { nullable: true })
     @Column()
     categoryId: string;
+
+    @Field()
+    @OneToOne(() => WishList, wishlist => wishlist.userId)
+    @Column({ nullable: true })
+    wishlistId: string;
 
     @CreateDateColumn({ type: "timestamp", default: () => "CURRENT_TIMESTAMP(6)" })
     public created_at: Date;

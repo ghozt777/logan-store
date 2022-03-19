@@ -2,12 +2,34 @@
 # THIS FILE WAS AUTOMATICALLY GENERATED (DO NOT MODIFY)
 # ------------------------------------------------------
 
+type Image {
+  id: String!
+  name: String!
+  url: String!
+  owner: String
+}
+
+type Currency {
+  currency: String!
+}
+
+type Product {
+  productId: String!
+  name: String!
+  description: String!
+  SKU: String!
+  inventoryId: String
+  categoryId: String!
+  images: [Image!]
+}
+
 type User {
   id: String!
   username: String!
   email: String!
   address: Address
   categoryId: String!
+  wishlistId: String!
 }
 
 type Address {
@@ -17,6 +39,7 @@ type Address {
   city: String!
   zipcode: String!
   country: String!
+  categoryId: String!
   mobile: Float!
 }
 
@@ -33,23 +56,6 @@ type UserCreationResponse {
 type LoginResponse {
   accessToken: String!
   errors: [Errors!]!
-}
-
-type Image {
-  id: String!
-  name: String!
-  url: String!
-  owner: String
-}
-
-type Product {
-  productId: String!
-  name: String!
-  description: String!
-  SKU: String!
-  price: Float!
-  categoryId: String!
-  images: [Image!]
 }
 
 type ImageResponse {
@@ -72,6 +78,8 @@ type Mutation {
   forgotPassword(email: String!): Boolean!
   resetPassword(newPassword: String!, token: String!): UserCreationResponse!
   logout: Boolean!
+  addProduct(description: String!, productName: String!): Boolean!
+  createInventory(productId: String!, price: Float!, stock: Float!, currency: String!): Boolean!
   addImage(name: String!, url: String!): Boolean!
   addAddress(mobile: Float!, country: String!, zipcode: String!, city: String!, addressLine2: String, addressLine1: String!): Boolean!
   addCategory(categoryName: String!): Boolean!

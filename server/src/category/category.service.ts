@@ -1,22 +1,22 @@
 import { Injectable } from "@nestjs/common";
 import { InjectRepository } from "@nestjs/typeorm";
 import { Repository } from "typeorm";
-import { Category } from "./category.entity";
+import { EntityCategory } from "./category.entity";
 
 @Injectable()
 export class CategoryService {
     constructor(
-        @InjectRepository(Category) private categoryRespository: Repository<Category>
+        @InjectRepository(EntityCategory) private entityCategoryRepository: Repository<EntityCategory>
     ) { }
 
     async createCategory(categoryName: string) {
         try {
-            const response = await this.categoryRespository.insert({
+            const response = await this.entityCategoryRepository.insert({
                 categoryName
             })
             return true;
         } catch (err) {
-            console.log('ctegory creation faliure with message: ', err.message);
+            console.log('category creation faliure with message: ', err.message);
             return false;
         }
     }

@@ -54,7 +54,7 @@ export class UserService {
             try {
                 if (isValid) {
                     const em = getManager();
-                    const [userCategory] = await em.query(`SELECT * FROM category WHERE categoryName='User'`);
+                    const [userCategory] = await em.query(`SELECT * FROM entityCategory WHERE categoryName='User'`);
                     const result = await this.userRepository.insert({
                         username: user.username,
                         email: user.email,

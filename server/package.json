@@ -26,8 +26,8 @@
     "test:e2e": "jest --config ./test/jest-e2e.json",
     "prestart:prod": "yarn install",
     "heroku-postbuild": "yarn install --no-shrinkwrap && yarn run build",
-    "migration" : "yarn typeorm migration:create -d src/migrations -c" ,
-    "runMigrations" : "typeorm migration:run"
+    "migration": "yarn typeorm migration:create -d src/migrations -c",
+    "runMigrations": "typeorm migration:run"
   },
   "dependencies": {
     "@nestjs/common": "^8.0.0",
@@ -45,6 +45,7 @@
     "cache-manager": "^3.6.0",
     "connect-redis": "^6.0.0",
     "cookie-parser": "^1.4.6",
+    "crypto": "^1.0.1",
     "dotenv": "^14.2.0",
     "express-session": "^1.17.2",
     "graphql": "^15",

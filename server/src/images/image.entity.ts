@@ -3,7 +3,7 @@ import { Product } from "../product/product.entity";
 import { Column, Entity, ManyToOne, OneToMany, PrimaryGeneratedColumn } from "typeorm";
 
 @ObjectType()
-@Entity('image')
+@Entity('images')
 export class Image {
     @Field()
     @PrimaryGeneratedColumn('uuid')
@@ -17,7 +17,7 @@ export class Image {
     @Column()
     url: string;
 
-    @Field({nullable: true})
+    @Field({ nullable: true })
     @Column({ nullable: true })
     owner: string;
 

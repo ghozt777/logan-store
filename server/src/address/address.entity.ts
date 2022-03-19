@@ -1,5 +1,6 @@
 import { Field, Float, ObjectType } from "@nestjs/graphql";
-import { Column, Entity, ManyToOne, PrimaryGeneratedColumn } from "typeorm";
+import { EntityCategory } from "src/category/category.entity";
+import { Column, Entity, ManyToOne, OneToOne, PrimaryGeneratedColumn } from "typeorm";
 import { User } from "../user/user.entity";
 
 @ObjectType()
@@ -31,6 +32,11 @@ export class Address {
     @Field()
     @Column()
     country: string;
+
+    @Field()
+    @OneToOne(() => EntityCategory, category => category.categoryId)
+    @Column()
+    categoryId: string;
 
     @Field(() => Float)
     @Column({ type: 'bigint' })
