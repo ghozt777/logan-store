@@ -51,7 +51,7 @@ export const Header: React.FC<NavbarProps> = ({ title, links }) => {
             <Flex
                 h="100%"
                 w="100%"
-                p='20px'
+                p={`20px ${isLagerThan800 ? "8%" : '20px'}`}
                 fontWeight='bold'
                 fontFamily='sans-serif'
                 fontSize='1.3rem'
@@ -72,8 +72,10 @@ export const Header: React.FC<NavbarProps> = ({ title, links }) => {
                         fontWeight={700}
                         className="title-text"
                         color={`text.${themeState.theme}`}
-                        fontSize={isLagerThan800 ? '1rem' : '0.6rem'}
-                        cursor='pointer' >{title}
+                        fontSize={isLagerThan800 ? 'lg' : 'sm'}
+                        cursor='pointer'
+                        whiteSpace='nowrap'
+                    >{title}
                     </Text>
                     {
                         isLagerThan1000 &&
@@ -81,7 +83,7 @@ export const Header: React.FC<NavbarProps> = ({ title, links }) => {
                             fontSize={isLagerThan800 ? "0.8rem" : "0.6rem"}
                             color={`text.${themeState.theme}`}
                             className="title-tagline"
-                        // letterSpacing="4px"
+                            whiteSpace='nowrap' 
                         >{tagline}
                             <span style={{ fontSize: isLagerThan800 ? "4rem" : "1rem" }}>.</span>
                         </Text>

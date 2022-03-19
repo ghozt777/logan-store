@@ -18,7 +18,7 @@ export const HoverCard: React.FC<HoverCardProps> = (props) => {
         <Box
             position={"fixed"}
             top="3.6rem"
-            h="15rem"
+            h="10rem"
             left="0"
             w={width}
             bg="white"

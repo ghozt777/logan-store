@@ -1,4 +1,4 @@
-import { Flex } from "@chakra-ui/react"
+import { Flex, useMediaQuery } from "@chakra-ui/react"
 import { useSelector } from "react-redux"
 import { RootState } from "../../app/store"
 import { Showcase } from "../../components/Showcase/Showcase"
@@ -7,6 +7,7 @@ import config from '../../config/config.json'
 
 export const Shop: React.FC<{}> = () => {
     const themeState = useSelector((state: RootState) => state.theme)
+    const [isLagerThan800] = useMediaQuery([`(min-width: 800px)`]);
     return (
         <Flex
             h='100vh'
@@ -19,10 +20,10 @@ export const Shop: React.FC<{}> = () => {
             flexDirection='column'
         >
             <Flex
-                h='70%'
+                h={isLagerThan800 ? '70%' : '50%'}
                 w='100%'
             >
-                <Showcase products={config["dummy-api"].trending.products} />
+                <Showcase title='Trending' products={config["dummy-api"].trending.products} />
             </Flex>
         </Flex>
     )
