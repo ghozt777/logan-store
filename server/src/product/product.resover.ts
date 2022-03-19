@@ -7,6 +7,7 @@ import { Repository } from "typeorm";
 import { Product } from "./product.entity";
 import { ProductService } from "./product.service";
 
+
 @UseInterceptors(LoggingInterceptor)
 @Resolver(() => Product)
 export class ProductResolver {
@@ -15,9 +16,9 @@ export class ProductResolver {
         private productService: ProductService
     ) { }
 
-    @Query(() => Product) // no auth required as we wanna show the products for all the customers wether they are logged in or not
-    async getProducts(): Promise<Product> {
-        const products = await this.productRepository.query(`SELECT * FROM products`);
+    @Query(() => [Product]) // no auth required as we wanna show the products for all the customers wether they are logged in or not
+    async getProducts(): Promise<Product[]> {
+        const products = await this.productService.getAllProducts();
         return products;
     }
 
@@ -31,8 +32,18 @@ export class ProductResolver {
     }
 
     @Mutation(() => Boolean)
+    async addImageToProduct(
+        @Args({ type: () => String, name: 'productId' }) productId: string,
+        @Args({ type: () => String, name: 'imageName' }) imageName: string,
+        @Args({ type: () => String, name: 'imageUrl' }) imageUrl: string
+    ): Promise<Boolean> {
+        const response = await this.productService.addImage(productId, imageName, imageUrl);
+        return response;
+    }
+
+    @Mutation(() => Boolean)
     async createInventory(
-        @Args({ type: () => String, name: 'currency' }) currency: "IND" | "USD",
+        @Args({ type: () => String, name: 'currency' }) currency: "USD" | "INR",
         @Args({ type: () => Float, name: 'stock' }) stock: number,
         @Args({ type: () => Float, name: 'price' }) price: number,
         @Args({ type: () => String, name: 'productId' }) productId: string,

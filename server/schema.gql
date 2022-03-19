@@ -67,7 +67,7 @@ type Query {
   hello: String!
   me: User!
   whoami: User!
-  getProducts: Product!
+  getProducts: [Product!]!
   getImages: ImageResponse!
 }
 
@@ -79,6 +79,7 @@ type Mutation {
   resetPassword(newPassword: String!, token: String!): UserCreationResponse!
   logout: Boolean!
   addProduct(description: String!, productName: String!): Boolean!
+  addImageToProduct(imageUrl: String!, imageName: String!, productId: String!): Boolean!
   createInventory(productId: String!, price: Float!, stock: Float!, currency: String!): Boolean!
   addImage(name: String!, url: String!): Boolean!
   addAddress(mobile: Float!, country: String!, zipcode: String!, city: String!, addressLine2: String, addressLine1: String!): Boolean!

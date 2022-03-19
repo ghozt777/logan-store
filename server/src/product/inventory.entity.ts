@@ -17,7 +17,7 @@ export class Inventory {
     inventoryId: string;
 
     @Field()
-    @Column()
+    @Column({ unique: true })
     skuCode: string;
 
     @Field()

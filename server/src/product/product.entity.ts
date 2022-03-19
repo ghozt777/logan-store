@@ -40,7 +40,6 @@ export class Product {
 
     @Field(() => [Image], { nullable: true })
     @OneToMany(() => Image, (image: Image) => image.product)
-    @JoinColumn()
     images: Image[];
 
     @CreateDateColumn({ type: "timestamp", default: () => "CURRENT_TIMESTAMP(6)" })
