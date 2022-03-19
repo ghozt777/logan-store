@@ -6,10 +6,16 @@ type User {
   id: String!
   username: String!
   email: String!
+  address: Address
+  categoryId: String!
+}
+
+type Address {
+  id: Float!
   addressLine1: String!
   addressLine2: String!
   city: String!
-  zipcode: Float!
+  zipcode: String!
   country: String!
   mobile: Float!
 }
@@ -42,6 +48,7 @@ type Product {
   description: String!
   SKU: String!
   price: Float!
+  categoryId: String!
   images: [Image!]
 }
 
@@ -66,4 +73,6 @@ type Mutation {
   resetPassword(newPassword: String!, token: String!): UserCreationResponse!
   logout: Boolean!
   addImage(name: String!, url: String!): Boolean!
+  addAddress(mobile: Float!, country: String!, zipcode: String!, city: String!, addressLine2: String, addressLine1: String!): Boolean!
+  addCategory(categoryName: String!): Boolean!
 }

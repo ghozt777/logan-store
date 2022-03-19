@@ -1,5 +1,6 @@
 import { Field, ObjectType } from "@nestjs/graphql";
-import { Column, CreateDateColumn, Entity, JoinColumn, OneToMany, PrimaryGeneratedColumn, UpdateDateColumn } from "typeorm";
+import { Category } from "src/category/category.entity";
+import { Column, CreateDateColumn, Entity, JoinColumn, OneToMany, OneToOne, PrimaryGeneratedColumn, UpdateDateColumn } from "typeorm";
 import { Image } from "./../images/image.entity"
 @ObjectType()
 @Entity('products')
@@ -21,7 +22,7 @@ export class Product {
     SKU: string;
 
     @Column({ nullable: true })
-    categoryId: string;
+    productCategoryId: string;
 
     @Column()
     inventoryId: string;
@@ -32,6 +33,11 @@ export class Product {
 
     @Column({ nullable: true })
     discountId: string;
+
+    @Field()
+    @OneToOne(() => Category, category => category.categoryId)
+    @Column({ nullable: true })
+    categoryId: string;
 
     @Field(() => [Image], { nullable: true })
     @OneToMany(() => Image, (image: Image) => image.product)
