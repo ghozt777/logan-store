@@ -29,6 +29,14 @@ export const theme = extendTheme({
         "hover-card": {
             dark: '#18181b',
             light: 'white'
+        },
+        "routeInfo-bar": {
+            light: "#f3f4f6",
+            dark: "#2e2e2e"
+        },
+        'main-nav': {
+            dark: '#18181b',
+            light: 'white'
         }
     }
 })

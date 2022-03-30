@@ -8,6 +8,7 @@ import { theme } from './theme';
 import { Provider as URQLProvider, dedupExchange } from 'urql'
 import { getURQLClient } from "./utils/getURQLClient"
 import { NavBarProvider } from './context/navbar';
+import { setLoaderInactive } from './utils/setLoaderInactive';
 
 
 export const Root = () => {
@@ -17,7 +18,7 @@ export const Root = () => {
     const client = useMemo(() => getURQLClient(), [authState]); // client creation optimization
     /*eslint-enable */
     useEffect(() => {
-        document.querySelector<HTMLElement>('.loader')?.style.setProperty('display', 'none');
+        setLoaderInactive();
     })
     return (
         <React.StrictMode>

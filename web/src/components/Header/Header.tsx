@@ -16,6 +16,7 @@ import { v4 as uuidv4 } from 'uuid';
 import config from './../../config/config.json'
 import "./style.css"
 import { useNavBar } from "../../context/navbar";
+import { RouteInfoBar } from "../RouteInfoBar/RouteInfoBar";
 
 type NavbarProps = {
     title: string;
@@ -137,6 +138,7 @@ export const Header: React.FC<NavbarProps> = ({ title, links }) => {
                     <Dropdown isOpen={isDropdownOpen} setIsDropdownOpen={setIsDropdownOpen} />
                 </Flex>
             </Flex >
+            <RouteInfoBar />
         </Box>
     )
 }

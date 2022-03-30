@@ -26,6 +26,7 @@ export const Shop: React.FC<{}> = () => {
             <Flex
                 h={isLagerThan800 ? '95%' : '75%'}
                 w='100%'
+                mt='3rem'
             >
                 <Showcase title='Trending' products={config["dummy-api"].trending.products} />
             </Flex>

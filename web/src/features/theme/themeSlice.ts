@@ -1,4 +1,6 @@
 import { createSlice } from "@reduxjs/toolkit";
+import { useSelector } from "react-redux";
+import { RootState } from "../../app/store";
 
 export interface ThemeSlice {
     theme: "dark" | "light";
@@ -24,3 +26,4 @@ export const themeSlice = createSlice({
 
 export const { changeTheme } = themeSlice.actions
 export default themeSlice.reducer
+export const useTheme = () => useSelector((state: RootState) => state.theme)
