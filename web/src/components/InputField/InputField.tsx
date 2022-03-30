@@ -14,11 +14,13 @@ type InputFieldProps = InputHTMLAttributes<HTMLInputElement> & {
     label: string;
     placeholder?: string;
     variant?: "light" | "dark";
+    textSize?: "sm" | "lg";
 };
 
 export const InputField: React.FC<InputFieldProps> = ({
     variant,
     label,
+    textSize,
     size,
     ...props
 }) => {
@@ -27,7 +29,14 @@ export const InputField: React.FC<InputFieldProps> = ({
     return (
         //   if there is an error isInvalid will be true
         <FormControl isInvalid={!!error}>
-            <FormLabel className="label" color={variant === "light" ? "black" : "white"} htmlFor={props.name}>{label}</FormLabel>
+            <FormLabel
+                fontSize={isLagerThan800? 'md' : 'sm'}
+                className="label"
+                color={variant === "light" ? "black" : "white"}
+                htmlFor={props.name}
+            >
+                {label}
+            </FormLabel>
             <Input
                 autoComplete="on"
                 _focus={{
@@ -36,7 +45,7 @@ export const InputField: React.FC<InputFieldProps> = ({
                 _placeholder={{
                     color: variant === "light" ? "#94a3b8" : "#71717a"
                 }}
-                size={isLagerThan800 ? "sm" : "md"}  {...field} {...props} id={field.name} />
+                size={isLagerThan800 ? "md" : "sm"}  {...field} {...props} id={field.name} />
             {error && <FormErrorMessage>{error}</FormErrorMessage>}
         </FormControl>
     );

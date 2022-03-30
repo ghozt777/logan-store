@@ -8,6 +8,7 @@ import "./style.css";
 import { useSelector } from "react-redux";
 import { RootState } from "../../app/store";
 import React from "react";
+import { v4 as uuidv4 } from 'uuid'
 
 const Wrapper = styled.div`
     height: 100%;
@@ -30,7 +31,7 @@ export const Carousel: React.FC<{}> = ({ children }) => {
                     {
                         childrenArray.map(Children => {
                             return (
-                                <SwiperSlide className='swiper-slide'>
+                                <SwiperSlide key={uuidv4()} className='swiper-slide'>
                                     {
                                         Children
                                     }

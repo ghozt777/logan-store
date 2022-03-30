@@ -15,6 +15,23 @@ export type Scalars = {
   Float: number;
 };
 
+export type Address = {
+  __typename?: 'Address';
+  addressLine1: Scalars['String'];
+  addressLine2: Scalars['String'];
+  categoryId: Scalars['String'];
+  city: Scalars['String'];
+  country: Scalars['String'];
+  id: Scalars['Float'];
+  mobile: Scalars['Float'];
+  zipcode: Scalars['String'];
+};
+
+export type Currency = {
+  __typename?: 'Currency';
+  currency: Scalars['String'];
+};
+
 export type Errors = {
   __typename?: 'Errors';
   field: Scalars['String'];
@@ -43,8 +60,13 @@ export type LoginResponse = {
 
 export type Mutation = {
   __typename?: 'Mutation';
+  addAddress: Scalars['Boolean'];
+  addCategory: Scalars['Boolean'];
   addImage: Scalars['Boolean'];
+  addImageToProduct: Scalars['Boolean'];
+  addProduct: Scalars['Boolean'];
   checkAuth: Scalars['String'];
+  createInventory: Scalars['Boolean'];
   forgotPassword: Scalars['Boolean'];
   login: LoginResponse;
   logout: Scalars['Boolean'];
@@ -53,9 +75,45 @@ export type Mutation = {
 };
 
 
+export type MutationAddAddressArgs = {
+  addressLine1: Scalars['String'];
+  addressLine2?: InputMaybe<Scalars['String']>;
+  city: Scalars['String'];
+  country: Scalars['String'];
+  mobile: Scalars['Float'];
+  zipcode: Scalars['String'];
+};
+
+
+export type MutationAddCategoryArgs = {
+  categoryName: Scalars['String'];
+};
+
+
 export type MutationAddImageArgs = {
   name: Scalars['String'];
   url: Scalars['String'];
+};
+
+
+export type MutationAddImageToProductArgs = {
+  imageName: Scalars['String'];
+  imageUrl: Scalars['String'];
+  productId: Scalars['String'];
+};
+
+
+export type MutationAddProductArgs = {
+  description: Scalars['String'];
+  productName: Scalars['String'];
+};
+
+
+export type MutationCreateInventoryArgs = {
+  currency: Scalars['String'];
+  price: Scalars['Float'];
+  productId: Scalars['String'];
+  stock: Scalars['Float'];
 };
 
 
@@ -85,16 +143,18 @@ export type MutationResetPasswordArgs = {
 export type Product = {
   __typename?: 'Product';
   SKU: Scalars['String'];
+  categoryId: Scalars['String'];
   description: Scalars['String'];
+  images?: Maybe<Array<Image>>;
+  inventoryId?: Maybe<Scalars['String']>;
   name: Scalars['String'];
-  price: Scalars['Float'];
   productId: Scalars['String'];
 };
 
 export type Query = {
   __typename?: 'Query';
   getImages: ImageResponse;
-  getProducts: Product;
+  getProducts: Array<Product>;
   hello: Scalars['String'];
   me: User;
   whoami: User;
@@ -102,15 +162,12 @@ export type Query = {
 
 export type User = {
   __typename?: 'User';
-  addressLine1: Scalars['String'];
-  addressLine2: Scalars['String'];
-  city: Scalars['String'];
-  country: Scalars['String'];
+  address?: Maybe<Address>;
+  categoryId: Scalars['String'];
   email: Scalars['String'];
   id: Scalars['String'];
-  mobile: Scalars['Float'];
   username: Scalars['String'];
-  zipcode: Scalars['Float'];
+  wishlistId: Scalars['String'];
 };
 
 export type UserCreationResponse = {
@@ -155,6 +212,11 @@ export type ResetPasswordMutationVariables = Exact<{
 
 
 export type ResetPasswordMutation = { __typename?: 'Mutation', resetPassword: { __typename?: 'UserCreationResponse', message: string, errors: Array<{ __typename?: 'Errors', field: string, message: string }> } };
+
+export type GetProductsQueryVariables = Exact<{ [key: string]: never; }>;
+
+
+export type GetProductsQuery = { __typename?: 'Query', getProducts: Array<{ __typename?: 'Product', productId: string, name: string, SKU: string, images?: Array<{ __typename?: 'Image', name: string, url: string, id: string }> | null | undefined }> };
 
 export type HelloQueryVariables = Exact<{ [key: string]: never; }>;
 
@@ -229,6 +291,24 @@ export const ResetPasswordDocument = gql`
 
 export function useResetPasswordMutation() {
   return Urql.useMutation<ResetPasswordMutation, ResetPasswordMutationVariables>(ResetPasswordDocument);
+};
+export const GetProductsDocument = gql`
+    query GetProducts {
+  getProducts {
+    productId
+    name
+    SKU
+    images {
+      name
+      url
+      id
+    }
+  }
+}
+    `;
+
+export function useGetProductsQuery(options: Omit<Urql.UseQueryArgs<GetProductsQueryVariables>, 'query'> = {}) {
+  return Urql.useQuery<GetProductsQuery>({ query: GetProductsDocument, ...options });
 };
 export const HelloDocument = gql`
     query Hello {

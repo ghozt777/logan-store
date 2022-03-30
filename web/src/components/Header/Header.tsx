@@ -15,6 +15,7 @@ import { HoverCard, HoverCardProps } from "./components/hover-card/HoverCard";
 import { v4 as uuidv4 } from 'uuid';
 import config from './../../config/config.json'
 import "./style.css"
+import { useNavBar } from "../../context/navbar";
 
 type NavbarProps = {
     title: string;
@@ -37,7 +38,9 @@ export const Header: React.FC<NavbarProps> = ({ title, links }) => {
     const dispatch = useDispatch();
     const [isDropdownOpen, setIsDropdownOpen] = useState(false);
     const [, logout] = useLogoutMutation();
-    const [isLagerThan800, isLagerThan1000] = useMediaQuery([`(min-width: 800px)`, `(min-width: 1000px)`])
+    const [isLagerThan800, isLagerThan1000] = useMediaQuery([`(min-width: 800px)`, `(min-width: 1000px)`]);
+    const navBarContext = useNavBar();
+    const setIsNavBarOpen = navBarContext?.setIsNavBarOpen;
     const catrgories = config.header.categories;
     const tagline = config.header.tagline;
     return (
@@ -67,7 +70,7 @@ export const Header: React.FC<NavbarProps> = ({ title, links }) => {
                     h="100%"
                     w="30%"
                 >
-                    <HamburgerIcon fontSize={isLagerThan1000 ? "1rem" : "0.7rem"} color={`text.${themeState.theme}`} cursor='pointer' />
+                    <HamburgerIcon onClick={() => setIsNavBarOpen && setIsNavBarOpen(s => !s)} fontSize={isLagerThan1000 ? "1rem" : "0.7rem"} color={`text.${themeState.theme}`} cursor='pointer' />
                     <Text
                         fontWeight={700}
                         className="title-text"
@@ -83,7 +86,7 @@ export const Header: React.FC<NavbarProps> = ({ title, links }) => {
                             fontSize={isLagerThan800 ? "0.8rem" : "0.6rem"}
                             color={`text.${themeState.theme}`}
                             className="title-tagline"
-                            whiteSpace='nowrap' 
+                            whiteSpace='nowrap'
                         >{tagline}
                             <span style={{ fontSize: isLagerThan800 ? "4rem" : "1rem" }}>.</span>
                         </Text>

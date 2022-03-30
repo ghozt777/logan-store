@@ -12,10 +12,13 @@ import {
 import { Header } from '../components/Header/Header';
 import 'react-toastify/dist/ReactToastify.css';
 import config from "../config/config.json"
+import { NavBar } from '../components/Navbar/Navbar';
+import { useNavBar } from '../context/navbar';
 
 function App() {
   const productName = config.header['product-name'];
   const location = useLocation();
+  const navBarContext = useNavBar();
   return (
     <>
       <ToastContainer
@@ -33,6 +36,7 @@ function App() {
         limit={3}
       />
       {location.pathname !== '/' && <Header title={productName} />}
+      {navBarContext?.isNavBarOpen && <NavBar />}
       <Routes>
         <Route path='/' element={<LandingPage />} />
         <Route path='/shop' element={<Shop />} />

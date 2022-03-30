@@ -7,6 +7,7 @@ import { ChakraProvider } from '@chakra-ui/react';
 import { theme } from './theme';
 import { Provider as URQLProvider, dedupExchange } from 'urql'
 import { getURQLClient } from "./utils/getURQLClient"
+import { NavBarProvider } from './context/navbar';
 
 
 export const Root = () => {
@@ -18,11 +19,13 @@ export const Root = () => {
     return (
         <React.StrictMode>
             <URQLProvider value={client ?? getURQLClient()} >
-                <BrowserRouter>
-                    <ChakraProvider theme={theme}>
-                        <App />
-                    </ChakraProvider>
-                </BrowserRouter>
+                <NavBarProvider>
+                    <BrowserRouter>
+                        <ChakraProvider theme={theme}>
+                            <App />
+                        </ChakraProvider>
+                    </BrowserRouter>
+                </NavBarProvider>
             </URQLProvider>
         </React.StrictMode>
     );
