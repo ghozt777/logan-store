@@ -53,10 +53,13 @@ export class UserService {
             const { user, errors, isValid } = payload;
             try {
                 if (isValid) {
+                    const em = getManager();
+                    const [userCategory] = await em.query(`SELECT * FROM entityCategory WHERE categoryName='User'`);
                     const result = await this.userRepository.insert({
                         username: user.username,
                         email: user.email,
-                        password: user.password
+                        password: user.password,
+                        categoryId: userCategory.categoryId
                     });
                 }
             } catch (err) {
@@ -102,11 +105,7 @@ export class UserService {
             }
             const accessToken = this.createAccessToken(user[0]);
             const refreshToken = this.createRefreshToken(user[0]);
-            res.cookie('jid', refreshToken, {
-                httpOnly: true,
-                sameSite: 'lax',
-            });
-            res.setHeader("Access-Control-Expose-Headers", "Set-Cookie");
+            res.cookie('jid', refreshToken, { sameSite: 'lax', httpOnly: true, secure: true });
             return {
                 accessToken: accessToken,
                 errors: []

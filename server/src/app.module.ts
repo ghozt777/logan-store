@@ -7,6 +7,8 @@ import { UserModule } from './user/user.module';
 import { ConfigModule } from '@nestjs/config';
 import { ProductModule } from './product/product.module';
 import { ImageModule } from './images/image.module';
+import { AddressModule } from './address/address.module';
+import { CategoryModule } from './category/category.module';
 
 
 @Module({
@@ -31,6 +33,8 @@ import { ImageModule } from './images/image.module';
     UserModule,
     ProductModule,
     ImageModule,
+    AddressModule,
+    CategoryModule
   ],
   controllers: [AppController],
   providers: [AppService],

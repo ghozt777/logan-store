@@ -1,6 +1,8 @@
 import { Field, ObjectType } from "@nestjs/graphql";
-import { Column, CreateDateColumn, Entity, JoinColumn, OneToMany, PrimaryGeneratedColumn, UpdateDateColumn } from "typeorm";
+import { EntityCategory } from "src/category/category.entity";
+import { Column, CreateDateColumn, Entity, JoinColumn, OneToMany, OneToOne, PrimaryGeneratedColumn, UpdateDateColumn } from "typeorm";
 import { Image } from "./../images/image.entity"
+import { Inventory } from "./inventory.entity";
 @ObjectType()
 @Entity('products')
 export class Product {
@@ -21,21 +23,23 @@ export class Product {
     SKU: string;
 
     @Column({ nullable: true })
-    categoryId: string;
+    productCategoryId: string;
 
-    @Column()
+    @Field({ nullable: true })
+    @Column({ nullable: true })
+    @OneToOne(() => Inventory, inventory => inventory.inventoryId)
     inventoryId: string;
-
-    @Field()
-    @Column()
-    price: number;
 
     @Column({ nullable: true })
     discountId: string;
 
+    @Field()
+    @OneToOne(() => EntityCategory, category => category.categoryId)
+    @Column({ nullable: true })
+    categoryId: string;
+
     @Field(() => [Image], { nullable: true })
     @OneToMany(() => Image, (image: Image) => image.product)
-    @JoinColumn()
     images: Image[];
 
     @CreateDateColumn({ type: "timestamp", default: () => "CURRENT_TIMESTAMP(6)" })

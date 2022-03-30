@@ -1,4 +1,4 @@
-import React, { useMemo } from 'react';
+import React, { useEffect, useMemo } from 'react';
 import App from './app/App';
 import { RootState } from './app/store'
 import { useSelector } from 'react-redux'
@@ -7,6 +7,7 @@ import { ChakraProvider } from '@chakra-ui/react';
 import { theme } from './theme';
 import { Provider as URQLProvider, dedupExchange } from 'urql'
 import { getURQLClient } from "./utils/getURQLClient"
+import { NavBarProvider } from './context/navbar';
 
 
 export const Root = () => {
@@ -15,14 +16,19 @@ export const Root = () => {
     /*eslint-disable */
     const client = useMemo(() => getURQLClient(), [authState]); // client creation optimization
     /*eslint-enable */
+    useEffect(() => {
+        document.querySelector<HTMLElement>('.loader')?.style.setProperty('display', 'none');
+    })
     return (
         <React.StrictMode>
             <URQLProvider value={client ?? getURQLClient()} >
-                <BrowserRouter>
-                    <ChakraProvider theme={theme}>
-                        <App />
-                    </ChakraProvider>
-                </BrowserRouter>
+                <NavBarProvider>
+                    <BrowserRouter>
+                        <ChakraProvider theme={theme}>
+                            <App />
+                        </ChakraProvider>
+                    </BrowserRouter>
+                </NavBarProvider>
             </URQLProvider>
         </React.StrictMode>
     );

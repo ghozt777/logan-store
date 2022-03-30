@@ -15,6 +15,7 @@ import { HoverCard, HoverCardProps } from "./components/hover-card/HoverCard";
 import { v4 as uuidv4 } from 'uuid';
 import config from './../../config/config.json'
 import "./style.css"
+import { useNavBar } from "../../context/navbar";
 
 type NavbarProps = {
     title: string;
@@ -37,7 +38,9 @@ export const Header: React.FC<NavbarProps> = ({ title, links }) => {
     const dispatch = useDispatch();
     const [isDropdownOpen, setIsDropdownOpen] = useState(false);
     const [, logout] = useLogoutMutation();
-    const [isLagerThan800, isLagerThan1000] = useMediaQuery([`(min-width: 800px)`, `(min-width: 1000px)`])
+    const [isLagerThan800, isLagerThan1000] = useMediaQuery([`(min-width: 800px)`, `(min-width: 1000px)`]);
+    const navBarContext = useNavBar();
+    const setIsNavBarOpen = navBarContext?.setIsNavBarOpen;
     const catrgories = config.header.categories;
     const tagline = config.header.tagline;
     return (
@@ -51,7 +54,7 @@ export const Header: React.FC<NavbarProps> = ({ title, links }) => {
             <Flex
                 h="100%"
                 w="100%"
-                p='20px'
+                p={`20px ${isLagerThan800 ? "8%" : '20px'}`}
                 fontWeight='bold'
                 fontFamily='sans-serif'
                 fontSize='1.3rem'
@@ -67,13 +70,19 @@ export const Header: React.FC<NavbarProps> = ({ title, links }) => {
                     h="100%"
                     w="30%"
                 >
-                    <HamburgerIcon fontSize={isLagerThan1000 ? "1rem" : "0.7rem"} color={`text.${themeState.theme}`} cursor='pointer' />
+                    <HamburgerIcon
+                        onClick={() => setIsNavBarOpen && setIsNavBarOpen(s => !s)}
+                        fontSize={isLagerThan1000 ? "1rem" : "0.7rem"}
+                        color={`text.${themeState.theme}`} cursor='pointer'
+                    />
                     <Text
                         fontWeight={700}
                         className="title-text"
                         color={`text.${themeState.theme}`}
-                        fontSize={isLagerThan800 ? '1rem' : '0.6rem'}
-                        cursor='pointer' >{title}
+                        fontSize={isLagerThan800 ? 'lg' : 'sm'}
+                        cursor='pointer'
+                        whiteSpace='nowrap'
+                    >{title}
                     </Text>
                     {
                         isLagerThan1000 &&
@@ -81,7 +90,7 @@ export const Header: React.FC<NavbarProps> = ({ title, links }) => {
                             fontSize={isLagerThan800 ? "0.8rem" : "0.6rem"}
                             color={`text.${themeState.theme}`}
                             className="title-tagline"
-                        // letterSpacing="4px"
+                            whiteSpace='nowrap'
                         >{tagline}
                             <span style={{ fontSize: isLagerThan800 ? "4rem" : "1rem" }}>.</span>
                         </Text>

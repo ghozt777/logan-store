@@ -44,5 +44,52 @@
         ],
         "tagline" : "Be a Maverick" ,
         "product-name": "Logan Store"
+    },
+    "dummy-api": {
+        "trending" : {
+            "title": "Trending" ,
+            "products" : [
+                {
+                    "productName" : "X Box Series X" ,
+                    "productImage" : "https://ik.imagekit.io/dnoyrwmg9i9o/logan-store-products/b90ad58f-9950-44a7-87fa-1ee8f0b6a90e_hyR4r3VIwJr9.jpeg?ik-sdk-version=javascript-1.4.3&updatedAt=1646942521926" ,
+                    "price" : "599.99" ,
+                    "currency" : "USD",
+                    "logo" : "" ,
+                    "tagline": ""
+                } ,
+                {
+                    "productName" : "Sony PS5" ,
+                    "productImage" : "https://ik.imagekit.io/dnoyrwmg9i9o/logan-store-products/ps5_hardware_render.0_k1cpJKZ9_.webp?ik-sdk-version=javascript-1.4.3&updatedAt=1647711341418" ,
+                    "price" : "699.99" ,
+                    "currency" : "USD",
+                    "logo" : "" ,
+                    "tagline": ""
+                } ,
+                {
+                    "productName" : "Apple Mac Studio" ,
+                    "productImage" : "https://ik.imagekit.io/dnoyrwmg9i9o/logan-store-products/mac-studio-select-202203_SP6rWkj0h.jpeg?ik-sdk-version=javascript-1.4.3&updatedAt=1647712811854" ,
+                    "price" : "389900.00" ,
+                    "currency" : "INR",
+                    "logo" : "" ,
+                    "tagline": ""
+                },
+                {
+                    "productName" : "Apple MacBook Air" ,
+                    "productImage" : "https://ik.imagekit.io/dnoyrwmg9i9o/logan-store-products/macbook_air__cvqhw0f6aq82_large_diP3XI-L8.jpeg?ik-sdk-version=javascript-1.4.3&updatedAt=1647712930258" ,
+                    "price" : "899.90" ,
+                    "currency" : "USD",
+                    "logo" : "" ,
+                    "tagline": ""
+                } ,
+                {
+                    "productName" : "Apple iPad Air" ,
+                    "productImage" : "https://ik.imagekit.io/dnoyrwmg9i9o/logan-store-products/71SAHzzQqkL._SX522__aaN2_JkLl.jpg?ik-sdk-version=javascript-1.4.3&updatedAt=1647713139841" ,
+                    "price" : "569.00" ,
+                    "currency" : "USD",
+                    "logo" : "" ,
+                    "tagline": ""
+                } 
+            ]
+        }
     }
 }

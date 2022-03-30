@@ -33,7 +33,7 @@ export const LoginPage: React.FC<LoginPageProps> = () => {
         >
             <Box
                 h="50%"
-                w="40%"
+                w={isGreaterThan800 ? "40%" : "90%"}
             >
                 <Formik
 
@@ -107,12 +107,12 @@ export const LoginPage: React.FC<LoginPageProps> = () => {
                                             w="100%"
                                         >
                                             <Flex
-                                                h="5rem"
-                                                w={isGreaterThan800 ? "35%" : "100%"}
                                                 ml="auto"
                                                 flexDirection={"row"}
                                                 alignItems="center"
-                                                justifyContent="space-evenly"
+                                                justifyContent="flex-end"
+                                                size={isGreaterThan800 ? "md" : "sm"}
+                                                gap='10px'
                                             >
                                                 <Button onClick={() => navigate('/register')} size={"xs"} variant={"solid"}>Register</Button>
                                                 <Button onClick={() => navigate('/forgot-password')} size={"xs"} variant={"link"}>forgot password</Button>

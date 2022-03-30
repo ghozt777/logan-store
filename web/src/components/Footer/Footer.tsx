@@ -16,8 +16,8 @@ export const Footer: React.FC<{}> = () => {
             justifyContent='center'
             color={`text.${themeState.theme}`}
         >
-            <Text fontSize='xs'>Made with <b>React</b> , <b>GraphQL</b> and ❤️</Text>
-            <Text fontSize='xs'>© Logan Store {new Date().getFullYear()}</Text>
+            <Text fontSize='xs'>Made with <b>React</b> , <b>GraphQL</b> and ❤️ <pre style={{ display: "inline-block" }}> </pre> by <a href="https://www.instagram.com/dontsleeponcustard/" ><b>ghozt777</b></a> </Text>
+            <Text fontSize='xs'> © Logan Store {new Date().getFullYear()} </Text>
         </Flex>
     )
 }
