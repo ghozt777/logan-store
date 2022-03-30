@@ -24,7 +24,7 @@ export const Shop: React.FC<{}> = () => {
             flexDirection='column'
         >
             <Flex
-                h={isLagerThan800 ? '70%' : '50%'}
+                h={isLagerThan800 ? '95%' : '75%'}
                 w='100%'
             >
                 <Showcase title='Trending' products={config["dummy-api"].trending.products} />

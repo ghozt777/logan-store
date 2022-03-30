@@ -32,63 +32,57 @@ const ShowCaseCard: React.FC<ProductCardProps> = ({ product, align }) => {
     const [isLagerThan800] = useMediaQuery([`(min-width: 800px)`]);
     const themeState = useSelector((state: RootState) => state.theme);
     return (
-        <Box
-            h='100%'
+        <Flex
+            h='80%'
             w='100%'
+            p={isLagerThan800 ? '20px' : '0px'}
+            alignItems='center'
+            justifyContent='space-between'
+            flexDirection={isLagerThan800 ? align === "left" ? "row" : "row-reverse" : "column"}
+            bg={`main.${themeState.theme}`}
         >
             <Flex
-                h='100%'
-                w='100%'
-                p={isLagerThan800 ? '20px' : '0px'}
+                className='hero-container'
+                h={isLagerThan800? '80%' : '60%'}
+                w={isLagerThan800 ? '40%' : '95%'}
                 alignItems='center'
-                justifyContent='space-between'
-                flexDirection={align === "left" ? "row" : "row-reverse"}
-                bg={`main.${themeState.theme}`}
+                justifyContent='center'
+                boxShadow='xl'
+                p={isLagerThan800 ? '6' : '2'}
+                rounded='lg'
+                bg='white'
             >
-                <Flex
-                    className='hero-container'
-                    h='80%'
-                    w='40%'
-                    alignItems='center'
-                    justifyContent='center'
-                    boxShadow='xl'
-                    p={isLagerThan800 ? '6' : '2'}
-                    rounded='lg'
-                    bg='white'
-                >
-                    <Img
-                        maxH='90%'
-                        h='auto'
-                        src={productImage}
-                        alt={productName}
-                        backgroundSize="cover"
-                        backgroundPosition="center"
-                        backgroundRepeat="no-repeat"
-                    />
-                </Flex>
-                <Flex
-                    h='80%'
-                    w='60%'
-                    alignItems='center'
-                    justifyContent='center'
-                    boxShadow='xl'
-                    p='6'
-                    rounded='lg'
-                    flexDir='column'
-                    transition="250ms"
-                    _hover={{
-                        transform: "translateY(-5px) scale(1.1)"
-                    }}
-                >
-                    <Box>
-                        <Text fontSize={isLagerThan800 ? '3xl' : "xl"}>{productName}</Text>
-                    </Box>
-                    <Box>
-                        <Text color={`text2.${themeState.theme}`} fontSize={isLagerThan800 ? 'xl' : 'md'}><span>{currency + " "} </span>{price}</Text>
-                    </Box>
-                </Flex>
+                <Img
+                    maxH='90%'
+                    src={productImage}
+                    alt={productName}
+                    backgroundSize="cover"
+                    backgroundPosition="center"
+                    backgroundRepeat="no-repeat"
+                />
             </Flex>
-        </Box >
+            <Flex
+                h={isLagerThan800? '80%' : '40%'}
+                w={isLagerThan800 ? '60%' : '95%'}
+                alignItems='center'
+                justifyContent='center'
+                boxShadow='xl'
+                p='6'
+                rounded='lg'
+                flexDir='column'
+                transition="250ms"
+                _hover={{
+                    transform: "translateY(-5px) scale(1.1)"
+                }}
+            >
+                <Box>
+                    <Text fontSize={isLagerThan800 ? '3xl' : "xl"}>{productName}</Text>
+                </Box>
+                <Box>
+                    <Text color={`text2.${themeState.theme}`} fontSize={isLagerThan800 ? 'xl' : 'md'}><span>{currency + " "} </span>{price}</Text>
+                </Box>
+            </Flex>
+        </Flex>
     )
 }
 
