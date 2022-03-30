@@ -1,4 +1,4 @@
-import React, { useMemo } from 'react';
+import React, { useEffect, useMemo } from 'react';
 import App from './app/App';
 import { RootState } from './app/store'
 import { useSelector } from 'react-redux'
@@ -16,6 +16,9 @@ export const Root = () => {
     /*eslint-disable */
     const client = useMemo(() => getURQLClient(), [authState]); // client creation optimization
     /*eslint-enable */
+    useEffect(() => {
+        document.querySelector<HTMLElement>('.loader')?.style.setProperty('display', 'none');
+    })
     return (
         <React.StrictMode>
             <URQLProvider value={client ?? getURQLClient()} >

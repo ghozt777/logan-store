@@ -25,6 +25,10 @@ export const theme = extendTheme({
         "btn-primary": {
             light: 'black',
             dark: 'white'
+        },
+        "hover-card": {
+            dark: '#18181b',
+            light: 'white'
         }
     }
 })

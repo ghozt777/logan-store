@@ -70,7 +70,11 @@ export const Header: React.FC<NavbarProps> = ({ title, links }) => {
                     h="100%"
                     w="30%"
                 >
-                    <HamburgerIcon onClick={() => setIsNavBarOpen && setIsNavBarOpen(s => !s)} fontSize={isLagerThan1000 ? "1rem" : "0.7rem"} color={`text.${themeState.theme}`} cursor='pointer' />
+                    <HamburgerIcon
+                        onClick={() => setIsNavBarOpen && setIsNavBarOpen(s => !s)}
+                        fontSize={isLagerThan1000 ? "1rem" : "0.7rem"}
+                        color={`text.${themeState.theme}`} cursor='pointer'
+                    />
                     <Text
                         fontWeight={700}
                         className="title-text"
