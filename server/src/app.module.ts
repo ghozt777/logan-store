@@ -8,7 +8,8 @@ import { ConfigModule } from '@nestjs/config';
 import { ProductModule } from './product/product.module';
 import { ImageModule } from './images/image.module';
 import { AddressModule } from './address/address.module';
-import { CategoryModule } from './category/category.module';
+import { CategoryModule } from './entity-category/category.module';
+import { ProductCategoryModule } from './product-category/productCategory.module';
 
 
 @Module({
@@ -34,7 +35,8 @@ import { CategoryModule } from './category/category.module';
     ProductModule,
     ImageModule,
     AddressModule,
-    CategoryModule
+    CategoryModule,
+    ProductCategoryModule
   ],
   controllers: [AppController],
   providers: [AppService],

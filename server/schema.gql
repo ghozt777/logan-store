@@ -9,6 +9,11 @@ type Image {
   owner: String
 }
 
+type Brand {
+  id: Float!
+  name: String!
+}
+
 type Currency {
   currency: String!
 }
@@ -19,8 +24,9 @@ type Product {
   description: String!
   SKU: String!
   inventoryId: String
-  categoryId: String!
+  entityCategoryId: String!
   images: [Image!]
+  brand: Brand!
 }
 
 type User {
@@ -63,12 +69,19 @@ type ImageResponse {
   message: String!
 }
 
+type ProductCategory {
+  id: String!
+  name: String!
+  subCategories: [ProductCategory!]
+}
+
 type Query {
   hello: String!
   me: User!
   whoami: User!
   getProducts: [Product!]!
   getImages: ImageResponse!
+  helloFromProductCategory: String!
 }
 
 type Mutation {
