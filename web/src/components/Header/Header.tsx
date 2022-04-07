@@ -17,6 +17,7 @@ import config from './../../config/config.json'
 import "./style.css"
 import { useNavBar } from "../../context/navbar";
 import { RouteInfoBar } from "../RouteInfoBar/RouteInfoBar";
+import { useNavigate } from "react-router-dom";
 
 type NavbarProps = {
     title: string;
@@ -42,6 +43,7 @@ export const Header: React.FC<NavbarProps> = ({ title, links }) => {
     const [isLagerThan800, isLagerThan1000] = useMediaQuery([`(min-width: 800px)`, `(min-width: 1000px)`]);
     const navBarContext = useNavBar();
     const setIsNavBarOpen = navBarContext?.setIsNavBarOpen;
+    const navigate = useNavigate();
     const catrgories = config.header.categories;
     const tagline = config.header.tagline;
     return (

@@ -14,6 +14,12 @@ type Brand {
   name: String!
 }
 
+type DisCount {
+  discountId: String!
+  code: String!
+  discountPercentage: Float!
+}
+
 type Currency {
   currency: String!
 }
@@ -27,6 +33,7 @@ type Product {
   entityCategoryId: String!
   images: [Image!]
   brand: Brand!
+  applicabeDiscountIds: [DisCount!]
 }
 
 type User {
@@ -64,6 +71,11 @@ type LoginResponse {
   errors: [Errors!]!
 }
 
+type GenericResponse {
+  errors: [Errors!]!
+  isOk: Boolean!
+}
+
 type ImageResponse {
   images: [Image!]!
   message: String!
@@ -94,6 +106,9 @@ type Mutation {
   addProduct(description: String!, productName: String!): Boolean!
   addImageToProduct(imageUrl: String!, imageName: String!, productId: String!): Boolean!
   createInventory(productId: String!, price: Float!, stock: Float!, currency: String!): Boolean!
+  registerDiscount(percentage: Float!, code: String!): Boolean!
+  tagProductWithDiscount(discountId: String!, productId: String!): GenericResponse!
+  tagProductWithDiscountCode(discountCode: String!, productId: String!): GenericResponse!
   addImage(name: String!, url: String!): Boolean!
   addAddress(mobile: Float!, country: String!, zipcode: String!, city: String!, addressLine2: String, addressLine1: String!): Boolean!
   addCategory(categoryName: String!): Boolean!

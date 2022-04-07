@@ -5,14 +5,16 @@ import { Text, Link as ChakraLink } from '@chakra-ui/react'
 import { v4 as uuidv4 } from 'uuid'
 import React, { useEffect } from "react";
 
-const Link: React.FC<{ title: string, isActive: boolean, path: string }> = ({ title, isActive, path }) => {
+const Link: React.FC<{ title: string, isActive: boolean, path: string, dark: boolean }> = ({ title, isActive, path, dark }) => {
     const nvaigate = useNavigate();
-    return isActive ? <ChakraLink whiteSpace='nowrap' fontSize='sm' onClick={() => nvaigate(path)}>{title}</ChakraLink> : <Text whiteSpace='nowrap' color='#a855f7' fontSize='sm' cursor={'default'} >{title}</Text>
+    return isActive ? <ChakraLink color={dark ? "white" : "black"} whiteSpace='nowrap' fontSize='sm' onClick={() => nvaigate(path)}>{title}</ChakraLink> : <Text whiteSpace='nowrap' color={dark ? "#c084fc" : '#a855f7'} fontSize='sm' cursor={'default'} >{title}</Text>
 }
 
-const Slash = () => <Text
+const Slash: React.FC<{ dark: boolean }> = ({ dark }) => <Text
+    fontWeight='bold'
     fontSize='xs'
     p='1'
+    color={dark ? "whiteAlpha.600" : "grey"}
 >/</Text>
 
 export const RouteInfoBar: React.FC<{}> = () => {
@@ -38,11 +40,12 @@ export const RouteInfoBar: React.FC<{}> = () => {
             justifyContent='center'
         >
             <Link
+                dark={themeState.theme === "dark"}
                 isActive={true}
                 title='Home'
                 path="/"
             />
-            <Slash />
+            <Slash dark={themeState.theme === "dark"} />
             <Flex
                 alignItems='center'
                 justifyContent='center'
@@ -56,11 +59,12 @@ export const RouteInfoBar: React.FC<{}> = () => {
                                 alignItems='center'
                             >
                                 <Link
+                                    dark={themeState.theme === "dark"}
                                     isActive={i != routes.length - 1}
                                     title={r}
                                     path={completeRoutes[i]}
                                 />
-                                {i != routes.length - 1 && <Slash />}
+                                {i != routes.length - 1 && <Slash dark={themeState.theme === "dark"} />}
                             </Flex>
                         )
                     })
