@@ -1,9 +1,11 @@
-import { Inject, Injectable } from "@nestjs/common";
+import { Injectable } from "@nestjs/common";
 import { InjectRepository } from "@nestjs/typeorm";
-import { getManager, Repository } from "typeorm";
+import { EntityManager, getManager, Repository } from "typeorm";
 import { Product } from "./product.entity";
 import { Inventory } from "./inventory.entity";
 import { Image } from "src/images/image.entity";
+import { DisCount } from "./discount.entity";
+import { GenericResponse } from "./genericResponse.dto";
 const crypto = require('crypto')
 
 @Injectable()
@@ -11,14 +13,15 @@ export class ProductService {
     constructor(
         @InjectRepository(Product) private productRepository: Repository<Product>,
         @InjectRepository(Inventory) private inventoryRepository: Repository<Inventory>,
-        @InjectRepository(Image) private imageRepository: Repository<Image>
+        @InjectRepository(Image) private imageRepository: Repository<Image>,
+        @InjectRepository(DisCount) private discountRepository: Repository<DisCount>
     ) { }
 
     async getAllProducts(): Promise<Product[]> {
         const products = await this.productRepository
-        .createQueryBuilder('product')
-        .leftJoinAndSelect('product.images', 'images')
-        .getMany();
+            .createQueryBuilder('product')
+            .leftJoinAndSelect('product.images', 'images')
+            .getMany();
         console.log(products);
         return products;
     }
@@ -78,4 +81,85 @@ export class ProductService {
             return false;
         }
     }
+
+    async registerDiscount(code: string, percentage: number) {
+        try {
+            await this.discountRepository.save({ code, discountPercentage: percentage });
+            return true;
+        } catch (err) {
+            console.error(`error while registering discount with code : ${code}`);
+            console.error(`error message : ${err.message}`);
+            return false;
+        }
+    }
+
+    async tagProductWithDiscount(productId: string, discountId: string): Promise<GenericResponse> {
+        try {
+            const foundProduct = await this.productRepository.findOne({ productId });
+            if (!foundProduct) {
+                return {
+                    errors: [{
+                        field: 'product',
+                        message: `product with id=${productId} not found !`
+                    }],
+                    isOk: false
+                };
+            }
+            const foundDiscount = await this.discountRepository.findOne({ discountId });
+            if (!foundDiscount) {
+                return {
+                    errors: [{
+                        field: 'discount',
+                        message: `discount with id=${discountId} not found !`
+                    }],
+                    isOk: false
+                };
+            }
+            const em = getManager();
+            await em.query(`UPDATE products SET discountId='${discountId}' WHERE productId='${productId}'`);
+            return {
+                errors: [],
+                isOk: true
+            };
+        } catch (err) {
+            console.error(`error while tagging product with id = ${productId} with discount with id = ${discountId}`);
+            console.error(`error with message : ${err.message}`);
+            return {
+                errors: [{
+                    field: 'unknown',
+                    message: err.message
+                }],
+                isOk: false
+            };
+        }
+    }
+
+    async tagProductWithDiscountCode(productId: string, discountCode: string): Promise<GenericResponse> {
+        try {
+            const discount = await this.discountRepository.findOne({ code: discountCode });
+            if (!discount) {
+                return {
+                    errors: [{
+                        field: 'discount',
+                        message: `discount with code=${discountCode} not found !`
+                    }],
+                    isOk: false
+                }
+            }
+            const response = await this.tagProductWithDiscount(productId, discount.discountId);
+            return response;
+        } catch (err) {
+            console.error(`error while tagging product with id = ${productId} with discount with code = ${discountCode}`);
+            console.error(`error with message : ${err.message}`);
+            return {
+                errors: [{
+                    field: 'unknown',
+                    message: err.message
+                }],
+                isOk: false
+            };
+        }
+    }
+
+
 }

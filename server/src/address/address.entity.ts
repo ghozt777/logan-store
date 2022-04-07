@@ -1,5 +1,5 @@
 import { Field, Float, ObjectType } from "@nestjs/graphql";
-import { EntityCategory } from "src/category/category.entity";
+import { EntityCategory } from "src/entity-category/category.entity";
 import { Column, Entity, ManyToOne, OneToOne, PrimaryGeneratedColumn } from "typeorm";
 import { User } from "../user/user.entity";
 

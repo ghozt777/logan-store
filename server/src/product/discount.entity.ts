@@ -2,14 +2,18 @@ import { Field, ObjectType } from "@nestjs/graphql";
 import { Column, Entity, PrimaryGeneratedColumn } from "typeorm";
 
 @ObjectType()
-@Entity('entityCategory')
-export class EntityCategory {
-    @Field()
+@Entity('discounts')
+export class DisCount {
+
+    @Field(() => String)
     @PrimaryGeneratedColumn('uuid')
-    categoryId: string;
+    discountId: string;
 
     @Field(() => String)
     @Column({ unique: true })
-    categoryName: string;
+    code: string;
 
+    @Field()
+    @Column()
+    discountPercentage: number;
 }

@@ -1,4 +1,5 @@
 import { Field, ObjectType } from "@nestjs/graphql";
+import { fieldInfoOfKey } from "@urql/exchange-graphcache/dist/types/store";
 import { Column, Entity, OneToOne, PrimaryGeneratedColumn } from "typeorm";
 import { Product } from "./product.entity";
 
@@ -35,4 +36,8 @@ export class Inventory {
     @Field()
     @Column({ default: 0 })
     stock: number;
+
+    @Field()
+    @Column({ default: -1 })
+    maxNumberOfUnitsPerCustomer: number
 }

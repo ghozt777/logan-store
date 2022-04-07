@@ -1,12 +1,12 @@
 import { UseInterceptors } from "@nestjs/common";
-import { Resolver, Query, Mutation, Args } from "@nestjs/graphql";
+import { Resolver, Query, Mutation, Args, ObjectType, Field } from "@nestjs/graphql";
 import { InjectRepository } from "@nestjs/typeorm";
 import { LoggingInterceptor } from "src/user/logging.interceptor";
 import { Float } from "type-graphql";
 import { Repository } from "typeorm";
+import { GenericResponse } from "./genericResponse.dto";
 import { Product } from "./product.entity";
 import { ProductService } from "./product.service";
-
 
 @UseInterceptors(LoggingInterceptor)
 @Resolver(() => Product)
@@ -52,4 +52,30 @@ export class ProductResolver {
         return response;
     }
 
+    @Mutation(() => Boolean)
+    async registerDiscount(
+        @Args({ type: () => String, name: 'code' }) code: string,
+        @Args({ type: () => Float, name: 'percentage' }) percentage: number,
+    ) {
+        const res = await this.productService.registerDiscount(code, percentage);
+        return res;
+    }
+
+    @Mutation(() => GenericResponse)
+    async tagProductWithDiscount(
+        @Args({ type: () => String, name: 'productId' }) productId: string,
+        @Args({ type: () => String, name: 'discountId' }) discountId: string,
+    ): Promise<GenericResponse> {
+        const response = await this.productService.tagProductWithDiscount(productId, discountId);
+        return response;
+    }
+
+    @Mutation(() => GenericResponse)
+    async tagProductWithDiscountCode(
+        @Args({ type: () => String, name: 'productId' }) productId: string,
+        @Args({ type: () => String, name: 'discountCode' }) discountCode: string,
+    ) {
+        const response = await this.productService.tagProductWithDiscountCode(productId, discountCode);
+        return response;
+    }
 }

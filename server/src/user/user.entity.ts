@@ -1,5 +1,5 @@
 import { Field, ObjectType } from "@nestjs/graphql";
-import { EntityCategory } from "src/category/category.entity";
+import { EntityCategory } from "src/entity-category/category.entity";
 import { Column, Entity, PrimaryGeneratedColumn, CreateDateColumn, UpdateDateColumn, OneToMany, OneToOne } from "typeorm";
 import { Address } from "../address/address.entity";
 import { WishList } from "./wisthlist.entity";

@@ -6,9 +6,11 @@ import { ProductResolver } from "./product.resover";
 import { Image } from "../images/image.entity"
 import { Inventory } from "./inventory.entity";
 import { ProductService } from "./product.service";
+import { Brand } from "./brand.entity";
+import { DisCount } from "./discount.entity";
 
 @Module({
-    imports: [TypeOrmModule.forFeature([Product, Image, Inventory]), CacheModule.register()],
+    imports: [TypeOrmModule.forFeature([Product, Image, Inventory, Brand, DisCount]), CacheModule.register()],
     controllers: [ProductController],
     providers: [ProductResolver, ProductService]
 })
