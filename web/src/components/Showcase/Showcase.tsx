@@ -43,11 +43,13 @@ const ShowCaseCard: React.FC<ProductCardProps> = ({ product, align }) => {
         >
             <Flex
                 className='hero-container'
-                h={isLagerThan800? '80%' : '60%'}
+                h={isLagerThan800 ? '80%' : '59%'}
                 w={isLagerThan800 ? '40%' : '95%'}
                 alignItems='center'
                 justifyContent='center'
-                boxShadow='xl'
+                boxShadow={isLagerThan800 ? 'xl' : '0px'}
+                border={isLagerThan800 ? '0px' : '1px'}
+                borderColor={themeState.theme === 'light' ? 'gray.200' : 'gray.600'}
                 p={isLagerThan800 ? '6' : '2'}
                 rounded='lg'
                 bg='white'
@@ -62,15 +64,16 @@ const ShowCaseCard: React.FC<ProductCardProps> = ({ product, align }) => {
                 />
             </Flex>
             <Flex
-                h={isLagerThan800? '80%' : '40%'}
-                w={isLagerThan800 ? '60%' : '95%'}
+                h={isLagerThan800 ? '80%' : '40%'}
+                w={isLagerThan800 ? '59%' : '95%'}
                 alignItems='center'
                 justifyContent='center'
-                boxShadow='xl'
+                boxShadow={isLagerThan800 ? 'xl' : 'sm'}
                 p='6'
                 rounded='lg'
                 flexDir='column'
                 transition="250ms"
+                bg={`showcase.${themeState.theme}`}
                 _hover={{
                     transform: "translateY(-5px) scale(1.1)"
                 }}

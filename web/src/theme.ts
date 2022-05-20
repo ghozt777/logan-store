@@ -35,8 +35,12 @@ export const theme = extendTheme({
             dark: "#2e2e2e"
         },
         'main-nav': {
-            dark: '#18181b',
+            dark: '#8b5cf6',
             light: 'white'
-        }
+        },
+        "showcase": {
+            light: "#fff",
+            dark: "#27272a"
+        },
     }
 })
