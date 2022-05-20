@@ -1,20 +1,69 @@
 import { Box, Flex, Grid, GridItem, Text, useMediaQuery } from "@chakra-ui/react"
 import { useTheme } from "../../features/theme/themeSlice";
 
+const GridContent: React.FC<{ r?: number, c?: number }> = ({ children, r, c }) => {
+    return (
+        <GridItem
+            rowSpan={r ?? 0}
+            colSpan={c ?? 0}
+        >
+            {
+                children
+            }
+        </GridItem >
+    )
+}
+
+const GridCard = () => {
+    return (
+        <Box
+            h='100%'
+            w='100%'
+            p='4px'
+            boxShadow='md'
+            rounded='lg'
+        >
+        </Box>
+    )
+}
+
 const DesktopView = () => {
     return (
         <>
 
-            <GridItem rowSpan={2} colSpan={1} bg='tomato' />
-            <GridItem colSpan={2} bg='papayawhip' />
-            <GridItem colSpan={2} bg='papayawhip' />
-            <GridItem colSpan={4} bg='tomato' />
+            <GridContent r={2} c={1}>
+                <GridCard />
+            </GridContent>
+            <GridContent c={2}>
+                <GridCard />
+            </GridContent>
+            <GridContent c={2} >
+                <GridCard />
+            </GridContent>
+            <GridContent c={4} >
+                <GridCard />
+            </GridContent>
         </>
     )
 }
 
 const MobileView = () => {
-    return (<h1>Test </h1>)
+    return (
+        <>
+            <GridContent c={3}>
+                <GridCard />
+            </GridContent>
+            <GridContent c={2}>
+                <GridCard />
+            </GridContent>
+            <GridContent c={2} >
+                <GridCard />
+            </GridContent>
+            <GridContent c={3} >
+                <GridCard />
+            </GridContent>
+        </>
+    )
 }
 
 export const Categories: React.FC<{}> = () => {
@@ -41,7 +90,6 @@ export const Categories: React.FC<{}> = () => {
             <Box
                 h='80%'
                 w='90%'
-                bg='red'
                 p='10px'
             >
                 <Grid
