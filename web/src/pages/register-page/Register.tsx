@@ -1,4 +1,4 @@
-import { Box, Button, Flex, Stack, useMediaQuery } from "@chakra-ui/react"
+import { Box, Button, Flex, Stack, StackDivider, useMediaQuery, VStack } from "@chakra-ui/react"
 import { Form, Formik } from "formik"
 import { InputField } from "../../components"
 import { useRegisterMutation } from "../../generated/graphql"
@@ -29,7 +29,7 @@ export const RegisterPage: React.FC<RegisterPageProps> = () => {
             bg={`main.${themeState.theme}`}
         >
             <Flex
-                h="50%"
+                h={isGreaterThan800 ? "50%" : "70%"}
                 boxShadow='base'
                 alignItems='center'
                 justifyContent='center'
@@ -38,6 +38,7 @@ export const RegisterPage: React.FC<RegisterPageProps> = () => {
                 <Box
                     w='90%'
                     h='90%'
+                    position={'relative'}
                 >
                     <Formik
 
@@ -78,7 +79,11 @@ export const RegisterPage: React.FC<RegisterPageProps> = () => {
                             }) => {
                                 return (
                                     <Form>
-                                        <Stack spacing={3} >
+                                        <VStack
+                                            spacing={'15px'}
+                                            divider={<StackDivider borderColor='gray.200' />}
+                                            position={'relative'}
+                                        >
                                             <InputField
                                                 variant={themeState.theme}
                                                 name="username"
@@ -114,11 +119,25 @@ export const RegisterPage: React.FC<RegisterPageProps> = () => {
                                                 isLoading={isSubmitting}
                                                 loadingText='Submitting'
                                                 type="submit"
+                                                w='80%'
                                             >
                                                 Register
                                             </Button>
-
-                                        </Stack>
+                                        </VStack>
+                                        <Flex
+                                            position='absolute'
+                                            bottom='10px'
+                                            right='10px'
+                                            ml="auto"
+                                            flexDirection="row"
+                                            alignItems="center"
+                                            justifyContent="flex-end"
+                                            size={isGreaterThan800 ? "md" : "sm"}
+                                            gap='1rem'
+                                        >
+                                            <Button onClick={() => navigate('/login')} size={"xs"} variant={"solid"}>Login</Button>
+                                            <Button onClick={() => navigate('/forgot-password')} size={"xs"} variant={"link"}>forgot password ?</Button>
+                                        </Flex>
                                     </Form>
                                 )
                             }
