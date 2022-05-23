@@ -26,8 +26,11 @@ export class ProductResolver {
     async addProduct(
         @Args({ type: () => String, name: 'productName' }) productName: string,
         @Args({ type: () => String || null, name: 'description' }) description: string | null,
+        @Args({ type: () => Float, name: 'price' }) price: number,
+        @Args({ type: () => String || null, name: 'currency' }) currency: string | null,
+        @Args({ type: () => String, name: 'brand' }) brand: string,
     ): Promise<Boolean> {
-        const response = await this.productService.addProduct(productName, description,);
+        const response = await this.productService.addProduct(productName, description, price, currency, brand);
         return response;
     }
 
@@ -77,5 +80,20 @@ export class ProductResolver {
     ) {
         const response = await this.productService.tagProductWithDiscountCode(productId, discountCode);
         return response;
+    }
+
+    @Mutation(() => Boolean)
+    async registerBrand(
+        @Args({ type: () => String, name: 'name' }) name: string,
+        @Args({ type: () => String, name: 'brandLogo' }) brandLogo: string
+    ) {
+        const response = await this.productService.registerBrand(name, brandLogo);
+        return response;
+    }
+
+    @Query(() => [Product])
+    async getTrendingProducts(): Promise<Array<Product>> {
+        const products = await this.productService.getTrendingProducts();
+        return products;
     }
 }

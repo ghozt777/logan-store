@@ -4,15 +4,9 @@ import { v4 as uuidv4 } from 'uuid'
 import { RootState } from "../../app/store";
 import { useSelector } from "react-redux";
 import './style.css'
+import { GetTrendingProductsQuery } from "../../generated/graphql";
 
-type Product = {
-    productName: string;
-    productImage: string;
-    price: string;
-    currency: string;
-    logo: string;
-    tagline: string;
-}
+type Product = { __typename?: 'Product', productId: string, name: string, SKU: string, price: number, currency: string, upvotes: number, brand?: { __typename?: 'Brand', name: string, brandLogo: string } | null | undefined, images?: Array<{ __typename?: 'Image', name: string, url: string, id: string }> | null | undefined };
 
 interface ProductCardProps {
     product: Product;
@@ -20,7 +14,7 @@ interface ProductCardProps {
 }
 
 interface ShowcaseProps {
-    products: Product[];
+    products: Array<Product>;
     title: string;
 }
 
@@ -28,7 +22,7 @@ interface ShowcaseProps {
 
 const ShowCaseCard: React.FC<ProductCardProps> = ({ product, align }) => {
 
-    const { currency, productImage, logo, productName, tagline, price } = product;
+    const { name, SKU, images, brand, productId, upvotes, currency, price } = product;
     const [isLagerThan800] = useMediaQuery([`(min-width: 800px)`]);
     const themeState = useSelector((state: RootState) => state.theme);
     return (
@@ -43,40 +37,43 @@ const ShowCaseCard: React.FC<ProductCardProps> = ({ product, align }) => {
         >
             <Flex
                 className='hero-container'
-                h={isLagerThan800? '80%' : '60%'}
+                h={isLagerThan800 ? '80%' : '59%'}
                 w={isLagerThan800 ? '40%' : '95%'}
                 alignItems='center'
                 justifyContent='center'
-                boxShadow='xl'
+                boxShadow={isLagerThan800 ? 'xl' : '0px'}
+                border={isLagerThan800 ? '0px' : '1px'}
+                borderColor={themeState.theme === 'light' ? 'gray.200' : 'gray.600'}
                 p={isLagerThan800 ? '6' : '2'}
                 rounded='lg'
                 bg='white'
             >
                 <Img
                     maxH='90%'
-                    src={productImage}
-                    alt={productName}
+                    src={images ? images[0].url : 'www.google.com'}
+                    alt={images ? images[0].name : 'NP'}
                     backgroundSize="cover"
                     backgroundPosition="center"
                     backgroundRepeat="no-repeat"
                 />
             </Flex>
             <Flex
-                h={isLagerThan800? '80%' : '40%'}
-                w={isLagerThan800 ? '60%' : '95%'}
+                h={isLagerThan800 ? '80%' : '40%'}
+                w={isLagerThan800 ? '59%' : '95%'}
                 alignItems='center'
                 justifyContent='center'
-                boxShadow='xl'
+                boxShadow={isLagerThan800 ? 'xl' : 'sm'}
                 p='6'
                 rounded='lg'
                 flexDir='column'
                 transition="250ms"
+                bg={`showcase.${themeState.theme}`}
                 _hover={{
                     transform: "translateY(-5px) scale(1.1)"
                 }}
             >
                 <Box>
-                    <Text fontSize={isLagerThan800 ? '3xl' : "xl"}>{productName}</Text>
+                    <Text fontSize={isLagerThan800 ? '3xl' : "xl"}>{name}</Text>
                 </Box>
                 <Box>
                     <Text color={`text2.${themeState.theme}`} fontSize={isLagerThan800 ? 'xl' : 'md'}><span>{currency + " "} </span>{price}</Text>

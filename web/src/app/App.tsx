@@ -7,7 +7,8 @@ import {
   ForgotPasswordPage,
   ResetPasswordPage,
   LoginPage,
-  Shop
+  Shop,
+  MarketPlacePage
 } from "../pages/index"
 import { Header } from '../components/Header/Header';
 import 'react-toastify/dist/ReactToastify.css';
@@ -41,6 +42,7 @@ function App() {
         <Route path='/' element={<LandingPage />} />
         <Route path='/shop' element={<Shop />} />
         <Route path='/login' element={<LoginPage />} />
+        <Route path='/marketplace/*' element={<MarketPlacePage />} />
         <Route path='/register' element={<RegisterPage />} />
         <Route path='/forgot-password' element={<ForgotPasswordPage />} />
         <Route path='/reset-password/:token' element={<ResetPasswordPage />} />

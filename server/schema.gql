@@ -12,6 +12,7 @@ type Image {
 type Brand {
   id: Float!
   name: String!
+  brandLogo: String!
 }
 
 type DisCount {
@@ -29,10 +30,13 @@ type Product {
   name: String!
   description: String!
   SKU: String!
+  price: Float!
+  currency: String!
   inventoryId: String
   entityCategoryId: String!
+  upvotes: Float!
   images: [Image!]
-  brand: Brand!
+  brand: Brand
   applicabeDiscountIds: [DisCount!]
 }
 
@@ -92,6 +96,7 @@ type Query {
   me: User!
   whoami: User!
   getProducts: [Product!]!
+  getTrendingProducts: [Product!]!
   getImages: ImageResponse!
   helloFromProductCategory: String!
 }
@@ -103,12 +108,13 @@ type Mutation {
   forgotPassword(email: String!): Boolean!
   resetPassword(newPassword: String!, token: String!): UserCreationResponse!
   logout: Boolean!
-  addProduct(description: String!, productName: String!): Boolean!
+  addProduct(brand: String!, currency: String!, price: Float!, description: String!, productName: String!): Boolean!
   addImageToProduct(imageUrl: String!, imageName: String!, productId: String!): Boolean!
   createInventory(productId: String!, price: Float!, stock: Float!, currency: String!): Boolean!
   registerDiscount(percentage: Float!, code: String!): Boolean!
   tagProductWithDiscount(discountId: String!, productId: String!): GenericResponse!
   tagProductWithDiscountCode(discountCode: String!, productId: String!): GenericResponse!
+  registerBrand(brandLogo: String!, name: String!): Boolean!
   addImage(name: String!, url: String!): Boolean!
   addAddress(mobile: Float!, country: String!, zipcode: String!, city: String!, addressLine2: String, addressLine1: String!): Boolean!
   addCategory(categoryName: String!): Boolean!

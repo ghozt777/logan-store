@@ -1,0 +1,19 @@
+query GetTrendingProducts{
+  getTrendingProducts{
+    productId ,
+    name ,
+    SKU ,
+    price,
+    currency,
+    upvotes,
+    brand{
+      name,
+      brandLogo
+    },
+    images{
+      name,
+      url,
+      id
+    }
+  }
+}
