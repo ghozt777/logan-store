@@ -6,6 +6,7 @@ import { Inventory } from "./inventory.entity";
 import { Image } from "src/images/image.entity";
 import { DisCount } from "./discount.entity";
 import { GenericResponse } from "./genericResponse.dto";
+import { Brand } from "./brand.entity";
 const crypto = require('crypto')
 
 @Injectable()
@@ -21,6 +22,7 @@ export class ProductService {
         const products = await this.productRepository
             .createQueryBuilder('product')
             .leftJoinAndSelect('product.images', 'images')
+            .leftJoinAndSelect('product.brand', 'brands')
             .getMany();
         console.log(products);
         return products;
@@ -32,14 +34,19 @@ export class ProductService {
         return prefix + "-" + u_key;
     }
 
-    async addProduct(name: string, description: string | null) {
+    async addProduct(productName: string, description: string | null, price: number, currency: string | null, brandName: string) {
         const em = getManager();
         try {
-            const skuCode = this.generateSKUCode(name);
+            const skuCode = this.generateSKUCode(productName);
+            const brand = await em.findOne(Brand, { name: brandName });
+            if (!brand) throw new Error(`Brand with name ${brandName} not registered please register the brand first !`);
             const response = await this.productRepository.insert({
-                name,
+                name: productName,
                 description,
-                SKU: skuCode
+                SKU: skuCode,
+                price,
+                currency,
+                brand
             })
             return true;
         } catch (err) {
@@ -161,5 +168,30 @@ export class ProductService {
         }
     }
 
+    async registerBrand(name: string, brandLogo: string): Promise<Boolean> {
+        const em = getManager();
+        let isOk = true;
+        try {
+            const response = await em.save(Brand, {
+                name,
+                brandLogo
+            })
+        } catch (err) {
+            console.error(`Error while registering brand with message -> ${err.message}`)
+            isOk = false;
+        }
+        return isOk;
+    }
+
+    async getTrendingProducts(): Promise<Array<Product>> {
+
+        const products = await this.productRepository
+            .createQueryBuilder('product').orderBy("product.upvotes", "DESC").limit(5)
+            .leftJoinAndSelect('product.images', 'images')
+            .leftJoinAndSelect('product.brand', 'brands')
+            .getMany();
+
+        return products;
+    }
 
 }

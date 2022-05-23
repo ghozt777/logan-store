@@ -24,6 +24,14 @@ export class Product {
     @Column()
     SKU: string;
 
+    @Field()
+    @Column()
+    price: number;
+
+    @Field()
+    @Column({ default: 'INR' })
+    currency: string;
+
     @Column({ nullable: true })
     productCategoryId: string;
 
@@ -40,12 +48,16 @@ export class Product {
     @Column({ nullable: true })
     entityCategoryId: string;
 
+    @Field()
+    @Column({ default: 0 })
+    upvotes: number;
+
     @Field(() => [Image], { nullable: true })
     @OneToMany(() => Image, (image: Image) => image.product)
     images: Image[];
 
-    @Field(() => Brand)
-    @ManyToOne(() => Brand, brand => brand.id)
+    @Field(() => Brand, { nullable: true })
+    @ManyToOne(() => Brand, brand => brand.id, { nullable: true })
     brand: Brand
 
     @Field(() => [DisCount], { nullable: true })

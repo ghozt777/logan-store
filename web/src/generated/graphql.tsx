@@ -27,15 +27,35 @@ export type Address = {
   zipcode: Scalars['String'];
 };
 
+export type Brand = {
+  __typename?: 'Brand';
+  brandLogo: Scalars['String'];
+  id: Scalars['Float'];
+  name: Scalars['String'];
+};
+
 export type Currency = {
   __typename?: 'Currency';
   currency: Scalars['String'];
+};
+
+export type DisCount = {
+  __typename?: 'DisCount';
+  code: Scalars['String'];
+  discountId: Scalars['String'];
+  discountPercentage: Scalars['Float'];
 };
 
 export type Errors = {
   __typename?: 'Errors';
   field: Scalars['String'];
   message: Scalars['String'];
+};
+
+export type GenericResponse = {
+  __typename?: 'GenericResponse';
+  errors: Array<Errors>;
+  isOk: Scalars['Boolean'];
 };
 
 export type Image = {
@@ -71,7 +91,11 @@ export type Mutation = {
   login: LoginResponse;
   logout: Scalars['Boolean'];
   register: UserCreationResponse;
+  registerBrand: Scalars['Boolean'];
+  registerDiscount: Scalars['Boolean'];
   resetPassword: UserCreationResponse;
+  tagProductWithDiscount: GenericResponse;
+  tagProductWithDiscountCode: GenericResponse;
 };
 
 
@@ -104,7 +128,10 @@ export type MutationAddImageToProductArgs = {
 
 
 export type MutationAddProductArgs = {
+  brand: Scalars['String'];
+  currency: Scalars['String'];
   description: Scalars['String'];
+  price: Scalars['Float'];
   productName: Scalars['String'];
 };
 
@@ -135,27 +162,65 @@ export type MutationRegisterArgs = {
 };
 
 
+export type MutationRegisterBrandArgs = {
+  brandLogo: Scalars['String'];
+  name: Scalars['String'];
+};
+
+
+export type MutationRegisterDiscountArgs = {
+  code: Scalars['String'];
+  percentage: Scalars['Float'];
+};
+
+
 export type MutationResetPasswordArgs = {
   newPassword: Scalars['String'];
   token: Scalars['String'];
 };
 
+
+export type MutationTagProductWithDiscountArgs = {
+  discountId: Scalars['String'];
+  productId: Scalars['String'];
+};
+
+
+export type MutationTagProductWithDiscountCodeArgs = {
+  discountCode: Scalars['String'];
+  productId: Scalars['String'];
+};
+
 export type Product = {
   __typename?: 'Product';
   SKU: Scalars['String'];
-  categoryId: Scalars['String'];
+  applicabeDiscountIds?: Maybe<Array<DisCount>>;
+  brand?: Maybe<Brand>;
+  currency: Scalars['String'];
   description: Scalars['String'];
+  entityCategoryId: Scalars['String'];
   images?: Maybe<Array<Image>>;
   inventoryId?: Maybe<Scalars['String']>;
   name: Scalars['String'];
+  price: Scalars['Float'];
   productId: Scalars['String'];
+  upvotes: Scalars['Float'];
+};
+
+export type ProductCategory = {
+  __typename?: 'ProductCategory';
+  id: Scalars['String'];
+  name: Scalars['String'];
+  subCategories?: Maybe<Array<ProductCategory>>;
 };
 
 export type Query = {
   __typename?: 'Query';
   getImages: ImageResponse;
   getProducts: Array<Product>;
+  getTrendingProducts: Array<Product>;
   hello: Scalars['String'];
+  helloFromProductCategory: Scalars['String'];
   me: User;
   whoami: User;
 };
@@ -217,6 +282,11 @@ export type GetProductsQueryVariables = Exact<{ [key: string]: never; }>;
 
 
 export type GetProductsQuery = { __typename?: 'Query', getProducts: Array<{ __typename?: 'Product', productId: string, name: string, SKU: string, images?: Array<{ __typename?: 'Image', name: string, url: string, id: string }> | null | undefined }> };
+
+export type GetTrendingProductsQueryVariables = Exact<{ [key: string]: never; }>;
+
+
+export type GetTrendingProductsQuery = { __typename?: 'Query', getTrendingProducts: Array<{ __typename?: 'Product', productId: string, name: string, SKU: string, price: number, currency: string, upvotes: number, brand?: { __typename?: 'Brand', name: string, brandLogo: string } | null | undefined, images?: Array<{ __typename?: 'Image', name: string, url: string, id: string }> | null | undefined }> };
 
 export type HelloQueryVariables = Exact<{ [key: string]: never; }>;
 
@@ -309,6 +379,31 @@ export const GetProductsDocument = gql`
 
 export function useGetProductsQuery(options: Omit<Urql.UseQueryArgs<GetProductsQueryVariables>, 'query'> = {}) {
   return Urql.useQuery<GetProductsQuery>({ query: GetProductsDocument, ...options });
+};
+export const GetTrendingProductsDocument = gql`
+    query GetTrendingProducts {
+  getTrendingProducts {
+    productId
+    name
+    SKU
+    price
+    currency
+    upvotes
+    brand {
+      name
+      brandLogo
+    }
+    images {
+      name
+      url
+      id
+    }
+  }
+}
+    `;
+
+export function useGetTrendingProductsQuery(options: Omit<Urql.UseQueryArgs<GetTrendingProductsQueryVariables>, 'query'> = {}) {
+  return Urql.useQuery<GetTrendingProductsQuery>({ query: GetTrendingProductsDocument, ...options });
 };
 export const HelloDocument = gql`
     query Hello {

@@ -14,7 +14,7 @@ const GridContent: React.FC<{ r?: number, c?: number }> = ({ children, r, c }) =
     )
 }
 
-const GridCard = () => {
+const GridCard: React.FC<{ b?: string }> = ({ b }) => {
     return (
         <Box
             h='100%'
@@ -22,6 +22,7 @@ const GridCard = () => {
             p='4px'
             boxShadow='md'
             rounded='lg'
+            bg={b ?? 'white'}
         >
         </Box>
     )
@@ -32,16 +33,16 @@ const DesktopView = () => {
         <>
 
             <GridContent r={2} c={1}>
-                <GridCard />
+                <GridCard b='#a855f7' />
             </GridContent>
-            <GridContent c={2}>
-                <GridCard />
+            <GridContent  c={2}>
+                <GridCard b='#ef4444' />
             </GridContent>
-            <GridContent c={2} >
-                <GridCard />
+            <GridContent  c={2} >
+                <GridCard b='#a855f7' />
             </GridContent>
             <GridContent c={4} >
-                <GridCard />
+                <GridCard b='#ef4444' />
             </GridContent>
         </>
     )
@@ -51,16 +52,16 @@ const MobileView = () => {
     return (
         <>
             <GridContent c={3}>
-                <GridCard />
+                <GridCard b='#a855f7' />
             </GridContent>
             <GridContent c={2}>
-                <GridCard />
+                <GridCard b='#ef4444'/>
             </GridContent>
             <GridContent c={2} >
-                <GridCard />
+                <GridCard b='#ef4444' />
             </GridContent>
             <GridContent c={3} >
-                <GridCard />
+                <GridCard b='#a855f7'/>
             </GridContent>
         </>
     )

@@ -11,4 +11,8 @@ export class Brand {
     @Field(() => String)
     @Column({ unique: true })
     name: string;
+
+    @Field(() => String)
+    @Column()
+    brandLogo: string;
 }

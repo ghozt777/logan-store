@@ -4,15 +4,9 @@ import { v4 as uuidv4 } from 'uuid'
 import { RootState } from "../../app/store";
 import { useSelector } from "react-redux";
 import './style.css'
+import { GetTrendingProductsQuery } from "../../generated/graphql";
 
-type Product = {
-    productName: string;
-    productImage: string;
-    price: string;
-    currency: string;
-    logo: string;
-    tagline: string;
-}
+type Product = { __typename?: 'Product', productId: string, name: string, SKU: string, price: number, currency: string, upvotes: number, brand?: { __typename?: 'Brand', name: string, brandLogo: string } | null | undefined, images?: Array<{ __typename?: 'Image', name: string, url: string, id: string }> | null | undefined };
 
 interface ProductCardProps {
     product: Product;
@@ -20,7 +14,7 @@ interface ProductCardProps {
 }
 
 interface ShowcaseProps {
-    products: Product[];
+    products: Array<Product>;
     title: string;
 }
 
@@ -28,7 +22,7 @@ interface ShowcaseProps {
 
 const ShowCaseCard: React.FC<ProductCardProps> = ({ product, align }) => {
 
-    const { currency, productImage, logo, productName, tagline, price } = product;
+    const { name, SKU, images, brand, productId, upvotes, currency, price } = product;
     const [isLagerThan800] = useMediaQuery([`(min-width: 800px)`]);
     const themeState = useSelector((state: RootState) => state.theme);
     return (
@@ -56,8 +50,8 @@ const ShowCaseCard: React.FC<ProductCardProps> = ({ product, align }) => {
             >
                 <Img
                     maxH='90%'
-                    src={productImage}
-                    alt={productName}
+                    src={images ? images[0].url : 'www.google.com'}
+                    alt={images ? images[0].name : 'NP'}
                     backgroundSize="cover"
                     backgroundPosition="center"
                     backgroundRepeat="no-repeat"
@@ -79,7 +73,7 @@ const ShowCaseCard: React.FC<ProductCardProps> = ({ product, align }) => {
                 }}
             >
                 <Box>
-                    <Text fontSize={isLagerThan800 ? '3xl' : "xl"}>{productName}</Text>
+                    <Text fontSize={isLagerThan800 ? '3xl' : "xl"}>{name}</Text>
                 </Box>
                 <Box>
                     <Text color={`text2.${themeState.theme}`} fontSize={isLagerThan800 ? 'xl' : 'md'}><span>{currency + " "} </span>{price}</Text>
