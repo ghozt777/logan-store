@@ -2,6 +2,7 @@ import { Box, Flex, useMediaQuery } from "@chakra-ui/react"
 import { useSelector } from "react-redux"
 import { RootState } from "../../app/store"
 import { Categories } from "../../components/Categories/Categories"
+import { ErrorCard } from "../../components/Error/Error"
 import { Showcase } from "../../components/Showcase/Showcase"
 import config from '../../config/config.json'
 import { useGetProductsQuery, useGetTrendingProductsQuery } from "../../generated/graphql"
@@ -11,6 +12,7 @@ const TrendingSection = () => {
     const [isLagerThan800] = useMediaQuery([`(min-width: 800px)`]);
     const [result] = useGetTrendingProductsQuery();
     const { fetching, data, error } = result;
+    console.log(error)
     console.log('trending products', data?.getTrendingProducts);
     return (
         <Flex
@@ -28,8 +30,11 @@ const TrendingSection = () => {
                 h={isLagerThan800 ? '95%' : '75%'}
                 w='100%'
                 mt='3rem'
+                alignItems='center'
+                justifyContent='center'
             >
-                {!fetching && data?.getTrendingProducts && <Showcase title='Trending 🔥' products={data.getTrendingProducts} />}
+                {fetching ? <h1>Loading ...</h1> : data?.getTrendingProducts && <Showcase title='Trending 🔥' products={data.getTrendingProducts} />}
+                {error && <ErrorCard message={error.message + error.networkError?.stack + "Please Check Your Internet Connection or contact our service center"} theme={themeState.theme} />}
             </Flex>
         </Flex>
     )
