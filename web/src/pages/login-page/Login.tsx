@@ -1,4 +1,4 @@
-import { Box, Button, Flex, FormControl, FormErrorMessage, FormHelperText, FormLabel, Input, Link, Stack, useMediaQuery } from "@chakra-ui/react"
+import { Box, Button, Flex, FormControl, FormErrorMessage, FormHelperText, FormLabel, Input, Link, Stack, StackDivider, useMediaQuery, VStack } from "@chakra-ui/react"
 import { Form, Formik } from "formik"
 import { InputField } from "../../components"
 import { useLoginMutation } from "../../generated/graphql"
@@ -85,7 +85,10 @@ export const LoginPage: React.FC<LoginPageProps> = () => {
                             }) => {
                                 return (
                                     <Form>
-                                        <Stack spacing={3}>
+                                        <VStack
+                                            spacing={'15px'}
+                                            divider={<StackDivider borderColor='gray.200' />}
+                                        >
                                             <InputField
                                                 value={values.usernameOrEmail}
                                                 variant={themeState.theme}
@@ -108,6 +111,7 @@ export const LoginPage: React.FC<LoginPageProps> = () => {
                                                 isLoading={isSubmitting}
                                                 loadingText='Submitting'
                                                 type="submit"
+                                                w='80%'
                                             >
                                                 Login
                                             </Button>
@@ -129,7 +133,7 @@ export const LoginPage: React.FC<LoginPageProps> = () => {
                                                     <Button onClick={() => navigate('/forgot-password')} size={"xs"} variant={"link"}>forgot password</Button>
                                                 </Flex>
                                             </Box>
-                                        </Stack>
+                                        </VStack>
                                     </Form>
                                 )
                             }
