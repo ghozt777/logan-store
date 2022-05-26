@@ -4,12 +4,6 @@ import { Column, Entity, OneToOne, PrimaryGeneratedColumn } from "typeorm";
 import { Product } from "./product.entity";
 
 @ObjectType()
-class Currency {
-    @Field()
-    currency: "USD" | "INR"
-}
-
-@ObjectType()
 @Entity('inventory')
 export class Inventory {
 
@@ -25,13 +19,13 @@ export class Inventory {
     @Column()
     price: number;
 
-    @Field(() => Currency)
+    @Field(() => String)
     @Column()
     currency: string;
 
-    @Field()
-    @OneToOne(() => Product, product => product.productId)
-    productId: string;
+    @Field(() => Product, { nullable: true })
+    @OneToOne(() => Product, product => product.category, { nullable: true })
+    product: Product;
 
     @Field()
     @Column({ default: 0 })

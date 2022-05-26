@@ -1,5 +1,6 @@
 import { Field, ObjectType } from "@nestjs/graphql";
-import { Column, Entity, ManyToMany, PrimaryGeneratedColumn } from "typeorm";
+import { Product } from "src/product/product.entity";
+import { Column, Entity, ManyToMany, OneToMany, PrimaryGeneratedColumn } from "typeorm";
 
 @ObjectType()
 @Entity('productCategory')
@@ -12,7 +13,11 @@ export class ProductCategory {
     @Column({ unique: true })
     name: string;
 
-    @Field(() => [ProductCategory], { nullable: true })
-    @ManyToMany(() => ProductCategory, productCategory => productCategory.id, { nullable: true })
-    subCategories: [ProductCategory]
+    @Field(() => String, { nullable: true })
+    @Column({ nullable: true })
+    imageUrl: string;
+
+    @Field(() => Product, { nullable: true })
+    @OneToMany(() => Product, (product: Product) => product.category, { nullable: true })
+    product: Product
 }
