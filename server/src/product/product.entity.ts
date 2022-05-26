@@ -31,7 +31,7 @@ export class Product {
 
     @Field(() => Inventory, { nullable: true })
     @OneToOne(() => Inventory, (inventory: Inventory) => inventory.product, { nullable: true })
-    @JoinColumn()
+    @JoinColumn({ name: 'inventory' })
     inventory: Inventory;
 
     @Column({ nullable: true })

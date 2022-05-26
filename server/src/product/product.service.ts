@@ -189,6 +189,7 @@ export class ProductService {
             .createQueryBuilder('product').orderBy("product.upvotes", "DESC").limit(5)
             .leftJoinAndSelect('product.images', 'images')
             .leftJoinAndSelect('product.brand', 'brands')
+            .leftJoinAndSelect('product.inventory', 'inventory')
             .getMany();
 
         return products;
