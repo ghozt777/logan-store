@@ -24,9 +24,7 @@
     "heroku-postbuild": "echo Skip builds on Heroku",
     "test:cov": "jest --coverage",
     "test:debug": "node --inspect-brk -r tsconfig-paths/register -r ts-node/register node_modules/.bin/jest --runInBand",
-    "test:e2e": "jest --config ./test/jest-e2e.json",
-    "migration": "yarn typeorm migration:create -d src/migrations -c",
-    "runMigrations": "typeorm migration:run"
+    "test:e2e": "jest --config ./test/jest-e2e.json"
   },
   "dependencies": {
     "@nestjs/common": "^8.0.0",
