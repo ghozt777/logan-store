@@ -7,7 +7,7 @@ import { changeTheme } from '../../features/theme/themeSlice'
 import { Dropdown } from "../Dropdown/Dropdown";
 import { TiWeatherNight, TiWeatherSunny } from "react-icons/ti"
 import { Link } from "../Link/Link";
-import { useLogoutMutation } from "../../generated/graphql";
+import { useGetCategoriesQuery, useLogoutMutation } from "../../generated/graphql";
 import { logout as logoutReducer } from "../../features/auth/authSlice"
 import { CategoryBar } from "./components/category-bar/CategoryBar";
 import { CategoryButton } from "./components/category-button/CategoryButton";
@@ -44,7 +44,10 @@ export const Header: React.FC<NavbarProps> = ({ title, links }) => {
     const navBarContext = useNavBar();
     const setIsNavBarOpen = navBarContext?.setIsNavBarOpen;
     const navigate = useNavigate();
-    const catrgories = config.header.categories;
+    // const catrgories = config.header.categories;
+    const [result] = useGetCategoriesQuery();
+    const { data, fetching, error } = result;
+    const categories = fetching || error ? [] : data?.getCategories;
     const tagline = config.header.tagline;
     return (
         <Box
@@ -101,13 +104,13 @@ export const Header: React.FC<NavbarProps> = ({ title, links }) => {
                 </Flex>
                 <CategoryBar>
                     {
-                        catrgories.map(category => {
+                        categories && categories.map(category => {
                             return (
                                 <CategoryButton
                                     key={uuidv4()}
-                                    HoverCard={EnhancedHoverCard(HoverCard, { title: category["hover-card"].title })}
-                                    name={category["category-name"]}
-                                    abbr="C1"
+                                    HoverCard={EnhancedHoverCard(HoverCard, { title: category.name })}
+                                    name={category.name}
+                                    abbr={category.name}
                                 />
                             )
                         })

@@ -73,7 +73,7 @@ export type Inventory = {
   inventoryId: Scalars['String'];
   maxNumberOfUnitsPerCustomer: Scalars['Float'];
   price: Scalars['Float'];
-  productId: Scalars['String'];
+  product?: Maybe<Product>;
   skuCode: Scalars['String'];
   stock: Scalars['Float'];
 };
@@ -100,6 +100,7 @@ export type Mutation = {
   registerBrand: Scalars['Boolean'];
   registerDiscount: Scalars['Boolean'];
   resetPassword: UserCreationResponse;
+  tagProductWithCategory: Scalars['Boolean'];
   tagProductWithDiscount: GenericResponse;
   tagProductWithDiscountCode: GenericResponse;
   tagProductWithInventory: Scalars['Boolean'];
@@ -186,6 +187,12 @@ export type MutationResetPasswordArgs = {
 };
 
 
+export type MutationTagProductWithCategoryArgs = {
+  categoryName: Scalars['String'];
+  productId: Scalars['String'];
+};
+
+
 export type MutationTagProductWithDiscountArgs = {
   discountId: Scalars['String'];
   productId: Scalars['String'];
@@ -208,9 +215,8 @@ export type Product = {
   SKU: Scalars['String'];
   applicabeDiscountIds?: Maybe<Array<DisCount>>;
   brand?: Maybe<Brand>;
-  category: ProductCategory;
+  category?: Maybe<ProductCategory>;
   description: Scalars['String'];
-  entityCategoryId: Scalars['String'];
   images?: Maybe<Array<Image>>;
   inventory?: Maybe<Inventory>;
   name: Scalars['String'];
@@ -228,6 +234,7 @@ export type ProductCategory = {
 
 export type Query = {
   __typename?: 'Query';
+  getCategories: Array<ProductCategory>;
   getImages: ImageResponse;
   getProducts: Array<Product>;
   getTrendingProducts: Array<Product>;
@@ -252,6 +259,11 @@ export type UserCreationResponse = {
   errors: Array<Errors>;
   message: Scalars['String'];
 };
+
+export type GetCategoriesQueryVariables = Exact<{ [key: string]: never; }>;
+
+
+export type GetCategoriesQuery = { __typename?: 'Query', getCategories: Array<{ __typename?: 'ProductCategory', id: string, name: string, imageUrl?: string | null | undefined }> };
 
 export type ForgotPasswordMutationVariables = Exact<{
   email: Scalars['String'];
@@ -311,6 +323,19 @@ export type WhoAmIQueryVariables = Exact<{ [key: string]: never; }>;
 export type WhoAmIQuery = { __typename?: 'Query', whoami: { __typename?: 'User', username: string, email: string } };
 
 
+export const GetCategoriesDocument = gql`
+    query getCategories {
+  getCategories {
+    id
+    name
+    imageUrl
+  }
+}
+    `;
+
+export function useGetCategoriesQuery(options: Omit<Urql.UseQueryArgs<GetCategoriesQueryVariables>, 'query'> = {}) {
+  return Urql.useQuery<GetCategoriesQuery>({ query: GetCategoriesDocument, ...options });
+};
 export const ForgotPasswordDocument = gql`
     mutation ForgotPassword($email: String!) {
   forgotPassword(email: $email)

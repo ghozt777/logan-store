@@ -1,9 +1,10 @@
 import { UseInterceptors } from "@nestjs/common";
 import { Resolver, Query, Mutation, Args, ObjectType, Field } from "@nestjs/graphql";
 import { InjectRepository } from "@nestjs/typeorm";
+import { ProductCategory } from "src/product-category/productCategory.entity";
 import { LoggingInterceptor } from "src/user/logging.interceptor";
 import { Float } from "type-graphql";
-import { Repository } from "typeorm";
+import { getManager, Repository } from "typeorm";
 import { GenericResponse } from "./genericResponse.dto";
 import { Product } from "./product.entity";
 import { ProductService } from "./product.service";
@@ -110,6 +111,13 @@ export class ProductResolver {
         @Args({ type: () => String, name: 'categoryName' }) categoryName: string,
     ) {
         const response = this.productService.tagProductWithCategory(productId, categoryName);
+        return response;
+    }
+
+    @Query(() => [ProductCategory])
+    async getCategories(): Promise<Array<ProductCategory>> {
+        const em = getManager();
+        const response = await em.query('SELECT * FROM productCategory')
         return response;
     }
 }

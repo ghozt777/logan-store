@@ -7,7 +7,6 @@ import { Image } from "src/images/image.entity";
 import { DisCount } from "./discount.entity";
 import { GenericResponse } from "./genericResponse.dto";
 import { Brand } from "./brand.entity";
-import { ProductCategory } from "src/product-category/productCategory.entity";
 const crypto = require('crypto')
 
 @Injectable()
@@ -82,6 +81,9 @@ export class ProductService {
                 stock,
                 skuCode: foundProduct.SKU
             })
+            console.log('response', resposne);
+            const resp = this.tagProductWithInventory(resposne.generatedMaps[0].inventoryId, foundProduct.productId);
+            if (!resp) throw new Error(`Error while tagging product with inventory`);
             return true;
         } catch (err) {
             console.log(err)
@@ -232,5 +234,6 @@ export class ProductService {
         }
         return isOk;
     }
+
 
 }
