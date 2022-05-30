@@ -16,6 +16,7 @@ import { __prod__ } from "src/config";
             entities: [],
             autoLoadEntities: true,
             synchronize: true, // avoid in prod
+            ssl: { rejectUnauthorized: false },
             logging: !__prod__,
             migrationsRun: true,
             migrations: ["src/migrations/*.ts"],
