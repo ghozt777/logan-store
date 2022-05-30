@@ -6,9 +6,9 @@
   "private": true,
   "license": "UNLICENSED",
   "engines": {
-    "npm": ">=8.5.1",
-    "node": ">=16.00.0",
-    "yarn": ">=1.22.17"
+    "node": "17.3.1",
+    "npm": "8.3.0",
+    "yarn": "1.22.7"
   },
   "scripts": {
     "prebuild": "rimraf dist",
