@@ -24,8 +24,6 @@
     "test:cov": "jest --coverage",
     "test:debug": "node --inspect-brk -r tsconfig-paths/register -r ts-node/register node_modules/.bin/jest --runInBand",
     "test:e2e": "jest --config ./test/jest-e2e.json",
-    "prestart:prod": "yarn install",
-    "heroku-postbuild": "yarn install --no-shrinkwrap && yarn run build",
     "migration": "yarn typeorm migration:create -d src/migrations -c",
     "runMigrations": "typeorm migration:run"
   },
