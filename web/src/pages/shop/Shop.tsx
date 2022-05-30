@@ -1,5 +1,6 @@
 import { Box, Flex, useMediaQuery } from "@chakra-ui/react"
 import { useSelector } from "react-redux"
+import { HashLoader } from "react-spinners"
 import { RootState } from "../../app/store"
 import { Categories } from "../../components/Categories/Categories"
 import { ErrorCard } from "../../components/Error/Error"
@@ -33,7 +34,7 @@ const TrendingSection = () => {
                 alignItems='center'
                 justifyContent='center'
             >
-                {fetching ? <h1>Loading ...</h1> : data?.getTrendingProducts && <Showcase title='Trending 🔥' products={data.getTrendingProducts} />}
+                {fetching ? <HashLoader /> : data?.getTrendingProducts && <Showcase title='Trending 🔥' products={data.getTrendingProducts} />}
                 {error && <ErrorCard message={error.message + error.networkError?.stack + "Please Check Your Internet Connection or contact our service center"} theme={themeState.theme} />}
             </Flex>
         </Flex>
@@ -46,7 +47,7 @@ const CategoriesSection = () => {
     return (
         <Flex
             h='100vh'
-            minH='100vh'
+            minH='700px'
             w='100%'
             pt='10vh'
             bg={`main.${themeState.theme}`}

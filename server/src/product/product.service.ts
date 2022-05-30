@@ -1,4 +1,4 @@
-import { Injectable } from "@nestjs/common";
+import { ConsoleLogger, Injectable } from "@nestjs/common";
 import { InjectRepository } from "@nestjs/typeorm";
 import { EntityManager, getManager, Repository } from "typeorm";
 import { Product } from "./product.entity";
@@ -23,6 +23,7 @@ export class ProductService {
             .createQueryBuilder('product')
             .leftJoinAndSelect('product.images', 'images')
             .leftJoinAndSelect('product.brand', 'brands')
+            .leftJoinAndSelect('product.inventory', 'inventory')
             .getMany();
         console.log(products);
         return products;
@@ -34,7 +35,7 @@ export class ProductService {
         return prefix + "-" + u_key;
     }
 
-    async addProduct(productName: string, description: string | null, price: number, currency: string | null, brandName: string) {
+    async addProduct(productName: string, description: string | null, brandName: string) {
         const em = getManager();
         try {
             const skuCode = this.generateSKUCode(productName);
@@ -44,8 +45,6 @@ export class ProductService {
                 name: productName,
                 description,
                 SKU: skuCode,
-                price,
-                currency,
                 brand
             })
             return true;
@@ -82,6 +81,9 @@ export class ProductService {
                 stock,
                 skuCode: foundProduct.SKU
             })
+            console.log('response', resposne);
+            const resp = this.tagProductWithInventory(resposne.generatedMaps[0].inventoryId, foundProduct.productId);
+            if (!resp) throw new Error(`Error while tagging product with inventory`);
             return true;
         } catch (err) {
             console.log(err)
@@ -189,9 +191,49 @@ export class ProductService {
             .createQueryBuilder('product').orderBy("product.upvotes", "DESC").limit(5)
             .leftJoinAndSelect('product.images', 'images')
             .leftJoinAndSelect('product.brand', 'brands')
+            .leftJoinAndSelect('product.inventory', 'inventory')
             .getMany();
 
         return products;
     }
+
+    async tagProductWithInventory(inventoryId: string, productId: string): Promise<Boolean> {
+        let isOk = true;
+        const em = getManager();
+        try {
+            const foundInventory = await em.findOne(Inventory, { inventoryId });
+            const foundProduct = await em.findOne(Product, { productId });
+            console.log(foundInventory, foundProduct)
+            if (!foundInventory) throw new Error(`Inventory with inventory id = ${inventoryId} not found please re-check`)
+            if (!foundProduct) throw new Error(`Product with product id = ${productId} not found please re-check`)
+            foundProduct.inventory = foundInventory;
+            await em.save(foundProduct);
+        } catch (err) {
+            console.error(`Error while tagging product with inventory with message -> ${err.message}`);
+            console.error(err);
+            isOk = false;
+        }
+        return isOk;
+    }
+
+    async tagProductWithCategory(productId: string, categoryName: string): Promise<Boolean> {
+        let isOk = true;
+        const em = getManager();
+        try {
+            let queryString = `SELECT * FROM productCategory WHERE LOWER(name) = LOWER('${categoryName}') ;`
+            const [foundCategory] = await em.query(queryString);
+            if (!foundCategory) throw new Error(`Category with name = ${categoryName} not registered please recheck the name`);
+            const foundProduct = await em.findOne(Product, { productId });
+            if (!foundProduct) throw new Error(`Product with id = ${productId} not found please recheck the id`);
+            foundProduct.category = foundCategory;
+            await em.save(foundProduct);
+        } catch (err) {
+            console.error(`Error while tagging product with category with message -> ${err.message}`);
+            console.error(err);
+            isOk = false;
+        }
+        return isOk;
+    }
+
 
 }

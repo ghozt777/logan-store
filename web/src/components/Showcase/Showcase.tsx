@@ -6,7 +6,7 @@ import { useSelector } from "react-redux";
 import './style.css'
 import { GetTrendingProductsQuery } from "../../generated/graphql";
 
-type Product = { __typename?: 'Product', productId: string, name: string, SKU: string, price: number, currency: string, upvotes: number, brand?: { __typename?: 'Brand', name: string, brandLogo: string } | null | undefined, images?: Array<{ __typename?: 'Image', name: string, url: string, id: string }> | null | undefined };
+type Product = { __typename?: 'Product', productId: string, name: string, SKU: string, upvotes: number, inventory?: { __typename?: 'Inventory', price: number, currency: string, stock: number } | null | undefined, brand?: { __typename?: 'Brand', name: string, brandLogo: string } | null | undefined, images?: Array<{ __typename?: 'Image', name: string, url: string, id: string }> | null | undefined }
 
 interface ProductCardProps {
     product: Product;
@@ -21,8 +21,8 @@ interface ShowcaseProps {
 // NOTE : Implement BrandLOGO Feature ``
 
 const ShowCaseCard: React.FC<ProductCardProps> = ({ product, align }) => {
-
-    const { name, SKU, images, brand, productId, upvotes, currency, price } = product;
+    console.log('product', product);
+    const { name, SKU, images, brand, productId, upvotes, inventory } = product;
     const [isLagerThan800] = useMediaQuery([`(min-width: 800px)`]);
     const themeState = useSelector((state: RootState) => state.theme);
     return (
@@ -76,7 +76,7 @@ const ShowCaseCard: React.FC<ProductCardProps> = ({ product, align }) => {
                     <Text fontSize={isLagerThan800 ? '3xl' : "xl"}>{name}</Text>
                 </Box>
                 <Box>
-                    <Text color={`text2.${themeState.theme}`} fontSize={isLagerThan800 ? 'xl' : 'md'}><span>{currency + " "} </span>{price}</Text>
+                    <Text color={`text2.${themeState.theme}`} fontSize={isLagerThan800 ? 'xl' : 'md'}><span>{inventory?.currency + " "} </span>{inventory?.price}</Text>
                 </Box>
             </Flex>
         </Flex>

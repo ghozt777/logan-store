@@ -32,7 +32,7 @@ export const CategoryButton: React.FC<CategoryBtnProps> = ({ name, abbr, HoverCa
             variant='link'
         >
             {
-                iseGreaterThan600 && <Text onMouseOver={() => setIsHover(true)} onMouseLeave={() => setIsHover(false)} className='category-link' >{iseGreaterThan1100 ? name : abbr + "..."}</Text>
+                iseGreaterThan600 && <Text onMouseOver={() => setIsHover(true)} onMouseLeave={() => setIsHover(false)} className='category-link' >{iseGreaterThan1100 ? name : abbr}</Text>
             }
             {
                 !isHoverDisabled && isHover && <HoverCard setIsHover={setIsHover} />

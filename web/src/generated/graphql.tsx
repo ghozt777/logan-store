@@ -34,11 +34,6 @@ export type Brand = {
   name: Scalars['String'];
 };
 
-export type Currency = {
-  __typename?: 'Currency';
-  currency: Scalars['String'];
-};
-
 export type DisCount = {
   __typename?: 'DisCount';
   code: Scalars['String'];
@@ -72,6 +67,17 @@ export type ImageResponse = {
   message: Scalars['String'];
 };
 
+export type Inventory = {
+  __typename?: 'Inventory';
+  currency: Scalars['String'];
+  inventoryId: Scalars['String'];
+  maxNumberOfUnitsPerCustomer: Scalars['Float'];
+  price: Scalars['Float'];
+  product?: Maybe<Product>;
+  skuCode: Scalars['String'];
+  stock: Scalars['Float'];
+};
+
 export type LoginResponse = {
   __typename?: 'LoginResponse';
   accessToken: Scalars['String'];
@@ -94,8 +100,10 @@ export type Mutation = {
   registerBrand: Scalars['Boolean'];
   registerDiscount: Scalars['Boolean'];
   resetPassword: UserCreationResponse;
+  tagProductWithCategory: Scalars['Boolean'];
   tagProductWithDiscount: GenericResponse;
   tagProductWithDiscountCode: GenericResponse;
+  tagProductWithInventory: Scalars['Boolean'];
 };
 
 
@@ -111,6 +119,7 @@ export type MutationAddAddressArgs = {
 
 export type MutationAddCategoryArgs = {
   categoryName: Scalars['String'];
+  imageUrl: Scalars['String'];
 };
 
 
@@ -129,9 +138,7 @@ export type MutationAddImageToProductArgs = {
 
 export type MutationAddProductArgs = {
   brand: Scalars['String'];
-  currency: Scalars['String'];
   description: Scalars['String'];
-  price: Scalars['Float'];
   productName: Scalars['String'];
 };
 
@@ -180,6 +187,12 @@ export type MutationResetPasswordArgs = {
 };
 
 
+export type MutationTagProductWithCategoryArgs = {
+  categoryName: Scalars['String'];
+  productId: Scalars['String'];
+};
+
+
 export type MutationTagProductWithDiscountArgs = {
   discountId: Scalars['String'];
   productId: Scalars['String'];
@@ -191,18 +204,22 @@ export type MutationTagProductWithDiscountCodeArgs = {
   productId: Scalars['String'];
 };
 
+
+export type MutationTagProductWithInventoryArgs = {
+  inventoryId: Scalars['String'];
+  productId: Scalars['String'];
+};
+
 export type Product = {
   __typename?: 'Product';
   SKU: Scalars['String'];
   applicabeDiscountIds?: Maybe<Array<DisCount>>;
   brand?: Maybe<Brand>;
-  currency: Scalars['String'];
+  category?: Maybe<ProductCategory>;
   description: Scalars['String'];
-  entityCategoryId: Scalars['String'];
   images?: Maybe<Array<Image>>;
-  inventoryId?: Maybe<Scalars['String']>;
+  inventory?: Maybe<Inventory>;
   name: Scalars['String'];
-  price: Scalars['Float'];
   productId: Scalars['String'];
   upvotes: Scalars['Float'];
 };
@@ -210,12 +227,14 @@ export type Product = {
 export type ProductCategory = {
   __typename?: 'ProductCategory';
   id: Scalars['String'];
+  imageUrl?: Maybe<Scalars['String']>;
   name: Scalars['String'];
-  subCategories?: Maybe<Array<ProductCategory>>;
+  product?: Maybe<Product>;
 };
 
 export type Query = {
   __typename?: 'Query';
+  getCategories: Array<ProductCategory>;
   getImages: ImageResponse;
   getProducts: Array<Product>;
   getTrendingProducts: Array<Product>;
@@ -240,6 +259,11 @@ export type UserCreationResponse = {
   errors: Array<Errors>;
   message: Scalars['String'];
 };
+
+export type GetCategoriesQueryVariables = Exact<{ [key: string]: never; }>;
+
+
+export type GetCategoriesQuery = { __typename?: 'Query', getCategories: Array<{ __typename?: 'ProductCategory', id: string, name: string, imageUrl?: string | null | undefined }> };
 
 export type ForgotPasswordMutationVariables = Exact<{
   email: Scalars['String'];
@@ -286,7 +310,7 @@ export type GetProductsQuery = { __typename?: 'Query', getProducts: Array<{ __ty
 export type GetTrendingProductsQueryVariables = Exact<{ [key: string]: never; }>;
 
 
-export type GetTrendingProductsQuery = { __typename?: 'Query', getTrendingProducts: Array<{ __typename?: 'Product', productId: string, name: string, SKU: string, price: number, currency: string, upvotes: number, brand?: { __typename?: 'Brand', name: string, brandLogo: string } | null | undefined, images?: Array<{ __typename?: 'Image', name: string, url: string, id: string }> | null | undefined }> };
+export type GetTrendingProductsQuery = { __typename?: 'Query', getTrendingProducts: Array<{ __typename?: 'Product', productId: string, name: string, SKU: string, upvotes: number, inventory?: { __typename?: 'Inventory', price: number, currency: string, stock: number } | null | undefined, brand?: { __typename?: 'Brand', name: string, brandLogo: string } | null | undefined, images?: Array<{ __typename?: 'Image', name: string, url: string, id: string }> | null | undefined }> };
 
 export type HelloQueryVariables = Exact<{ [key: string]: never; }>;
 
@@ -299,6 +323,19 @@ export type WhoAmIQueryVariables = Exact<{ [key: string]: never; }>;
 export type WhoAmIQuery = { __typename?: 'Query', whoami: { __typename?: 'User', username: string, email: string } };
 
 
+export const GetCategoriesDocument = gql`
+    query getCategories {
+  getCategories {
+    id
+    name
+    imageUrl
+  }
+}
+    `;
+
+export function useGetCategoriesQuery(options: Omit<Urql.UseQueryArgs<GetCategoriesQueryVariables>, 'query'> = {}) {
+  return Urql.useQuery<GetCategoriesQuery>({ query: GetCategoriesDocument, ...options });
+};
 export const ForgotPasswordDocument = gql`
     mutation ForgotPassword($email: String!) {
   forgotPassword(email: $email)
@@ -386,8 +423,11 @@ export const GetTrendingProductsDocument = gql`
     productId
     name
     SKU
-    price
-    currency
+    inventory {
+      price
+      currency
+      stock
+    }
     upvotes
     brand {
       name

@@ -1,5 +1,6 @@
 import { Field, ObjectType } from "@nestjs/graphql";
 import { EntityCategory } from "src/entity-category/category.entity";
+import { ProductCategory } from "src/product-category/productCategory.entity";
 import { Column, CreateDateColumn, Entity, JoinColumn, ManyToMany, ManyToOne, OneToMany, OneToOne, PrimaryGeneratedColumn, UpdateDateColumn } from "typeorm";
 import { Image } from "./../images/image.entity"
 import { Brand } from "./brand.entity";
@@ -24,29 +25,17 @@ export class Product {
     @Column()
     SKU: string;
 
-    @Field()
-    @Column()
-    price: number;
+    @Field(() => ProductCategory, { nullable: true })
+    @ManyToOne(() => ProductCategory, (pc: ProductCategory) => pc.product, { nullable: true })
+    category: ProductCategory;
 
-    @Field()
-    @Column({ default: 'INR' })
-    currency: string;
-
-    @Column({ nullable: true })
-    productCategoryId: string;
-
-    @Field({ nullable: true })
-    @Column({ nullable: true })
-    @OneToOne(() => Inventory, inventory => inventory.inventoryId)
-    inventoryId: string;
+    @Field(() => Inventory, { nullable: true })
+    @OneToOne(() => Inventory, (inventory: Inventory) => inventory.product, { nullable: true })
+    @JoinColumn({ name: 'inventory' })
+    inventory: Inventory;
 
     @Column({ nullable: true })
     discountId: string;
-
-    @Field()
-    @OneToOne(() => EntityCategory, category => category.categoryId)
-    @Column({ nullable: true })
-    entityCategoryId: string;
 
     @Field()
     @Column({ default: 0 })

@@ -1,9 +1,10 @@
 import { UseInterceptors } from "@nestjs/common";
 import { Resolver, Query, Mutation, Args, ObjectType, Field } from "@nestjs/graphql";
 import { InjectRepository } from "@nestjs/typeorm";
+import { ProductCategory } from "src/product-category/productCategory.entity";
 import { LoggingInterceptor } from "src/user/logging.interceptor";
 import { Float } from "type-graphql";
-import { Repository } from "typeorm";
+import { getManager, Repository } from "typeorm";
 import { GenericResponse } from "./genericResponse.dto";
 import { Product } from "./product.entity";
 import { ProductService } from "./product.service";
@@ -26,11 +27,9 @@ export class ProductResolver {
     async addProduct(
         @Args({ type: () => String, name: 'productName' }) productName: string,
         @Args({ type: () => String || null, name: 'description' }) description: string | null,
-        @Args({ type: () => Float, name: 'price' }) price: number,
-        @Args({ type: () => String || null, name: 'currency' }) currency: string | null,
         @Args({ type: () => String, name: 'brand' }) brand: string,
     ): Promise<Boolean> {
-        const response = await this.productService.addProduct(productName, description, price, currency, brand);
+        const response = await this.productService.addProduct(productName, description, brand);
         return response;
     }
 
@@ -95,5 +94,30 @@ export class ProductResolver {
     async getTrendingProducts(): Promise<Array<Product>> {
         const products = await this.productService.getTrendingProducts();
         return products;
+    }
+
+    @Mutation(() => Boolean)
+    async tagProductWithInventory(
+        @Args({ type: () => String, name: 'inventoryId' }) inventoryId: string,
+        @Args({ type: () => String, name: 'productId' }) productId: string,
+    ) {
+        const response = this.productService.tagProductWithInventory(inventoryId, productId);
+        return response;
+    }
+
+    @Mutation(() => Boolean)
+    async tagProductWithCategory(
+        @Args({ type: () => String, name: 'productId' }) productId: string,
+        @Args({ type: () => String, name: 'categoryName' }) categoryName: string,
+    ) {
+        const response = this.productService.tagProductWithCategory(productId, categoryName);
+        return response;
+    }
+
+    @Query(() => [ProductCategory])
+    async getCategories(): Promise<Array<ProductCategory>> {
+        const em = getManager();
+        const response = await em.query('SELECT * FROM productCategory')
+        return response;
     }
 }
