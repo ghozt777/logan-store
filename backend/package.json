@@ -39,7 +39,7 @@
     "@urql/exchange-graphcache": "^4.3.6",
     "amqp-connection-manager": "^4.1.1",
     "amqplib": "^0.8.0",
-    "apollo-server-express": "^3.6.2",
+    "apollo-server-express": "^3.8.1",
     "argon2": "^0.28.3",
     "cache-manager": "^3.6.0",
     "connect-redis": "^6.0.0",
