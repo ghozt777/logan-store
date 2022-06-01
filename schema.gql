@@ -1,0 +1,129 @@
+# ------------------------------------------------------
+# THIS FILE WAS AUTOMATICALLY GENERATED (DO NOT MODIFY)
+# ------------------------------------------------------
+
+type ProductCategory {
+  id: String!
+  name: String!
+  imageUrl: String
+  product: Product
+}
+
+type Image {
+  id: String!
+  name: String!
+  url: String!
+  owner: String
+}
+
+type Brand {
+  id: Float!
+  name: String!
+  brandLogo: String!
+}
+
+type DisCount {
+  discountId: String!
+  code: String!
+  discountPercentage: Float!
+}
+
+type Inventory {
+  inventoryId: String!
+  skuCode: String!
+  price: Float!
+  currency: String!
+  product: Product
+  stock: Float!
+  maxNumberOfUnitsPerCustomer: Float!
+}
+
+type Product {
+  productId: String!
+  name: String!
+  description: String!
+  SKU: String!
+  category: ProductCategory
+  inventory: Inventory
+  upvotes: Float!
+  images: [Image!]
+  brand: Brand
+  applicabeDiscountIds: [DisCount!]
+}
+
+type User {
+  id: String!
+  username: String!
+  email: String!
+  address: Address
+  categoryId: String!
+  wishlistId: String!
+}
+
+type Address {
+  id: Float!
+  addressLine1: String!
+  addressLine2: String!
+  city: String!
+  zipcode: String!
+  country: String!
+  categoryId: String!
+  mobile: Float!
+}
+
+type Errors {
+  field: String!
+  message: String!
+}
+
+type UserCreationResponse {
+  errors: [Errors!]!
+  message: String!
+}
+
+type LoginResponse {
+  accessToken: String!
+  errors: [Errors!]!
+}
+
+type GenericResponse {
+  errors: [Errors!]!
+  isOk: Boolean!
+}
+
+type ImageResponse {
+  images: [Image!]!
+  message: String!
+}
+
+type Query {
+  hello: String!
+  me: User!
+  whoami: User!
+  getProducts: [Product!]!
+  getTrendingProducts: [Product!]!
+  getCategories: [ProductCategory!]!
+  getImages: ImageResponse!
+  helloFromProductCategory: String!
+}
+
+type Mutation {
+  checkAuth: String!
+  register(password: String!, email: String!, username: String!): UserCreationResponse!
+  login(password: String!, usernameOrEmail: String!): LoginResponse!
+  forgotPassword(email: String!): Boolean!
+  resetPassword(newPassword: String!, token: String!): UserCreationResponse!
+  logout: Boolean!
+  addProduct(brand: String!, description: String!, productName: String!): Boolean!
+  addImageToProduct(imageUrl: String!, imageName: String!, productId: String!): Boolean!
+  createInventory(productId: String!, price: Float!, stock: Float!, currency: String!): Boolean!
+  registerDiscount(percentage: Float!, code: String!): Boolean!
+  tagProductWithDiscount(discountId: String!, productId: String!): GenericResponse!
+  tagProductWithDiscountCode(discountCode: String!, productId: String!): GenericResponse!
+  registerBrand(brandLogo: String!, name: String!): Boolean!
+  tagProductWithInventory(productId: String!, inventoryId: String!): Boolean!
+  tagProductWithCategory(categoryName: String!, productId: String!): Boolean!
+  addImage(name: String!, url: String!): Boolean!
+  addAddress(mobile: Float!, country: String!, zipcode: String!, city: String!, addressLine2: String, addressLine1: String!): Boolean!
+  addCategory(imageUrl: String!, categoryName: String!): Boolean!
+}

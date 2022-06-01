@@ -1,0 +1,1 @@
+export const PREFIX_FORGOT_PASSWORD = "forgot-password:"

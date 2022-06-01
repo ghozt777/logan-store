@@ -1,0 +1,29 @@
+{
+    "name": "Logan Store Backend",
+    "description": "Backend Server for ecommerce app Logan Store",
+    "website": "https://logan-store.vercel.app",
+    "repository": "https://github.com/ghozt777/logan-store",
+    "success_url": "/",
+    "scripts":{
+      "predeploy": "npm install && npm run build"
+    },
+    "env": {
+      "NODE_ENV": {
+        "description": "Environment [production/development]",
+        "value": "production"
+      }
+    },
+    "formation": {
+      "web": {
+        "quantity": 1
+      }
+    },
+    "image": "heroku/nodejs",
+    "addons": ["heroku-postgresql"],
+    "buildpacks": [
+      {
+        "url": "heroku/nodejs"
+      }
+    ]
+  }
+  
