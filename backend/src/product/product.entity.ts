@@ -2,7 +2,7 @@ import { Field, ObjectType } from "@nestjs/graphql";
 import { EntityCategory } from "src/entity-category/category.entity";
 import { ProductCategory } from "src/product-category/productCategory.entity";
 import { Column, CreateDateColumn, Entity, JoinColumn, ManyToMany, ManyToOne, OneToMany, OneToOne, PrimaryGeneratedColumn, UpdateDateColumn } from "typeorm";
-import { Image } from "./../images/image.entity"
+import { Image } from "../images/image.entity"
 import { Brand } from "./brand.entity";
 import { DisCount } from "./discount.entity";
 import { Inventory } from "./inventory.entity";
