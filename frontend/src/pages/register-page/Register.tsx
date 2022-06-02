@@ -21,6 +21,7 @@ export const RegisterPage: React.FC<RegisterPageProps> = () => {
     return (
         <Flex
             h="100vh"
+            minH='850px'
             w="100%"
             pt={'8vh'}
             alignItems="center"
@@ -29,7 +30,8 @@ export const RegisterPage: React.FC<RegisterPageProps> = () => {
             bg={`main.${themeState.theme}`}
         >
             <Flex
-                h={isGreaterThan800 ? "50%" : "70%"}
+                h={isGreaterThan800 ? "60%" : "70%"}
+                minH='600px'
                 boxShadow='base'
                 alignItems='center'
                 justifyContent='center'

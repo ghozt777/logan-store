@@ -24,6 +24,7 @@ export const LoginPage: React.FC<LoginPageProps> = () => {
     return (
         <Flex
             h="100vh"
+            minH='850px'
             w="100%"
             pt={'8vh'}
             alignItems="center"
@@ -32,7 +33,8 @@ export const LoginPage: React.FC<LoginPageProps> = () => {
             bg={`main.${themeState.theme}`}
         >
             <Flex
-                h="50%"
+                h="40%"
+                minH='300px'
                 boxShadow='base'
                 alignItems='center'
                 justifyContent='center'
