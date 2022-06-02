@@ -94,7 +94,7 @@ export const Nav: React.FC<{}> = ({ children: categories }) => {
                     w='100%'
                     bg={`main-nav.${themeState.theme}`}
                     boxShadow='lg'
-                    onClick={(e:any) => e.stopPropagation()}
+                    onClick={(e: any) => e.stopPropagation()}
                 >
                     <Banner />
                     <UserInfo />
