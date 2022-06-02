@@ -79,6 +79,7 @@ export const Header: React.FC<NavbarProps> = ({ title, links }) => {
                     w="30%"
                 >
                     <FaHamburger
+                        cursor={'pointer'}
                         onClick={() => setIsNavBarOpen && setIsNavBarOpen(s => !s)}
                         className='hamburger'
                         color={themeState.theme === 'dark' ? 'white' : 'black'}
