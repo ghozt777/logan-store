@@ -3,8 +3,9 @@ import config from "../config/config.json"
 import { cacheExchange } from '@urql/exchange-graphcache';
 
 export const getURQLClient = (): Client => {
+    console.log(process.env.REACT_APP_URQL_HOST_ENV);
     let client = createClient({
-        url: `${config.urql.host}:${config.urql.port}/graphql`,
+        url: process.env.REACT_APP_URQL_HOST_ENV === 'prod' ? `${config.urql.prod.host}/graphql` : `${config.urql.development.host}:${config.urql.development.port}/graphql`,
         exchanges: [dedupExchange, cacheExchange({
             updates: {
                 Mutation: {
