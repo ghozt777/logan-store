@@ -14,7 +14,7 @@ export const NavBar: React.FC<NavBarProps> = () => {
             h='100vh'
             w='100%'
             backgroundColor='transparent'
-            zIndex='69'
+            zIndex={99999999}
             position='fixed'
             backdropFilter='blur(10px)'
             onClick={() => navBarContext?.setIsNavBarOpen(false)}

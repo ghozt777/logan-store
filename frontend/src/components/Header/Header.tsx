@@ -51,11 +51,12 @@ export const Header: React.FC<NavbarProps> = ({ title, links }) => {
     const tagline = config.header.tagline;
     return (
         <Box
-            bg="transparent"
             h='8vh'
             minHeight='100px'
             w='100%'
             position="fixed"
+            zIndex={9999}
+            bg={`dropdown.${themeState.theme}`}
         >
             <Flex
                 h="100%"
