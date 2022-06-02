@@ -27,23 +27,51 @@
     font-weight: 100;
 }
 
-:root{
-    --text-gaming-three : 'Tele-Marines';
-    --text-gaming-debug : 'debug'
-    --text-minimal-one : 'Comfortaa'
-    --tetx-minimal-two : 'Gogoia'
+@font-face {
+    font-family: 'titllium';
+    src: url('../../assets/fonts/TitilliumWeb-Regular.ttf');
+    font-style: normal;
+    font-weight: 100;
 }
 
+@font-face {
+    font-family: 'Leafy';
+    src: url('../../assets/fonts/leafy.otf');
+    font-style: normal;
+    font-weight: 100;
+}
+
+@font-face {
+    font-family: 'Besom';
+    src: url('../../assets/fonts/Besom-Handwritten-Brush-Font.ttf');
+    font-style: normal;
+    font-weight: 100;
+}
+
+:root{
+    --text-gaming-three : 'Tele-Marines';
+    --text-gaming-debug : 'debug' ;
+    --text-minimal-one : 'Comfortaa' ;
+    --tetx-minimal-two : 'Gogoia' ;
+    --text-minimal-three: "titllium" ;
+    --text-minimal-three: "Leafy" ;
+    --text-minimal-four: "Besom" ;
+}
 
 
 .title-text{
-    font-family: var(--text-minimal-one);
+    font-family: var(--text-minimal-four);
 }
 
 .title-tagline{
-    font-family: var(--text-minimal-two);
+    font-family: var(--text-minimal-three);
 }
 
 .blur{
     backdrop-filter: blur(1rem);
+}
+.hamburger{
+    font-size: 1.3rem !important;
+    min-height: 40px;
+    min-width: 14px;
 }

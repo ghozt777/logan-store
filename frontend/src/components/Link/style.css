@@ -5,8 +5,15 @@
     font-weight: 100;
 }
 
+@font-face {
+    font-family: 'Titllium';
+    src: url('../../assets/fonts/TitilliumWeb-Regular.ttf');
+    font-style: normal;
+    font-weight: 100;
+}
+
 .link {
     text-decoration: none;
-    font-family: 'Comfortaa'!important ;
+    font-family: 'Titllium'!important ;
     border-style: none;
 }
