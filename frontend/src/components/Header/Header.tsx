@@ -1,4 +1,5 @@
 import { HamburgerIcon, TriangleDownIcon } from "@chakra-ui/icons";
+import { FaHamburger } from 'react-icons/fa'
 import { Box, Flex, Text, useMediaQuery } from "@chakra-ui/react";
 import React, { useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
@@ -77,16 +78,16 @@ export const Header: React.FC<NavbarProps> = ({ title, links }) => {
                     h="100%"
                     w="30%"
                 >
-                    <HamburgerIcon
+                    <FaHamburger
                         onClick={() => setIsNavBarOpen && setIsNavBarOpen(s => !s)}
-                        fontSize={isLagerThan1000 ? "1rem" : "0.7rem"}
-                        color={`text.${themeState.theme}`} cursor='pointer'
+                        className='hamburger'
+                        color={themeState.theme === 'dark' ? 'white' : 'black'}
                     />
                     <Text
-                        fontWeight={700}
+                        fontWeight={600}
                         className="title-text"
                         color={`text.${themeState.theme}`}
-                        fontSize={isLagerThan800 ? 'lg' : 'sm'}
+                        fontSize={isLagerThan800 ? '1.6rem' : '1.2rem'}
                         cursor='pointer'
                         whiteSpace='nowrap'
                     >{title}
@@ -94,7 +95,7 @@ export const Header: React.FC<NavbarProps> = ({ title, links }) => {
                     {
                         isLagerThan1000 &&
                         <Text
-                            fontSize={isLagerThan800 ? "0.8rem" : "0.6rem"}
+                            fontSize={"1.4rem"}
                             color={`text.${themeState.theme}`}
                             className="title-tagline"
                             whiteSpace='nowrap'

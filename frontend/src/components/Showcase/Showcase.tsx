@@ -34,6 +34,7 @@ const ShowCaseCard: React.FC<ProductCardProps> = ({ product, align }) => {
             justifyContent='space-between'
             flexDirection={isLagerThan800 ? align === "left" ? "row" : "row-reverse" : "column"}
             bg={`main.${themeState.theme}`}
+            gap={4}
         >
             <Flex
                 className='hero-container'
@@ -62,7 +63,9 @@ const ShowCaseCard: React.FC<ProductCardProps> = ({ product, align }) => {
                 w={isLagerThan800 ? '59%' : '95%'}
                 alignItems='center'
                 justifyContent='center'
-                boxShadow={isLagerThan800 ? 'xl' : 'sm'}
+                boxShadow={isLagerThan800 ? 'xl' : '0px'}
+                border={isLagerThan800 ? '0px' : '1px'}
+                borderColor={themeState.theme === 'light' ? 'gray.200' : 'gray.600'}
                 p='6'
                 rounded='lg'
                 flexDir='column'
@@ -95,8 +98,9 @@ export const Showcase: React.FC<ShowcaseProps> = ({ products, title }) => {
             flexDir='column'
             gap='10px'
             color={`text.${themeState.theme}`}
+            position="relative"
         >
-            <Box w='80%' >
+            <Box w='80%'>
                 <Text fontSize='lg' >{title}</Text>
             </Box>
             <Flex

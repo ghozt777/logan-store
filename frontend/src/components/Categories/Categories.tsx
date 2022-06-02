@@ -26,7 +26,7 @@ const GridCard: React.FC<{ b?: string, name: string, img?: string, c?: String }>
             h='100%'
             w='100%'
             p='4px'
-            boxShadow='md'
+            boxShadow='xl'
             rounded='lg'
             bg={b ?? 'white'}
             flexDirection='column'
