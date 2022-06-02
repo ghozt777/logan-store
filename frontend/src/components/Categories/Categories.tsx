@@ -18,7 +18,7 @@ const GridContent: React.FC<{ r?: number, c?: number }> = ({ children, r, c }) =
     )
 }
 
-const GridCard: React.FC<{ b?: string, name: string, img: string, c?: String }> = ({ b, name, img, c }) => {
+const GridCard: React.FC<{ b?: string, name: string, img?: string, c?: String }> = ({ b, name, img, c }) => {
     const color: string = c ? c as string : 'white';
     return (
         <Flex
@@ -37,6 +37,7 @@ const GridCard: React.FC<{ b?: string, name: string, img: string, c?: String }> 
                 h='10%'
                 w='80%'
                 textAlign={'center'}
+                zIndex={10}
             >
                 <Text color={color} fontSize='lg' >{name}</Text>
             </Box>
@@ -52,7 +53,7 @@ const DesktopView: React.FC<{ categories?: GetCategoriesQuery }> = ({ categories
             {
                 categories && categories.map((category, i) => {
                     return (
-                        <GridContent r={i === 0 ? 2 : 0} c={i === 0 ? 1 : i === 3 ? 4 : 2}>
+                        <GridContent r={i === 0 ? 2 : 0} c={i === 0 ? 1 : i === 3 ? 1 : 2}>
                             <GridCard
                                 c={i === 0 || i === 2 ? 'black' : 'white'}
                                 b={
@@ -67,6 +68,27 @@ const DesktopView: React.FC<{ categories?: GetCategoriesQuery }> = ({ categories
                     )
                 })
             }
+            <GridContent c={2} >
+                <GridCard
+                    c='black'
+                    b='#fff'
+                    name='new picks'
+                    img="https://ik.imagekit.io/dnoyrwmg9i9o/logan-store-categories/hailey-moeller-dumcRYel9Z0-unsplash_Ur061bXEM.jpg?ik-sdk-version=javascript-1.4.3&updatedAt=1654159573352"
+                >
+
+                </GridCard>
+            </GridContent>
+
+            <GridContent c={1} >
+                <GridCard
+                    c='white'
+                    b='#050b0b'
+                    name='on sale'
+                    img="https://ik.imagekit.io/dnoyrwmg9i9o/logan-store-categories/fallon-michael-e8sbQNYEwX8-unsplash_cDkBgSAGA3.jpg?ik-sdk-version=javascript-1.4.3&updatedAt=1654159876679"
+                >
+
+                </GridCard>
+            </GridContent>
         </>
     )
 }
@@ -93,12 +115,32 @@ const MobileView: React.FC<{ categories?: GetCategoriesQuery }> = ({ categories:
                     </GridContent>)
                 })
             }
+            <GridContent r={4} c={2} >
+                <GridCard
+                    c='black'
+                    b='#fff'
+                    name='new picks'
+                    img="https://ik.imagekit.io/dnoyrwmg9i9o/logan-store-categories/hailey-moeller-dumcRYel9Z0-unsplash_Ur061bXEM.jpg?ik-sdk-version=javascript-1.4.3&updatedAt=1654159573352"
+                >
+
+                </GridCard>
+            </GridContent>
+
+            <GridContent r={4} c={3} >
+                <GridCard
+                    c='white'
+                    b='#050b0b'
+                    name='on sale'
+                    img="https://ik.imagekit.io/dnoyrwmg9i9o/logan-store-categories/fallon-michael-e8sbQNYEwX8-unsplash_cDkBgSAGA3.jpg?ik-sdk-version=javascript-1.4.3&updatedAt=1654159876679"
+                >
+
+                </GridCard>
+            </GridContent>
         </>
     )
 }
 
 export const Categories: React.FC<{}> = () => {
-    const [isLargerThan800] = useMediaQuery([`(min-width: 800px)`]);
     const [isLargerThan1200] = useMediaQuery([`(min-width: 1200px)`]);
     const [result] = useGetCategoriesQuery();
     const { data, fetching, error } = result
@@ -122,7 +164,7 @@ export const Categories: React.FC<{}> = () => {
             </Flex>
             <Flex
                 h='80%'
-                w='90%'
+                w={isLargerThan1200 ? "80%" : '90%'}
                 p='10px'
                 alignItems='center'
                 justifyContent='center'
@@ -137,7 +179,7 @@ export const Categories: React.FC<{}> = () => {
                                 w='100%'
                                 templateRows='repeat(2, 1fr)'
                                 templateColumns='repeat(5, 1fr)'
-                                gap={4}
+                                gap={isLargerThan1200 ? 6 : 4}
                             >
                                 {
                                     isLargerThan1200 ? <DesktopView categories={data} /> : <MobileView categories={data} />
