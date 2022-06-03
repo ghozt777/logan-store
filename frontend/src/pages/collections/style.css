@@ -1,0 +1,14 @@
+@font-face {
+    font-family: 'Leafy';
+    src: url('../../assets/fonts/leafy.otf');
+    font-style: normal;
+    font-weight: 100;
+}
+
+:root{
+    --text-minimal: "Leafy" ;
+}
+
+.header-text{
+    font-family: var(--text-minimal);
+}

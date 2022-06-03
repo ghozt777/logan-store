@@ -1,4 +1,1 @@
-git checkout backend
-git pull origin backend
-git subtree push --prefix=backend origin backend 
-git checkout development
+git push origin `git subtree split --prefix backend development`:backend --force
