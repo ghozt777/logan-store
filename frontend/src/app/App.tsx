@@ -8,6 +8,7 @@ import {
   ResetPasswordPage,
   LoginPage,
   Shop,
+  CollectionsPage,
   MarketPlacePage
 } from "../pages/index"
 import { Header } from '../components/Header/Header';
@@ -44,6 +45,9 @@ function App() {
         <Route path='/login' element={<LoginPage />} />
         <Route path='/marketplace/*' element={<MarketPlacePage />} />
         <Route path='/register' element={<RegisterPage />} />
+        <Route path='/collections' element={<CollectionsPage />}>
+          <Route path=':collection' element={<CollectionsPage />} />
+        </Route>
         <Route path='/forgot-password' element={<ForgotPasswordPage />} />
         <Route path='/reset-password/:token' element={<ResetPasswordPage />} />
       </Routes>

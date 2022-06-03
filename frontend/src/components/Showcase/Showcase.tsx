@@ -50,6 +50,9 @@ const ShowCaseCard: React.FC<ProductCardProps> = ({ product, align }) => {
                 bg='white'
             >
                 <Img
+                    style={{
+                        aspectRatio: "1/1"
+                    }}
                     maxH='90%'
                     src={images ? images[0].url : 'www.google.com'}
                     alt={images ? images[0].name : 'NP'}

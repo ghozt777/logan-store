@@ -1,4 +1,5 @@
 import { Box, Flex, Grid, GridItem, Img, Text, useMediaQuery } from "@chakra-ui/react"
+import { useNavigate } from "react-router-dom";
 import { HashLoader } from "react-spinners";
 import { cacheExchange } from "urql";
 import { useTheme } from "../../features/theme/themeSlice";
@@ -20,6 +21,8 @@ const GridContent: React.FC<{ r?: number, c?: number }> = ({ children, r, c }) =
 
 const GridCard: React.FC<{ b?: string, name: string, img?: string, c?: String }> = ({ b, name, img, c }) => {
     const color: string = c ? c as string : 'white';
+    const navigate = useNavigate();
+    const nameWithoutSpace = name.replace(/ /i, '-');
     return (
         <Flex
             cursor={'pointer'}
@@ -32,6 +35,7 @@ const GridCard: React.FC<{ b?: string, name: string, img?: string, c?: String }>
             flexDirection='column'
             alignItems='center'
             justifyContent='space-evenly'
+            onClick={() => navigate(`/collections/${nameWithoutSpace}`)}
         >
             <Box
                 h='10%'
@@ -140,11 +144,39 @@ const MobileView: React.FC<{ categories?: GetCategoriesQuery }> = ({ categories:
     )
 }
 
-export const Categories: React.FC<{}> = () => {
-    const [isLargerThan1200] = useMediaQuery([`(min-width: 1200px)`]);
+export const CategoriesView = () => {
     const [result] = useGetCategoriesQuery();
     const { data, fetching, error } = result
+    const [isLargerThan1200] = useMediaQuery([`(min-width: 1200px)`]);
     const themeState = useTheme();
+    return (<Box
+        h='100%'
+        w='100%'
+    >
+        {
+            error ?
+                <ErrorCard theme={themeState.theme} message={error.message} /> :
+                fetching ?
+                    <HashLoader /> :
+                    <Grid
+                        h='100%'
+                        w='100%'
+                        templateRows='repeat(2, 1fr)'
+                        templateColumns='repeat(5, 1fr)'
+                        gap={isLargerThan1200 ? 6 : 4}
+                    >
+                        {
+                            isLargerThan1200 ? <DesktopView categories={data} /> : <MobileView categories={data} />
+                        }
+                    </Grid>
+
+        }
+    </Box>)
+}
+
+export const Categories: React.FC<{}> = () => {
+    const themeState = useTheme();
+    const [isLargerThan1200] = useMediaQuery([`(min-width: 1200px)`]);
     return (
         <Flex
             h='80vh'
@@ -169,24 +201,7 @@ export const Categories: React.FC<{}> = () => {
                 alignItems='center'
                 justifyContent='center'
             >
-                {
-                    error ?
-                        <ErrorCard theme={themeState.theme} message={error.message} /> :
-                        fetching ?
-                            <HashLoader /> :
-                            <Grid
-                                h='100%'
-                                w='100%'
-                                templateRows='repeat(2, 1fr)'
-                                templateColumns='repeat(5, 1fr)'
-                                gap={isLargerThan1200 ? 6 : 4}
-                            >
-                                {
-                                    isLargerThan1200 ? <DesktopView categories={data} /> : <MobileView categories={data} />
-                                }
-                            </Grid>
-
-                }
+                <CategoriesView />
             </Flex>
         </Flex>
     )
