@@ -21,7 +21,6 @@ interface ShowcaseProps {
 // NOTE : Implement BrandLOGO Feature ``
 
 const ShowCaseCard: React.FC<ProductCardProps> = ({ product, align }) => {
-    console.log('product', product);
     const { name, SKU, images, brand, productId, upvotes, inventory } = product;
     const [isLagerThan800] = useMediaQuery([`(min-width: 800px)`]);
     const themeState = useSelector((state: RootState) => state.theme);
