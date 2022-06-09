@@ -8,7 +8,6 @@ interface NavBarProps { }
 export const NavBar: React.FC<NavBarProps> = () => {
 
     const navBarContext = useNavBar();
-    console.log('isNavBarOpen props: ', navBarContext?.isNavBarOpen);
     return (
         <Flex
             h='100vh'
