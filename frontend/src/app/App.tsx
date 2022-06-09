@@ -1,4 +1,3 @@
-import * as React from 'react'
 import { Route, Routes, useLocation } from 'react-router-dom'
 import { ToastContainer, Slide, } from 'react-toastify';
 import {
@@ -16,11 +15,19 @@ import 'react-toastify/dist/ReactToastify.css';
 import config from "../config/config.json"
 import { NavBar } from '../components/Navbar/Navbar';
 import { useNavBar } from '../context/navbar';
+import { useDispatch } from 'react-redux';
+import { useEffect } from 'react';
+import { initialAuthentication } from '../features/auth/authSlice';
+import { AppDispatch } from './store';
 
 function App() {
   const productName = config.header['product-name'];
   const location = useLocation();
   const navBarContext = useNavBar();
+  const dispatch = useDispatch<AppDispatch>();
+  useEffect(() => {
+    dispatch(initialAuthentication())
+  }, [])
   return (
     <>
       <ToastContainer

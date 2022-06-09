@@ -91,7 +91,6 @@ export type Mutation = {
   addImage: Scalars['Boolean'];
   addImageToProduct: Scalars['Boolean'];
   addProduct: Scalars['Boolean'];
-  checkAuth: Scalars['String'];
   createInventory: Scalars['Boolean'];
   forgotPassword: Scalars['Boolean'];
   login: LoginResponse;
@@ -234,6 +233,7 @@ export type ProductCategory = {
 
 export type Query = {
   __typename?: 'Query';
+  checkAuth: Scalars['Boolean'];
   getCategories: Array<ProductCategory>;
   getImages: ImageResponse;
   getProducts: Array<Product>;
@@ -301,6 +301,11 @@ export type ResetPasswordMutationVariables = Exact<{
 
 
 export type ResetPasswordMutation = { __typename?: 'Mutation', resetPassword: { __typename?: 'UserCreationResponse', message: string, errors: Array<{ __typename?: 'Errors', field: string, message: string }> } };
+
+export type CheckAuthQueryVariables = Exact<{ [key: string]: never; }>;
+
+
+export type CheckAuthQuery = { __typename?: 'Query', checkAuth: boolean };
 
 export type GetProductsQueryVariables = Exact<{ [key: string]: never; }>;
 
@@ -398,6 +403,15 @@ export const ResetPasswordDocument = gql`
 
 export function useResetPasswordMutation() {
   return Urql.useMutation<ResetPasswordMutation, ResetPasswordMutationVariables>(ResetPasswordDocument);
+};
+export const CheckAuthDocument = gql`
+    query CheckAuth {
+  checkAuth
+}
+    `;
+
+export function useCheckAuthQuery(options: Omit<Urql.UseQueryArgs<CheckAuthQueryVariables>, 'query'> = {}) {
+  return Urql.useQuery<CheckAuthQuery>({ query: CheckAuthDocument, ...options });
 };
 export const GetProductsDocument = gql`
     query GetProducts {

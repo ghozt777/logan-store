@@ -1,4 +1,27 @@
 import { createAsyncThunk, createSlice, PayloadAction } from '@reduxjs/toolkit'
+import axios from 'axios'
+
+export const initialAuthentication = createAsyncThunk(
+    'auth/initial',
+    async () => {
+        const auth = JSON.parse(localStorage.getItem('auth') as string);
+        if (!auth) return false;
+        const response = await axios({
+            url: "http://localhost:5001/graphql",
+            method: 'POST',
+            headers: {
+                "authorization": auth.token
+            },
+            data: {
+                "operationName": "CheckAuth",
+                "variables": {},
+                "query": "query CheckAuth {\n  checkAuth\n}\n"
+            }
+        })
+        console.log('thunk : ', response)
+        return response.data.checkAuth ?? false;
+    }
+)
 
 export interface AuthSlice {
     isLoggedIn: boolean;
@@ -32,14 +55,14 @@ export const authSlice = createSlice({
     name: 'auth',
     initialState: getInitialState(),
     reducers: {
-        successAuth: (state, action: PayloadAction<{ accessToken: string; }>) => {
+        successAuth: (state: AuthSlice, action: PayloadAction<{ accessToken: string; }>) => {
             state.isLoggedIn = true;
             state.token = action.payload.accessToken
             state.errors = []
             console.log(state)
             localStorage.setItem('auth', JSON.stringify(state))
         },
-        faliureAuth: (state, action: PayloadAction<any>) => {
+        faliureAuth: (state: AuthSlice, action: PayloadAction<any>) => {
             state.isLoggedIn = false;
             state.errors = action.payload.errors
             state.token = ""
@@ -60,6 +83,14 @@ export const authSlice = createSlice({
         })
         builder.addCase(logout.rejected, (state, action) => {
             console.error('logout unsuccessful with response: ', action.payload);
+        })
+
+        builder.addCase(initialAuthentication.fulfilled, (state, action) => {
+            state.isLoggedIn = true;
+        })
+
+        builder.addCase(initialAuthentication.rejected, (state, action) => {
+            state.isLoggedIn = false;
         })
     }
 })
