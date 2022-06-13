@@ -114,10 +114,20 @@ export class ProductResolver {
         return response;
     }
 
+    @Mutation(() => Boolean)
+    async tagProductWithBrand(
+        @Args({ type: () => String, name: 'productId' }) productId: string,
+        @Args({ type: () => String, name: 'brandId' }) brandId: string,
+    ) {
+        const response = this.productService.tagProductWithBrand(productId, brandId);
+        return response;
+    }
+
     @Query(() => [ProductCategory])
     async getCategories(): Promise<Array<ProductCategory>> {
         const em = getManager();
         const response = await em.query('SELECT * FROM productCategory')
         return response;
     }
+
 }

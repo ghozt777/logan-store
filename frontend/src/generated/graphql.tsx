@@ -32,6 +32,7 @@ export type Brand = {
   brandLogo: Scalars['String'];
   id: Scalars['Float'];
   name: Scalars['String'];
+  product?: Maybe<Product>;
 };
 
 export type DisCount = {
@@ -99,6 +100,7 @@ export type Mutation = {
   registerBrand: Scalars['Boolean'];
   registerDiscount: Scalars['Boolean'];
   resetPassword: UserCreationResponse;
+  tagProductWithBrand: Scalars['Boolean'];
   tagProductWithCategory: Scalars['Boolean'];
   tagProductWithDiscount: GenericResponse;
   tagProductWithDiscountCode: GenericResponse;
@@ -183,6 +185,12 @@ export type MutationRegisterDiscountArgs = {
 export type MutationResetPasswordArgs = {
   newPassword: Scalars['String'];
   token: Scalars['String'];
+};
+
+
+export type MutationTagProductWithBrandArgs = {
+  brandId: Scalars['String'];
+  productId: Scalars['String'];
 };
 
 

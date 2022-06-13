@@ -235,5 +235,23 @@ export class ProductService {
         return isOk;
     }
 
+    async tagProductWithBrand(productId: string, brandId: string): Promise<Boolean> {
+        const em = getManager();
+        let isOk = true;
+        try {
+            const em = getManager();
+            const foundProduct = await this.productRepository.findOne({ productId });
+            if (!foundProduct) throw new Error(`Product with product id = ${productId} not found !`);
+            const [foundBrand] = await em.query(`SELECT * FROM brands WHERE id='${brandId}'`);
+            if (!foundBrand) throw new Error(`Brand with brand id = ${brandId} not found !`);
+            foundProduct.brand = foundBrand;
+            await em.save(foundProduct);
+        } catch (err) {
+            console.error(`error while tagging product with brand with message -> ${err.message}`);
+            isOk = false;
+        } finally {
+            return isOk;
+        }
+    }
 
 }

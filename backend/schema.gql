@@ -20,6 +20,7 @@ type Brand {
   id: Float!
   name: String!
   brandLogo: String!
+  product: Product
 }
 
 type DisCount {
@@ -123,6 +124,7 @@ type Mutation {
   registerBrand(brandLogo: String!, name: String!): Boolean!
   tagProductWithInventory(productId: String!, inventoryId: String!): Boolean!
   tagProductWithCategory(categoryName: String!, productId: String!): Boolean!
+  tagProductWithBrand(brandId: String!, productId: String!): Boolean!
   addImage(name: String!, url: String!): Boolean!
   addAddress(mobile: Float!, country: String!, zipcode: String!, city: String!, addressLine2: String, addressLine1: String!): Boolean!
   addCategory(imageUrl: String!, categoryName: String!): Boolean!
