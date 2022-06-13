@@ -98,6 +98,7 @@ type ImageResponse {
 
 type Query {
   hello: String!
+  checkAuth: Boolean!
   me: User!
   whoami: User!
   getProducts: [Product!]!
@@ -108,7 +109,6 @@ type Query {
 }
 
 type Mutation {
-  checkAuth: String!
   register(password: String!, email: String!, username: String!): UserCreationResponse!
   login(password: String!, usernameOrEmail: String!): LoginResponse!
   forgotPassword(email: String!): Boolean!
