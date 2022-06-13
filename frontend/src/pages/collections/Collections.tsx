@@ -40,7 +40,7 @@ const DesktopView = () => {
                         left="0"
                         alignItems='center'
                         justifyContent='flex-start'
-                        zIndex={"99999999"}
+                        zIndex={"10000"}
                     >
                         <Text
                             className='header-text'
