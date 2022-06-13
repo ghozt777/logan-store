@@ -86,11 +86,18 @@ export const authSlice = createSlice({
         })
 
         builder.addCase(initialAuthentication.fulfilled, (state, action) => {
-            state.isLoggedIn = true;
+            state.isLoggedIn = action.payload;
+            if (!action.payload) {
+                state.isLoggedIn = false;
+                state.token = ""
+                localStorage.setItem('auth', JSON.stringify(state))
+            }
         })
 
         builder.addCase(initialAuthentication.rejected, (state, action) => {
             state.isLoggedIn = false;
+            state.token = ""
+            localStorage.setItem('auth', JSON.stringify(state))
         })
     }
 })
