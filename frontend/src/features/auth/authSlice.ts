@@ -19,7 +19,7 @@ export const initialAuthentication = createAsyncThunk(
             }
         })
         console.log('thunk : ', response)
-        return response.data.checkAuth ?? false;
+        return response.data.data.checkAuth ?? false;
     }
 )
 
