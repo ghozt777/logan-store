@@ -46,7 +46,7 @@ export class Product {
     images: Image[];
 
     @Field(() => Brand, { nullable: true })
-    @ManyToOne(() => Brand, brand => brand.id, { nullable: true })
+    @ManyToOne(() => Brand, b => b.product, { nullable: true })
     brand: Brand
 
     @Field(() => [DisCount], { nullable: true })
