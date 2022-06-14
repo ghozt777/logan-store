@@ -17,6 +17,10 @@ export class ProductCategory {
     @Column({ nullable: true })
     imageUrl: string;
 
+    @Field(() => String, { nullable: true })
+    @Column({ nullable: true })
+    categoryDescription: string;
+
     @Field(() => Product, { nullable: true })
     @OneToMany(() => Product, (product: Product) => product.category, { nullable: true })
     product: Product

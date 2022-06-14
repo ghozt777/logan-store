@@ -1,5 +1,6 @@
 import { Field, ObjectType } from "@nestjs/graphql";
-import { Column, Entity, PrimaryGeneratedColumn } from "typeorm";
+import { Column, Entity, OneToMany, PrimaryGeneratedColumn } from "typeorm";
+import { Product } from "./product.entity";
 
 @ObjectType()
 @Entity('brands')
@@ -15,4 +16,9 @@ export class Brand {
     @Field(() => String)
     @Column()
     brandLogo: string;
+
+    @Field(() => Product, { nullable: true })
+    @OneToMany(() => Product, p => p.brand, { nullable: true })
+    product: Product
+
 }

@@ -19,20 +19,20 @@ export class UserResolver {
     constructor(private userService: UserService, @InjectRepository(User) private userRepository: Repository<User>, @Inject(CACHE_MANAGER) private cacheManager: Cache) { }
 
     @Query(() => String)
-    hello(@Auth() isAuth : boolean) {
+    hello(@Auth() isAuth: boolean) {
         console.log('is authenticated', isAuth);
         return 'Hello From User'
     }
 
-    @Mutation(() => String)
-    checkAuth(@Context('req') req: Request) {
+    @Query(() => Boolean)
+    checkAuth(@Context('req') req: Request): Boolean {
         if (req.headers['authorization']) {
-            const token = req.headers['authorization'].split(' ')[1];
+            const token = req.headers['authorization'];
             const { user } = this.userService.isValid(token);
             console.log("User: ", user);
-            return 'auth passed'
+            return true;
         }
-        return 'auth failed'
+        return false;
     }
 
 
@@ -43,12 +43,12 @@ export class UserResolver {
         @Args({ name: "password", type: () => String }) password: string,
     ): Promise<UserCreationResponse> {
         const dto = {
-            username ,
-            email , 
-            password 
+            username,
+            email,
+            password
         }
-        const response = await this.userService.createUser(dto) ;
-        return response ;
+        const response = await this.userService.createUser(dto);
+        return response;
     }
 
     @Mutation(() => LoginResponse)
@@ -58,12 +58,12 @@ export class UserResolver {
         @Args({ name: 'password', type: () => String }) password: string,
     ): Promise<LoginResponse> {
         const dto = {
-            usernameOrEmail , 
+            usernameOrEmail,
             password,
             res
-        } ;
-        const response = await this.userService.logInUser(dto) ;
-        return response ;
+        };
+        const response = await this.userService.logInUser(dto);
+        return response;
     }
 
     @Query(() => User)
@@ -105,10 +105,10 @@ export class UserResolver {
     async logout(
         @Context('res') res: Response
     ) {
-        const response = await this.userService.logoutUser(res) ;
-        return response ;
+        const response = await this.userService.logoutUser(res);
+        return response;
     }
 
-    
+
 
 }

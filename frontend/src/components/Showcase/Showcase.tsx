@@ -21,7 +21,6 @@ interface ShowcaseProps {
 // NOTE : Implement BrandLOGO Feature ``
 
 const ShowCaseCard: React.FC<ProductCardProps> = ({ product, align }) => {
-    console.log('product', product);
     const { name, SKU, images, brand, productId, upvotes, inventory } = product;
     const [isLagerThan800] = useMediaQuery([`(min-width: 800px)`]);
     const themeState = useSelector((state: RootState) => state.theme);
@@ -37,6 +36,7 @@ const ShowCaseCard: React.FC<ProductCardProps> = ({ product, align }) => {
             gap={4}
         >
             <Flex
+                position={"relative"}
                 className='hero-container'
                 h={isLagerThan800 ? '80%' : '59%'}
                 w={isLagerThan800 ? '40%' : '95%'}
@@ -62,6 +62,7 @@ const ShowCaseCard: React.FC<ProductCardProps> = ({ product, align }) => {
                 />
             </Flex>
             <Flex
+                cursor={"pointer"}
                 h={isLagerThan800 ? '80%' : '40%'}
                 w={isLagerThan800 ? '59%' : '95%'}
                 alignItems='center'
@@ -73,11 +74,33 @@ const ShowCaseCard: React.FC<ProductCardProps> = ({ product, align }) => {
                 rounded='lg'
                 flexDir='column'
                 transition="250ms"
+                position={"relative"}
                 bg={`showcase.${themeState.theme}`}
                 _hover={{
-                    transform: "translateY(-5px) scale(1.1)"
+                    transform: "translateY(-5px) scale(1.05)"
                 }}
             >
+                <Box
+                    h='50px'
+                    w='50px'
+                    p='10px'
+                    rounded={'lg'}
+                    bg='white'
+                    position={'absolute'}
+                    top="20px"
+                    right="20px"
+                    shadow={"lg"}
+                >
+                    <Img
+                        maxH='40px'
+                        background={"transparent"}
+                        src={product.brand?.brandLogo}
+                        alt={product.brand?.name}
+                        backgroundSize="cover"
+                        backgroundPosition="center"
+                        backgroundRepeat="no-repeat"
+                    />
+                </Box>
                 <Box>
                     <Text fontSize={isLagerThan800 ? '3xl' : "xl"}>{name}</Text>
                 </Box>

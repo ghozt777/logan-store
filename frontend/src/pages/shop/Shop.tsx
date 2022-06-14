@@ -76,8 +76,6 @@ const TrendingSection = () => {
     const [isLagerThan800] = useMediaQuery([`(min-width: 800px)`]);
     const [result] = useGetTrendingProductsQuery();
     const { fetching, data, error } = result;
-    console.log(error)
-    console.log('trending products', data?.getTrendingProducts);
     return (
         <Flex
             h='100vh'
@@ -139,7 +137,6 @@ export const Shop: React.FC<{}> = () => {
     const [isLagerThan800] = useMediaQuery([`(min-width: 800px)`]);
     const [productsQueryData] = useGetProductsQuery();
     const products = productsQueryData.data?.getProducts;
-    console.log('products:', products);
     return (
         <Box
             minH={'100vh'}

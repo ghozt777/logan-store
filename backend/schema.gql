@@ -6,6 +6,7 @@ type ProductCategory {
   id: String!
   name: String!
   imageUrl: String
+  categoryDescription: String
   product: Product
 }
 
@@ -20,6 +21,7 @@ type Brand {
   id: Float!
   name: String!
   brandLogo: String!
+  product: Product
 }
 
 type DisCount {
@@ -98,6 +100,7 @@ type ImageResponse {
 
 type Query {
   hello: String!
+  checkAuth: Boolean!
   me: User!
   whoami: User!
   getProducts: [Product!]!
@@ -108,7 +111,6 @@ type Query {
 }
 
 type Mutation {
-  checkAuth: String!
   register(password: String!, email: String!, username: String!): UserCreationResponse!
   login(password: String!, usernameOrEmail: String!): LoginResponse!
   forgotPassword(email: String!): Boolean!
@@ -123,6 +125,7 @@ type Mutation {
   registerBrand(brandLogo: String!, name: String!): Boolean!
   tagProductWithInventory(productId: String!, inventoryId: String!): Boolean!
   tagProductWithCategory(categoryName: String!, productId: String!): Boolean!
+  tagProductWithBrand(brandId: String!, productId: String!): Boolean!
   addImage(name: String!, url: String!): Boolean!
   addAddress(mobile: Float!, country: String!, zipcode: String!, city: String!, addressLine2: String, addressLine1: String!): Boolean!
   addCategory(imageUrl: String!, categoryName: String!): Boolean!

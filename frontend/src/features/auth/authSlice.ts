@@ -1,4 +1,28 @@
 import { createAsyncThunk, createSlice, PayloadAction } from '@reduxjs/toolkit'
+import config from '../../config/config.json'
+import axios from 'axios'
+
+export const initialAuthentication = createAsyncThunk(
+    'auth/initial',
+    async () => {
+        const auth = JSON.parse(localStorage.getItem('auth') as string);
+        if (!auth) return false;
+        const auth_gql = {
+            "operationName": "CheckAuth",
+            "variables": {},
+            "query": "query CheckAuth {\n  checkAuth\n}\n"
+        };
+        const response = await axios({
+            url: process.env.REACT_APP_URQL_HOST_ENV === 'prod' ? `${config.urql.prod.host}/graphql` : `${config.urql.development.host}:${config.urql.development.port}/graphql`,
+            method: 'POST',
+            headers: {
+                "authorization": auth.token
+            },
+            data: auth_gql
+        })
+        return response.data.data.checkAuth ?? false;
+    }
+)
 
 export interface AuthSlice {
     isLoggedIn: boolean;
@@ -32,14 +56,14 @@ export const authSlice = createSlice({
     name: 'auth',
     initialState: getInitialState(),
     reducers: {
-        successAuth: (state, action: PayloadAction<{ accessToken: string; }>) => {
+        successAuth: (state: AuthSlice, action: PayloadAction<{ accessToken: string; }>) => {
             state.isLoggedIn = true;
             state.token = action.payload.accessToken
             state.errors = []
             console.log(state)
             localStorage.setItem('auth', JSON.stringify(state))
         },
-        faliureAuth: (state, action: PayloadAction<any>) => {
+        faliureAuth: (state: AuthSlice, action: PayloadAction<any>) => {
             state.isLoggedIn = false;
             state.errors = action.payload.errors
             state.token = ""
@@ -60,6 +84,21 @@ export const authSlice = createSlice({
         })
         builder.addCase(logout.rejected, (state, action) => {
             console.error('logout unsuccessful with response: ', action.payload);
+        })
+
+        builder.addCase(initialAuthentication.fulfilled, (state, action) => {
+            state.isLoggedIn = action.payload;
+            if (!action.payload) {
+                state.isLoggedIn = false;
+                state.token = ""
+                localStorage.setItem('auth', JSON.stringify(state))
+            }
+        })
+
+        builder.addCase(initialAuthentication.rejected, (state, action) => {
+            state.isLoggedIn = false;
+            state.token = ""
+            localStorage.setItem('auth', JSON.stringify(state))
         })
     }
 })
