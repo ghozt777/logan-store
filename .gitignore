@@ -12,6 +12,7 @@
 /build
 
 **/.env
+**/config.json
 
 # misc
 .DS_Store
