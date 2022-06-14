@@ -6,6 +6,7 @@ type ProductCategory {
   id: String!
   name: String!
   imageUrl: String
+  categoryDescription: String
   product: Product
 }
 
