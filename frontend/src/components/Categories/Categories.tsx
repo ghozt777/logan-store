@@ -149,9 +149,11 @@ export const CategoriesView = () => {
     const { data, fetching, error } = result
     const [isLargerThan1200] = useMediaQuery([`(min-width: 1200px)`]);
     const themeState = useTheme();
-    return (<Box
+    return (<Flex
         h='100%'
         w='100%'
+        alignItems='center'
+        justifyContent='center'
     >
         {
             error ?
@@ -171,7 +173,7 @@ export const CategoriesView = () => {
                     </Grid>
 
         }
-    </Box>)
+    </Flex>)
 }
 
 export const Categories: React.FC<{}> = () => {

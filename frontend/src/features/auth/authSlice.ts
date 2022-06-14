@@ -1,4 +1,5 @@
 import { createAsyncThunk, createSlice, PayloadAction } from '@reduxjs/toolkit'
+import config from '../../config/config.json'
 import axios from 'axios'
 
 export const initialAuthentication = createAsyncThunk(
@@ -6,19 +7,19 @@ export const initialAuthentication = createAsyncThunk(
     async () => {
         const auth = JSON.parse(localStorage.getItem('auth') as string);
         if (!auth) return false;
+        const auth_gql = {
+            "operationName": "CheckAuth",
+            "variables": {},
+            "query": "query CheckAuth {\n  checkAuth\n}\n"
+        };
         const response = await axios({
-            url: "http://localhost:5001/graphql",
+            url: process.env.REACT_APP_URQL_HOST_ENV === 'prod' ? `${config.urql.prod.host}/graphql` : `${config.urql.development.host}:${config.urql.development.port}/graphql`,
             method: 'POST',
             headers: {
                 "authorization": auth.token
             },
-            data: {
-                "operationName": "CheckAuth",
-                "variables": {},
-                "query": "query CheckAuth {\n  checkAuth\n}\n"
-            }
+            data: auth_gql
         })
-        console.log('thunk : ', response)
         return response.data.data.checkAuth ?? false;
     }
 )

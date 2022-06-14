@@ -4,7 +4,7 @@ import { useTheme } from "../../features/theme/themeSlice";
 import { CategoriesView } from "../../components/Categories/Categories";
 import "./style.css"
 
-const DesktopView = () => {
+const LandingDesktopView = () => {
     const [isGreaterThan800] = useMediaQuery(`(min-width: 800px)`);
     const themeState = useTheme();
     return (
@@ -70,6 +70,43 @@ const DesktopView = () => {
     )
 }
 
+const LandingMobileView = () => {
+    return (
+        <Flex
+            h='100%'
+            w='100%'
+            alignItems='center'
+            justifyContent='center'
+        >
+            <Flex
+                w='90%'
+                h='80%'
+                mt='7rem'
+                alignItems='center'
+                justifyContent='center'
+            >
+                <CategoriesView />
+            </Flex>
+        </Flex>
+    )
+}
+
+const CollectionsPageLanding = () => {
+    const themeState = useTheme();
+    const [isGreaterThan800] = useMediaQuery(`(min-width: 800px)`);
+    return (
+        <Box
+            h="100%"
+            w="100%"
+            minH={`844px`}
+            pt={'8vh'}
+            bg={`main.${themeState.theme}`}
+        >
+            {isGreaterThan800 ? <LandingDesktopView /> : <LandingMobileView />}
+        </Box>
+    )
+}
+
 interface CollectionsPageProps { };
 export const CollectionsPage: React.FC<CollectionsPageProps> = () => {
     const location = useLocation();
@@ -79,13 +116,12 @@ export const CollectionsPage: React.FC<CollectionsPageProps> = () => {
     console.log(location, collection);
     return (
         <Box
-            h="100vh"
-            w="100%"
-            minH={"890px"}
-            pt={'8vh'}
-            bg={`main.${themeState.theme}`}
+            h='100vh'
+            w='100%'
         >
-            {isGreaterThan800 && <DesktopView />}
+            {
+                !collection && <CollectionsPageLanding />
+            }
         </Box>
     )
 }
