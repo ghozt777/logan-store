@@ -20,7 +20,8 @@ import { useNavBar } from "../../context/navbar";
 import { RouteInfoBar } from "../RouteInfoBar/RouteInfoBar";
 import { useNavigate } from "react-router-dom";
 import { getAavatarUrl } from "../../utils/getAvatarUrl";
-import { RiShoppingBag2Line } from 'react-icons/ri'
+import { CgShoppingBag } from 'react-icons/cg'
+import { IoExitOutline } from 'react-icons/io5'
 
 type NavbarProps = {
     title: string;
@@ -128,17 +129,21 @@ export const Header: React.FC<NavbarProps> = ({ title, links }) => {
                     w='30%'
                     justifyContent='flex-end'
                     alignItems='center'
-                    gap='20px'
+                    gap={isLagerThan800 ? '20px' : '10px'}
                 >
                     {
-                        !authState.isLoggedIn ? <Link to='/login' name='login' /> : <Box onClick={() => dispatch(logoutReducer(logout))} ><Link to='/' name='logout' /></Box>
+                        !authState.isLoggedIn ? <Link to='/login' name='login' /> : <Box onClick={() => dispatch(logoutReducer(logout))} >{isLagerThan800 ? <Link to='/' name='logout' /> : <IoExitOutline color='red' />}</Box>
                     }
                     {
-                        !res.fetching && authState.isLoggedIn && <Avatar onClick={() => navigate('/profile')} iconLabel={res.data?.whoami.username ?? "unknown"} bg='white' cursor='pointer' size='md' name={res.data?.whoami.username} src={url} />
+                        !res.fetching && authState.isLoggedIn && <Avatar onClick={() => navigate('/profile')} iconLabel={res.data?.whoami.username ?? "unknown"} bg='white' cursor='pointer' size={isLagerThan800 ? 'md' : 'sm'} name={res.data?.whoami.username} src={url} />
                     }
-                    <RiShoppingBag2Line
+                    <CgShoppingBag
+                        style={{
+                            minHeight: "30px",
+                            minWidth: '20px'
+                        }}
+                        height="30px"
                         cursor='pointer'
-                        size={'30px'}
                         color='#a78bfa'
                         onClick={() => navigate('/cart')}
                     />
