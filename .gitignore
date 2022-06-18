@@ -12,6 +12,7 @@
 /build
 
 **/.env
+**/config.ts
 
 # misc
 .DS_Store

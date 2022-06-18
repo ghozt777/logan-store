@@ -1,6 +1,6 @@
 import { HamburgerIcon, TriangleDownIcon } from "@chakra-ui/icons";
 import { FaHamburger } from 'react-icons/fa'
-import { Box, Flex, Text, useMediaQuery } from "@chakra-ui/react";
+import { Avatar, Box, Flex, Img, Text, useMediaQuery } from "@chakra-ui/react";
 import React, { useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { RootState } from "../../app/store";
@@ -8,7 +8,7 @@ import { changeTheme } from '../../features/theme/themeSlice'
 import { Dropdown } from "../Dropdown/Dropdown";
 import { TiWeatherNight, TiWeatherSunny } from "react-icons/ti"
 import { Link } from "../Link/Link";
-import { useGetCategoriesQuery, useLogoutMutation } from "../../generated/graphql";
+import { useGetCategoriesQuery, useLogoutMutation, useWhoAmIQuery } from "../../generated/graphql";
 import { logout as logoutReducer } from "../../features/auth/authSlice"
 import { CategoryBar } from "./components/category-bar/CategoryBar";
 import { CategoryButton } from "./components/category-button/CategoryButton";
@@ -19,6 +19,8 @@ import "./style.css"
 import { useNavBar } from "../../context/navbar";
 import { RouteInfoBar } from "../RouteInfoBar/RouteInfoBar";
 import { useNavigate } from "react-router-dom";
+import { getAavatarUrl } from "../../utils/getAvatarUrl";
+import { RiShoppingBag2Line } from 'react-icons/ri'
 
 type NavbarProps = {
     title: string;
@@ -50,6 +52,8 @@ export const Header: React.FC<NavbarProps> = ({ title, links }) => {
     const { data, fetching, error } = result;
     const categories = fetching || error ? [] : data?.getCategories;
     const tagline = config.header.tagline;
+    const [res, retrigger] = useWhoAmIQuery()
+    let url: string = getAavatarUrl(res.data?.whoami.username.split(' ')[0] ?? "unknown")
     return (
         <Box
             h='8vh'
@@ -129,6 +133,15 @@ export const Header: React.FC<NavbarProps> = ({ title, links }) => {
                     {
                         !authState.isLoggedIn ? <Link to='/login' name='login' /> : <Box onClick={() => dispatch(logoutReducer(logout))} ><Link to='/' name='logout' /></Box>
                     }
+                    {
+                        !res.fetching && authState.isLoggedIn && <Avatar onClick={() => navigate('/profile')} iconLabel={res.data?.whoami.username ?? "unknown"} bg='white' cursor='pointer' size='md' name={res.data?.whoami.username} src={url} />
+                    }
+                    <RiShoppingBag2Line
+                        cursor='pointer'
+                        size={'30px'}
+                        color='#a78bfa'
+                        onClick={() => navigate('/cart')}
+                    />
                     <Box fontSize={isLagerThan1000 ? "1.2rem" : "1rem"} color={`text.${themeState.theme}`} cursor='pointer' onClick={() => dispatch(changeTheme())} >
                         {
                             themeState.theme === 'dark' ? <TiWeatherNight /> : <TiWeatherSunny />

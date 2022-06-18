@@ -50,6 +50,27 @@
         "tagline" : "Be a Maverick" ,
         "product-name": "Logan Store"
     },
+    "collections-page":{
+        "lading-hero": "https://ik.imagekit.io/dnoyrwmg9i9o/logan-store-categories/serhiy-hipskyy-O4pwbpzhKbw-unsplash_Ym7q6mtl2.jpg?ik-sdk-version=javascript-1.4.3&updatedAt=1654282401011"
+    },
+    "navbar-items":[
+        {
+            "name": "view all products",
+            "path": "/products"
+        },
+        {
+            "name": "shop by categories",
+            "path": "/collections"
+        },
+        {
+            "name": "orders",
+            "path": "/collections"
+        },
+        {
+            "name": "cart",
+            "path": "/collections"
+        }
+    ],
     "dummy-api": {
         "trending" : {
             "title": "Trending" ,

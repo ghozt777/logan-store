@@ -1,0 +1,11 @@
+@font-face {
+    font-family: 'Besom';
+    src: url('../../../../assets/fonts/Besom-Handwritten-Brush-Font.ttf');
+    font-style: normal;
+    font-weight: 100;
+}
+
+
+.asthetic-text{
+    font-family: 'Besom';
+}

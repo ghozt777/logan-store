@@ -12,6 +12,7 @@ export const NavBar: React.FC<NavBarProps> = () => {
         <Flex
             h='100vh'
             w='100%'
+            minH='500px'
             backgroundColor='transparent'
             zIndex={99999999}
             position='fixed'
