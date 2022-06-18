@@ -6,6 +6,7 @@ import { ResetPasswordPage } from './reset-password/ResetPasswordPage'
 import { Shop } from './shop/Shop'
 import { MarketPlacePage } from './marketplace/marketplace'
 import { CollectionsPage } from "./collections/Collections";
+import { NotFound } from './404/NotFound'
 export {
     LandingPage,
     LoginPage,
@@ -14,5 +15,6 @@ export {
     ResetPasswordPage,
     Shop,
     CollectionsPage,
-    MarketPlacePage
+    MarketPlacePage,
+    NotFound
 }
