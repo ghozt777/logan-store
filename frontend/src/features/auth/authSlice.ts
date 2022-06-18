@@ -1,6 +1,8 @@
 import { createAsyncThunk, createSlice, PayloadAction } from '@reduxjs/toolkit'
 import config from '../../config/config.json'
 import axios from 'axios'
+import { useSelector } from 'react-redux';
+import { RootState } from '../../app/store';
 
 export const initialAuthentication = createAsyncThunk(
     'auth/initial',
@@ -104,4 +106,5 @@ export const authSlice = createSlice({
 })
 
 export const { successAuth, faliureAuth } = authSlice.actions;
+export const useAuth = () => useSelector((state: RootState) => state.auth)
 export default authSlice.reducer;

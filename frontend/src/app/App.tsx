@@ -1,4 +1,4 @@
-import { Route, Routes, useLocation } from 'react-router-dom'
+import { Navigate, Route, Routes, useLocation } from 'react-router-dom'
 import { ToastContainer, Slide, } from 'react-toastify';
 import {
   LandingPage,
@@ -17,7 +17,7 @@ import { NavBar } from '../components/Navbar/Navbar';
 import { useNavBar } from '../context/navbar';
 import { useDispatch } from 'react-redux';
 import { useEffect } from 'react';
-import { initialAuthentication } from '../features/auth/authSlice';
+import { initialAuthentication, useAuth } from '../features/auth/authSlice';
 import { AppDispatch } from './store';
 
 function App() {
@@ -25,6 +25,7 @@ function App() {
   const location = useLocation();
   const navBarContext = useNavBar();
   const dispatch = useDispatch<AppDispatch>();
+  const authState = useAuth();
   useEffect(() => {
     dispatch(initialAuthentication())
   }, [])
@@ -49,7 +50,9 @@ function App() {
       <Routes>
         <Route path='/' element={<LandingPage />} />
         <Route path='/shop' element={<Shop />} />
-        <Route path='/login' element={<LoginPage />} />
+        <Route path='/login' element={
+          authState.isLoggedIn ? <Navigate to='/shop' replace /> : <LoginPage />
+        } />
         <Route path='/marketplace/*' element={<MarketPlacePage />} />
         <Route path='/register' element={<RegisterPage />} />
         <Route path='/collections' element={<CollectionsPage />}>

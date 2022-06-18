@@ -9,6 +9,7 @@ import { validateDataForLogin } from "../../utils/validateLoginFormData"
 import { useDispatch, useSelector } from "react-redux"
 import { faliureAuth, successAuth } from "../../features/auth/authSlice"
 import { RootState } from "../../app/store"
+import { useEffect } from "react"
 
 type LoginPageProps = {}
 
@@ -20,6 +21,11 @@ export const LoginPage: React.FC<LoginPageProps> = () => {
     const dispatch = useDispatch();
     const themeState = useSelector((state: RootState) => state.theme)
     const [isGreaterThan800] = useMediaQuery(`(min-width: 800px)`);
+    const authState = useSelector((state: RootState) => state.auth);
+
+    useEffect(() => {
+        if (authState.isLoggedIn) navigate('/')
+    }, [])
 
     return (
         <Flex
@@ -39,6 +45,10 @@ export const LoginPage: React.FC<LoginPageProps> = () => {
                 alignItems='center'
                 justifyContent='center'
                 w={isGreaterThan800 ? "40%" : "90%"}
+                // bg={themeState.theme==='light'?'white':'#171717'}
+                border={themeState.theme==='light'?'none':'solid'}
+                borderColor='#8b5cf6'
+                rounded={'md'}
             >
                 <Box
                     h='90%'

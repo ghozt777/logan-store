@@ -2,6 +2,7 @@ import { Box, Flex, Img, Text, useMediaQuery } from "@chakra-ui/react"
 import { useLocation, useParams } from "react-router-dom"
 import { useTheme } from "../../features/theme/themeSlice";
 import { CategoriesView } from "../../components/Categories/Categories";
+import config from '../../config/config.json'
 import "./style.css"
 
 const LandingDesktopView = () => {
@@ -44,7 +45,7 @@ const LandingDesktopView = () => {
                     >
                         <Text
                             className='header-text'
-                            fontSize='10rem'
+                            fontSize='13vh'
                             color={themeState.theme === 'light' ? "black" : "white"}
                         >
                             Collections
@@ -56,7 +57,7 @@ const LandingDesktopView = () => {
                         h='90%'
                         w='90%'
                         alt='collections-hero-desktop-view'
-                        src='https://ik.imagekit.io/dnoyrwmg9i9o/logan-store-categories/serhiy-hipskyy-O4pwbpzhKbw-unsplash_Ym7q6mtl2.jpg?ik-sdk-version=javascript-1.4.3&updatedAt=1654282401011'
+                        src={config["collections-page"]["lading-hero"]}
                     />
                 </Flex>
                 <Flex
@@ -78,31 +79,29 @@ const LandingMobileView = () => {
             alignItems='center'
             justifyContent='center'
         >
-            <Flex
+            <Box
                 w='90%'
                 h='80%'
                 mt='7rem'
-                alignItems='center'
-                justifyContent='center'
             >
                 <CategoriesView />
-            </Flex>
+            </Box>
         </Flex>
     )
 }
 
 const CollectionsPageLanding = () => {
     const themeState = useTheme();
-    const [isGreaterThan800] = useMediaQuery(`(min-width: 800px)`);
+    const [isGreaterThan1000] = useMediaQuery(`(min-width: 1000px)`);
     return (
         <Box
             h="100%"
             w="100%"
-            minH={`844px`}
+            minH={`890px`}
             pt={'8vh'}
             bg={`main.${themeState.theme}`}
         >
-            {isGreaterThan800 ? <LandingDesktopView /> : <LandingMobileView />}
+            {isGreaterThan1000 ? <LandingDesktopView /> : <LandingMobileView />}
         </Box>
     )
 }

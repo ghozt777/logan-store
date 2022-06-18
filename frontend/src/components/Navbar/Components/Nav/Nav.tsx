@@ -5,6 +5,11 @@ import { MavSvg } from "../../../../assets/images/Mav.svg";
 import { useTheme } from "../../../../features/theme/themeSlice"
 import { useWhoAmIQuery } from "../../../../generated/graphql";
 import { getAavatarUrl } from "../../../../utils/getAvatarUrl";
+import { ReactElement } from "react";
+import { useNavigate } from "react-router-dom";
+import config from '../../../../config/config.json'
+import './style.css'
+import { useNavBar } from "../../../../context/navbar";
 
 const Categories = styled.div`
     height: 60% ;
@@ -17,10 +22,12 @@ const Categories = styled.div`
 const Separator: React.FC<{ theme: "light" | "dark" }> = ({ theme }) => <Box rounded='lg' h='2px' w='80%' m='0 auto' bg={theme === 'light' ? 'grey' : 'white'} />
 
 const Banner = () => {
+    const themeState = useTheme();
     return (
         <Flex
             h='10%'
             w='100%'
+            pb='3rem'
             alignItems='center'
             justifyContent='space-between'
             flexDirection='column'
@@ -33,7 +40,30 @@ const Banner = () => {
                 alignItems='center'
                 justifyContent='space-between'
             >
-                <MavSvg />
+                {
+                    themeState.theme === 'dark' ?
+                        (
+                            <Flex
+                                rounded={'lg'}
+                                shadow="lg"
+                                pt='2px'
+                                bg='#ddd6fe'
+                                alignItems={'center'}
+                                justifyContent='center'
+                            >
+                                <MavSvg />
+                            </Flex>
+                        ) : (
+                            <Flex
+                                pt='2px'
+                                bg='transparent'
+                                alignItems={'center'}
+                                justifyContent='center'
+                            >
+                                <MavSvg />
+                            </Flex>
+                        )
+                }
             </Flex>
         </Flex>
     )
@@ -73,9 +103,60 @@ const UserInfo = () => {
     )
 }
 
+interface NavCardProps {
+    title: string;
+    to: string;
+    icon?: ReactElement;
+}
+
+const NavCard: React.FC<NavCardProps> = ({ title, to, icon }) => {
+    const navigate = useNavigate();
+    const themeState = useTheme();
+    const navContext = useNavBar();
+    const setIsNavBarOpen = navContext?.setIsNavBarOpen
+    return (
+        <Flex
+            h='10%'
+            w='80%'
+            bg={themeState.theme==='light'?'#f9fafb':'transparent'}
+            shadow={'base'}
+            rounded='md'
+            alignItems='center'
+            justifyContent='space-evenly'
+            cursor={'pointer'}
+            onClick={() => {
+                setIsNavBarOpen && setIsNavBarOpen(false)
+                navigate(to)
+            }}
+        >
+            <Text
+                className='asthetic-text'
+                color={themeState.theme === 'dark' ? 'white' : 'black'}
+                fontWeight='bold'
+                fontSize='xl'
+            >{title}</Text>
+        </Flex >
+    )
+}
+
+const NavMenu: React.FC<{}> = (props) => {
+    return (
+        <Flex
+            h='75%'
+            w='100%'
+            alignItems='center'
+            justifyContent={'space-evenly'}
+            flexDir='column'
+        >
+            {props.children}
+        </Flex>
+    )
+}
+
 export const Nav: React.FC<{}> = ({ children: categories }) => {
     const themeState = useTheme();
     const [isGreaterThen1200, isGreaterThan800] = useMediaQuery([`(min-width: 1200px)`, `(min-width: 800px)`]);
+    const navItems = config["navbar-items"]
     return (
         <Box
             h='100%'
@@ -93,10 +174,16 @@ export const Nav: React.FC<{}> = ({ children: categories }) => {
                     h='100%'
                     w='100%'
                     bg={`main-nav.${themeState.theme}`}
+                    flexDir='column'
                     boxShadow='lg'
                     onClick={(e: any) => e.stopPropagation()}
                 >
                     <Banner />
+                    <NavMenu>
+                        {
+                            navItems.map(navItem => <NavCard title={navItem.name} to={navItem.path} />)
+                        }
+                    </NavMenu>
                     <UserInfo />
                 </Flex>
             </Fade>
