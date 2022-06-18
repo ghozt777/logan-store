@@ -8,7 +8,8 @@ import {
   LoginPage,
   Shop,
   CollectionsPage,
-  MarketPlacePage
+  MarketPlacePage,
+  NotFound
 } from "../pages/index"
 import { Header } from '../components/Header/Header';
 import 'react-toastify/dist/ReactToastify.css';
@@ -48,17 +49,22 @@ function App() {
       {location.pathname !== '/' && <Header title={productName} />}
       {navBarContext?.isNavBarOpen && <NavBar />}
       <Routes>
+        <Route path="*" element={<NotFound />} />
         <Route path='/' element={<LandingPage />} />
         <Route path='/shop' element={<Shop />} />
         <Route path='/login' element={
           authState.isLoggedIn ? <Navigate to='/shop' replace /> : <LoginPage />
         } />
         <Route path='/marketplace/*' element={<MarketPlacePage />} />
-        <Route path='/register' element={<RegisterPage />} />
+        <Route path='/register' element={
+          authState.isLoggedIn ? <Navigate to='/shop' replace /> : <RegisterPage />
+        } />
         <Route path='/collections' element={<CollectionsPage />}>
           <Route path=':collection' element={<CollectionsPage />} />
         </Route>
-        <Route path='/forgot-password' element={<ForgotPasswordPage />} />
+        <Route path='/forgot-password' element={
+          authState.isLoggedIn ? <Navigate to='/shop' replace /> : <ForgotPasswordPage />
+        } />
         <Route path='/reset-password/:token' element={<ResetPasswordPage />} />
       </Routes>
     </>
