@@ -6,6 +6,7 @@ import { Image } from "../images/image.entity"
 import { Brand } from "./brand.entity";
 import { DisCount } from "./discount.entity";
 import { Inventory } from "./inventory.entity";
+import { ProductVariants } from "./variants.entity";
 @ObjectType()
 @Entity('products')
 export class Product {
@@ -52,6 +53,10 @@ export class Product {
     @Field(() => [DisCount], { nullable: true })
     @ManyToMany(() => DisCount, discount => discount.discountId, { nullable: true })
     applicabeDiscountIds: [string];
+
+    @Field(() => ProductVariants, { nullable: true })
+    @OneToOne(() => ProductVariants, (pv: ProductVariants) => pv.product, { nullable: true })
+    variants: ProductVariants;
 
     @CreateDateColumn({ type: "timestamp", default: () => "CURRENT_TIMESTAMP(6)" })
     public created_at: Date;

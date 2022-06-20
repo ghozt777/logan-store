@@ -40,6 +40,16 @@ type Inventory {
   maxNumberOfUnitsPerCustomer: Float!
 }
 
+type ProductVariants {
+  property: String!
+  variants: [Variants!]!
+}
+
+type Variants {
+  variantName: String!
+  priceIncement: Float!
+}
+
 type Product {
   productId: String!
   name: String!
@@ -51,6 +61,7 @@ type Product {
   images: [Image!]
   brand: Brand
   applicabeDiscountIds: [DisCount!]
+  variants: ProductVariants
 }
 
 type User {
