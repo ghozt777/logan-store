@@ -9,6 +9,7 @@ import {
   Shop,
   CollectionsPage,
   MarketPlacePage,
+  Products,
   NotFound
 } from "../pages/index"
 import { Header } from '../components/Header/Header';
@@ -16,20 +17,15 @@ import 'react-toastify/dist/ReactToastify.css';
 import config from "../config/config.json"
 import { NavBar } from '../components/Navbar/Navbar';
 import { useNavBar } from '../context/navbar';
-import { useDispatch } from 'react-redux';
-import { useEffect } from 'react';
-import { initialAuthentication, useAuth } from '../features/auth/authSlice';
+import { useAuth } from '../features/auth/authSlice';
 import { AppDispatch } from './store';
 
 function App() {
   const productName = config.header['product-name'];
   const location = useLocation();
   const navBarContext = useNavBar();
-  const dispatch = useDispatch<AppDispatch>();
   const authState = useAuth();
-  useEffect(() => {
-    dispatch(initialAuthentication())
-  }, [])
+
   return (
     <>
       <ToastContainer
@@ -66,6 +62,9 @@ function App() {
           authState.isLoggedIn ? <Navigate to='/shop' replace /> : <ForgotPasswordPage />
         } />
         <Route path='/reset-password/:token' element={<ResetPasswordPage />} />
+        <Route path='/products' element={<Products />} >
+          <Route path=':productId' element={<Products />} />
+        </Route>
       </Routes>
     </>
   );
