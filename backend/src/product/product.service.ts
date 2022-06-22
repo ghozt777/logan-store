@@ -7,6 +7,8 @@ import { Image } from "src/images/image.entity";
 import { DisCount } from "./discount.entity";
 import { GenericResponse } from "./genericResponse.dto";
 import { Brand } from "./brand.entity";
+import { VariantsDTO } from "./types/variants.dto";
+import { ProductVariants, VariantProps } from "./variants.entity";
 const crypto = require('crypto')
 
 @Injectable()
@@ -24,6 +26,8 @@ export class ProductService {
             .leftJoinAndSelect('product.images', 'images')
             .leftJoinAndSelect('product.brand', 'brands')
             .leftJoinAndSelect('product.inventory', 'inventory')
+            .leftJoinAndSelect('product.variants', 'productVariants')
+            .leftJoinAndSelect('productVariants.variantProps', 'variantProps')
             .getMany();
         console.log(products);
         return products;
@@ -192,6 +196,8 @@ export class ProductService {
             .leftJoinAndSelect('product.images', 'images')
             .leftJoinAndSelect('product.brand', 'brands')
             .leftJoinAndSelect('product.inventory', 'inventory')
+            .leftJoinAndSelect('product.variants', 'productVariants')
+            .leftJoinAndSelect('productVariants.variantProps', 'variantProps')
             .getMany();
 
         return products;
@@ -251,6 +257,60 @@ export class ProductService {
             isOk = false;
         } finally {
             return isOk;
+        }
+    }
+
+    async createproductVariant(dto: VariantsDTO): Promise<{ productVariant: ProductVariants, msg: string; }> {
+        try {
+            let toInsertVariantProps = []
+            dto.variants.forEach((v) => {
+                const variantToSave = new VariantProps();
+                variantToSave.variantName = v.variantName;
+                variantToSave.priceIncement = v.priceIncrement;
+                toInsertVariantProps.push(variantToSave);
+            })
+            const pv = new ProductVariants();
+            pv.property = dto.property;
+            pv.variantProps = toInsertVariantProps;
+            return {
+                productVariant: pv,
+                msg: "success"
+            }
+        } catch (err) {
+            return {
+                msg: err.message ?? "Unknown Error!",
+                productVariant: null
+            };
+        }
+    }
+
+    async addProductVariants(productId: string, dto: VariantsDTO): Promise<GenericResponse> {
+        const response: GenericResponse = {
+            errors: [],
+            isOk: false
+        };
+        try {
+            const em = getManager();
+            const foundProduct = await em.findOne(Product, { productId });
+            if (!foundProduct) {
+                response.errors.push({ field: 'product', message: 'product not found' })
+                throw new Error(`product with id=${productId} Not Found !`);
+            }
+            const variantsInsertionResponse = await this.createproductVariant(dto);
+            if (!variantsInsertionResponse.productVariant) {
+                response.errors.push({ field: 'variants', message: 'internal server error ' });
+                throw new Error(`Error inserting variants with message -> ${variantsInsertionResponse.msg}`);
+            }
+            foundProduct.variants = await em.save(variantsInsertionResponse.productVariant);
+            await em.save(foundProduct);
+            response.isOk = true;
+        } catch (err) {
+            console.error('Error adding variants to product with message -> ', err.message);
+            console.error(err);
+            response.errors.push({ field: 'sever error message', message: err.message });
+            return response;
+        } finally {
+            return response;
         }
     }
 

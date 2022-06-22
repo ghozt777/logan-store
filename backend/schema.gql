@@ -42,10 +42,10 @@ type Inventory {
 
 type ProductVariants {
   property: String!
-  variants: [Variants!]!
+  variantProps: [VariantProps!]
 }
 
-type Variants {
+type VariantProps {
   variantName: String!
   priceIncement: Float!
 }
@@ -137,7 +137,18 @@ type Mutation {
   tagProductWithInventory(productId: String!, inventoryId: String!): Boolean!
   tagProductWithCategory(categoryName: String!, productId: String!): Boolean!
   tagProductWithBrand(brandId: String!, productId: String!): Boolean!
+  addProductVariants(productId: String!, variantsInfo: VariantsDTO!): GenericResponse!
   addImage(name: String!, url: String!): Boolean!
   addAddress(mobile: Float!, country: String!, zipcode: String!, city: String!, addressLine2: String, addressLine1: String!): Boolean!
   addCategory(imageUrl: String!, categoryName: String!): Boolean!
+}
+
+input VariantsDTO {
+  property: String!
+  variants: [VariantPropsDTO!]!
+}
+
+input VariantPropsDTO {
+  variantName: String!
+  priceIncrement: Float!
 }

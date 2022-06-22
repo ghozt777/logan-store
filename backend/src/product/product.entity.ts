@@ -1,7 +1,7 @@
 import { Field, ObjectType } from "@nestjs/graphql";
 import { EntityCategory } from "src/entity-category/category.entity";
 import { ProductCategory } from "src/product-category/productCategory.entity";
-import { Column, CreateDateColumn, Entity, JoinColumn, ManyToMany, ManyToOne, OneToMany, OneToOne, PrimaryGeneratedColumn, UpdateDateColumn } from "typeorm";
+import { Column, CreateDateColumn, Entity, JoinColumn, JoinTable, ManyToMany, ManyToOne, OneToMany, OneToOne, PrimaryGeneratedColumn, UpdateDateColumn } from "typeorm";
 import { Image } from "../images/image.entity"
 import { Brand } from "./brand.entity";
 import { DisCount } from "./discount.entity";
@@ -55,7 +55,8 @@ export class Product {
     applicabeDiscountIds: [string];
 
     @Field(() => ProductVariants, { nullable: true })
-    @OneToOne(() => ProductVariants, (pv: ProductVariants) => pv.product, { nullable: true })
+    @OneToOne(() => ProductVariants, (pv: ProductVariants) => pv.product, { nullable: true, cascade: true })
+    @JoinColumn({ name: 'productVariants' })
     variants: ProductVariants;
 
     @CreateDateColumn({ type: "timestamp", default: () => "CURRENT_TIMESTAMP(6)" })

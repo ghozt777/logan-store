@@ -1,5 +1,5 @@
 import { Field, ObjectType } from "@nestjs/graphql";
-import { Column, Entity, ManyToOne, OneToMany, OneToOne, PrimaryGeneratedColumn } from "typeorm";
+import { Column, Entity, JoinColumn, JoinTable, ManyToOne, OneToMany, OneToOne, PrimaryGeneratedColumn } from "typeorm";
 import { Product } from "./product.entity";
 
 @ObjectType()
@@ -12,17 +12,18 @@ export class ProductVariants {
     @Column()
     property: string;
 
-    @Field(() => [Variants])
-    @OneToMany(() => Variants, (v: Variants) => v.productVariants)
-    variants: Variants[]
+    @Field(() => [VariantProps], { nullable: true })
+    @OneToMany(() => VariantProps, (v: VariantProps) => v.productVariants, { nullable: true, cascade: true })
+    @JoinColumn({ name: 'variantProps' })
+    variantProps: VariantProps[]
 
-    @OneToOne(() => Product, (p: Product) => p.variants)
+    @OneToOne(() => Product, (p: Product) => p.variants, { nullable: true })
     product: Product;
 }
 
 @ObjectType()
-@Entity('variants')
-export class Variants {
+@Entity('variantProps')
+export class VariantProps {
     @PrimaryGeneratedColumn('increment')
     id: number;
 
@@ -34,6 +35,6 @@ export class Variants {
     @Column({ default: 0, nullable: false })
     priceIncement: number;
 
-    @ManyToOne(() => ProductVariants, (pv: ProductVariants) => pv.variants)
+    @ManyToOne(() => ProductVariants, (pv: ProductVariants) => pv.variantProps, { nullable: true })
     productVariants: ProductVariants
 }
