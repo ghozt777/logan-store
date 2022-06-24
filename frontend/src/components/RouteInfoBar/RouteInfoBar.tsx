@@ -30,45 +30,51 @@ export const RouteInfoBar: React.FC<{}> = () => {
     })
     return (
         <Flex
-            h='3rem'
-            w='90%'
-            m='0.5rem auto'
-            bg={`routeInfo-bar.${themeState.theme}`}
-            boxShadow='base'
-            rounded='md'
-            alignItems='center'
-            justifyContent='center'
+            h='4rem'
+            w='100%'
+            bg={`main.${themeState.theme}`}
         >
-            <Link
-                dark={themeState.theme === "dark"}
-                isActive={true}
-                title='Home'
-                path="/"
-            />
-            <Slash dark={themeState.theme === "dark"} />
             <Flex
+                h='70%'
+                w='90%'
+                m='0.5rem auto'
+                bg={`routeInfo-bar.${themeState.theme}`}
+                boxShadow='base'
+                rounded='md'
                 alignItems='center'
                 justifyContent='center'
             >
-                {
-                    routes.map((r, i) => {
-                        return (
-                            <Flex
-                                key={uuidv4()}
-                                flexDirection='row'
-                                alignItems='center'
-                            >
-                                <Link
-                                    dark={themeState.theme === "dark"}
-                                    isActive={i != routes.length - 1}
-                                    title={r}
-                                    path={completeRoutes[i]}
-                                />
-                                {i != routes.length - 1 && <Slash dark={themeState.theme === "dark"} />}
-                            </Flex>
-                        )
-                    })
-                }
+                <Link
+                    dark={themeState.theme === "dark"}
+                    isActive={true}
+                    title='Home'
+                    path="/"
+                />
+                <Slash dark={themeState.theme === "dark"} />
+                <Flex
+                    alignItems='center'
+                    justifyContent='center'
+                >
+                    {
+                        routes.map((r, i) => {
+                            return (
+                                <Flex
+                                    key={uuidv4()}
+                                    flexDirection='row'
+                                    alignItems='center'
+                                >
+                                    <Link
+                                        dark={themeState.theme === "dark"}
+                                        isActive={i != routes.length - 1}
+                                        title={r}
+                                        path={completeRoutes[i]}
+                                    />
+                                    {i != routes.length - 1 && <Slash dark={themeState.theme === "dark"} />}
+                                </Flex>
+                            )
+                        })
+                    }
+                </Flex>
             </Flex>
         </Flex>
     )
