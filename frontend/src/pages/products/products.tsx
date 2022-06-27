@@ -4,6 +4,7 @@ import { useParams } from "react-router-dom";
 import { ProductsCard } from "../../components/ProductsCard/ProductsCard";
 import { useTheme } from "../../features/theme/themeSlice";
 import styled from "styled-components";
+import { useGetProductsQuery } from "../../generated/graphql";
 
 const Grid = styled.div`
     display:grid ;
@@ -46,39 +47,42 @@ const Controls: React.FC<{}> = () => {
 const ViewAllProducts: React.FC<{}> = () => {
     const themeState = useTheme()
     const [isLargerThan790] = useMediaQuery(`(min-width:790px)`);
+    const [getProductsRes] = useGetProductsQuery();
     return (
         <Flex
             minH='900px'
+            alignItems='flex-start'
+            justifyContent='center'
             pb='4rem'
             w='100%'
             pl={isLargerThan790 ? '235px' : '0px'}
             pr={isLargerThan790 ? '4vw' : '0px'}
         >
             {isLargerThan790 && <Controls />}
-            <Grid theme={themeState.theme}>
-                <ProductsCard />
-                <ProductsCard />
-                <ProductsCard />
-                <ProductsCard />
-                <ProductsCard />
-                <ProductsCard />
-                <ProductsCard />
-                <ProductsCard />
-                <ProductsCard />
-                <ProductsCard />
-                <ProductsCard />
-                <ProductsCard />
-                <ProductsCard />
-                <ProductsCard />
-                <ProductsCard />
-                <ProductsCard />
-                <ProductsCard />
-                <ProductsCard />
-                <ProductsCard />
-                <ProductsCard />
-                <ProductsCard />
-
-            </Grid>
+            <Flex
+                h='100%'
+                w='100%'
+                alignItems='center'
+                justifyContent='center'
+                maxW='1300px'
+            >
+                {
+                    getProductsRes.fetching ? (
+                        <h1>Loading...</h1>
+                    ) : (
+                        getProductsRes.data?.getProducts &&
+                        <Grid
+                            theme={themeState.theme}
+                        >
+                            {getProductsRes.data.getProducts.map(p => {
+                                return (
+                                    <ProductsCard img={p.images ? p.images[0].url : ""} name={p.name} price={100} />
+                                )
+                            })}
+                        </Grid>
+                    )
+                }
+            </Flex>
         </Flex>
     )
 }
@@ -89,7 +93,7 @@ export const Products: React.FC<{}> = () => {
 
     return (
         <Box
-            h='100vh'
+            h='auto'
             minH='890px'
             w='100%'
             bg={`main.${themeState.theme}`}

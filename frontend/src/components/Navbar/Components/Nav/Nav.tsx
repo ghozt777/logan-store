@@ -10,6 +10,7 @@ import { useNavigate } from "react-router-dom";
 import config from '../../../../config/config.json'
 import './style.css'
 import { useNavBar } from "../../../../context/navbar";
+import { IconsMap } from "./Icons";
 
 const Categories = styled.div`
     height: 60% ;
@@ -106,7 +107,7 @@ const UserInfo = () => {
 interface NavCardProps {
     title: string;
     to: string;
-    icon?: ReactElement;
+    icon: string;
 }
 
 const NavCard: React.FC<NavCardProps> = ({ title, to, icon }) => {
@@ -118,7 +119,7 @@ const NavCard: React.FC<NavCardProps> = ({ title, to, icon }) => {
         <Flex
             h='10%'
             w='80%'
-            bg={themeState.theme==='light'?'#f9fafb':'transparent'}
+            bg={themeState.theme === 'light' ? '#f9fafb' : '#a78bfa'}
             shadow={'base'}
             rounded='md'
             alignItems='center'
@@ -129,12 +130,18 @@ const NavCard: React.FC<NavCardProps> = ({ title, to, icon }) => {
                 navigate(to)
             }}
         >
-            <Text
-                className='asthetic-text'
-                color={themeState.theme === 'dark' ? 'white' : 'black'}
-                fontWeight='bold'
-                fontSize='xl'
-            >{title}</Text>
+            {IconsMap.get(icon)}
+            <Box
+                w='70%'
+                textAlign={'center'}
+            >
+                <Text
+                    className='asthetic-text'
+                    color={themeState.theme === 'dark' ? 'white' : 'black'}
+                    fontWeight='bold'
+                    fontSize='xl'
+                >{title}</Text>
+            </Box>
         </Flex >
     )
 }
@@ -181,7 +188,7 @@ export const Nav: React.FC<{}> = ({ children: categories }) => {
                     <Banner />
                     <NavMenu>
                         {
-                            navItems.map(navItem => <NavCard title={navItem.name} to={navItem.path} />)
+                            navItems.map(navItem => <NavCard title={navItem.name} to={navItem.path} icon={navItem.icon} />)
                         }
                     </NavMenu>
                     <UserInfo />
