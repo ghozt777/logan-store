@@ -1,5 +1,5 @@
 import { UseInterceptors } from "@nestjs/common";
-import { Resolver, Query, Mutation, Args, ObjectType, Field } from "@nestjs/graphql";
+import { Resolver, Query, Mutation, Args, ArgsType, Field, InputType } from "@nestjs/graphql";
 import { InjectRepository } from "@nestjs/typeorm";
 import { ProductCategory } from "src/product-category/productCategory.entity";
 import { LoggingInterceptor } from "src/user/logging.interceptor";
@@ -8,6 +8,8 @@ import { getManager, Repository } from "typeorm";
 import { GenericResponse } from "./genericResponse.dto";
 import { Product } from "./product.entity";
 import { ProductService } from "./product.service";
+import { VariantsDTO } from "./types/variants.dto";
+
 
 @UseInterceptors(LoggingInterceptor)
 @Resolver(() => Product)
@@ -130,4 +132,16 @@ export class ProductResolver {
         return response;
     }
 
+
+    @Mutation(() => GenericResponse)
+    async addProductVariants(
+        @Args('variantsInfo') variantsDTO: VariantsDTO,
+        @Args({ type: () => String, name: 'productId' }) productId: string
+    ): Promise<GenericResponse> {
+        const response = await this.productService.addProductVariants(productId, variantsDTO);
+        return response;
+    }
+
 }
+
+

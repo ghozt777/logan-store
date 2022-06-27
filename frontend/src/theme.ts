@@ -46,5 +46,9 @@ export const theme = extendTheme({
             light: "#f3f4f6",
             dark: "#2e2e2e"
         },
+        "products-card": {
+            light: "#fff",
+            dark: "#2e2e2e"
+        },
     }
 })

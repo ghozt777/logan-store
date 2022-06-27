@@ -1,6 +1,7 @@
 import { Resolver, Query, Mutation, Args } from "@nestjs/graphql";
 import { getManager } from "typeorm";
 import { ProductCategory } from "./productCategory.entity";
+import { GenericResponse } from "./response.dto";
 
 @Resolver(() => ProductCategory)
 export class ProductCategoryResolver {
@@ -29,4 +30,11 @@ export class ProductCategoryResolver {
         }
         return isOk;
     }
+
+    // @Mutation(() => GenericResponse)
+    // async tagCategoryWithSubCategory(
+    //     @Args()
+    // ) {
+
+    // }
 }

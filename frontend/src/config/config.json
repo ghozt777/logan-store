@@ -56,19 +56,23 @@
     "navbar-items":[
         {
             "name": "view all products",
-            "path": "/products"
+            "path": "/products",
+            "icon": "products"
         },
         {
             "name": "shop by categories",
-            "path": "/collections"
+            "path": "/collections",
+            "icon": "collection"
         },
         {
             "name": "orders",
-            "path": "/collections"
+            "path": "/collections",
+            "icon": "orders"
         },
         {
             "name": "cart",
-            "path": "/collections"
+            "path": "/collections",
+            "icon": "cart"
         }
     ],
     "dummy-api": {

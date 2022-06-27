@@ -8,9 +8,10 @@ import { Inventory } from "./inventory.entity";
 import { ProductService } from "./product.service";
 import { Brand } from "./brand.entity";
 import { DisCount } from "./discount.entity";
+import { ProductVariants, VariantProps } from "./variants.entity";
 
 @Module({
-    imports: [TypeOrmModule.forFeature([Product, Image, Inventory, Brand, DisCount]), CacheModule.register()],
+    imports: [TypeOrmModule.forFeature([Product, Image, Inventory, Brand, DisCount, ProductVariants, VariantProps]), CacheModule.register()],
     controllers: [ProductController],
     providers: [ProductResolver, ProductService]
 })
