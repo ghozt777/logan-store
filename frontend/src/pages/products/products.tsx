@@ -5,6 +5,7 @@ import { ProductsCard } from "../../components/ProductsCard/ProductsCard";
 import { useTheme } from "../../features/theme/themeSlice";
 import styled from "styled-components";
 import { useGetProductsQuery } from "../../generated/graphql";
+import { NotFoundCard } from "../../components/NotFoundCard/NotFound";
 
 const Grid = styled.div`
     display:grid ;
@@ -76,7 +77,7 @@ const ViewAllProducts: React.FC<{}> = () => {
                         >
                             {getProductsRes.data.getProducts.map(p => {
                                 return (
-                                    <ProductsCard img={p.images ? p.images[0].url : ""} name={p.name} price={100} />
+                                    <ProductsCard img={p.images ? p.images[0].url : ""} name={p.name} price={100} productId={p.productId} />
                                 )
                             })}
                         </Grid>
@@ -87,13 +88,44 @@ const ViewAllProducts: React.FC<{}> = () => {
     )
 }
 
+const ViewProduct: React.FC<{ productId: string }> = ({ productId }) => {
+    const [res] = useGetProductsQuery();
+    const { fetching, data, error } = res;
+    const product = data?.getProducts.find((p) => p.productId === productId);
+    const [isGreaterThan800] = useMediaQuery(`(min-width:800px)`)
+    return (
+        <Box
+            h='100%'
+            w='100%'
+            minH='700px'
+        >
+            <Flex
+                h='100%'
+                w='100%'
+                alignItems={'center'}
+                justifyContent={'center'}
+            >
+                {
+                    product ? <h1>Found!</h1> :
+                        <Flex
+                            h='50%'
+                            w={isGreaterThan800 ? '50%' : '98%'}
+                        >
+                            <NotFoundCard msg={`product not found !`} parameter={'product'} errMessage={`Product with id=${productId} not found in the data received from the server : please check the params or the server data`} />
+                        </Flex>
+                }
+            </Flex>
+        </Box >
+    )
+}
+
 export const Products: React.FC<{}> = () => {
     const themeState = useTheme();
     const { productId } = useParams();
-
+    const showAllProducts = !productId
     return (
         <Box
-            h='auto'
+            h='100vh'
             minH='890px'
             w='100%'
             bg={`main.${themeState.theme}`}
@@ -103,7 +135,7 @@ export const Products: React.FC<{}> = () => {
             pb='1rem'
             position={"relative"}
         >
-            <ViewAllProducts />
+            {showAllProducts ? <ViewAllProducts /> : <ViewProduct productId={productId} />}
         </Box>
     )
 } 

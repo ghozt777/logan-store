@@ -1,13 +1,16 @@
 import { Box, Flex, Img, Text } from "@chakra-ui/react"
+import { useNavigate } from "react-router-dom";
 import { useTheme } from "../../features/theme/themeSlice";
 import { Card } from "../Dropdown/components/Card/Card";
 interface ProductsCardProps {
     img: string;
     price: number;
     name: string;
+    productId: string;
 }
-export const ProductsCard: React.FC<ProductsCardProps> = ({ img, price, name }) => {
+export const ProductsCard: React.FC<ProductsCardProps> = ({ img, price, name, productId }) => {
     const themeState = useTheme();
+    const navigate = useNavigate();
     return (
         <Flex
             flexDirection={"column"}
@@ -20,6 +23,10 @@ export const ProductsCard: React.FC<ProductsCardProps> = ({ img, price, name }) 
             alignItems='center'
             bg={`products-card.${themeState.theme}`}
             position='relative'
+            cursor={'pointer'}
+            onClick={() => {
+                navigate(`/products/${productId}`);
+            }}
         >
             <Img
                 mt='10px'

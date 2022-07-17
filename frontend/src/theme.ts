@@ -50,5 +50,9 @@ export const theme = extendTheme({
             light: "#fff",
             dark: "#2e2e2e"
         },
+        "error-card": {
+            light: "#fff",
+            dark: "#18181b"
+        },
     }
 })
