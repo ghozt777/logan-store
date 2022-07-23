@@ -5,7 +5,18 @@
     font-weight: 100;
 }
 
+@font-face {
+    font-family: 'ii';
+    src: url('../../../../assets/fonts/GOGOIA-Regular.ttf');
+    font-style: normal;
+    font-weight: 100;
+}
+
 
 .asthetic-text{
     font-family: 'Besom';
+}
+
+.asthetic-text-ii{
+    font-family: 'ii';
 }

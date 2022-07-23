@@ -92,6 +92,7 @@ export type Mutation = {
   addImage: Scalars['Boolean'];
   addImageToProduct: Scalars['Boolean'];
   addProduct: Scalars['Boolean'];
+  addProductVariants: GenericResponse;
   createInventory: Scalars['Boolean'];
   forgotPassword: Scalars['Boolean'];
   login: LoginResponse;
@@ -141,6 +142,12 @@ export type MutationAddProductArgs = {
   brand: Scalars['String'];
   description: Scalars['String'];
   productName: Scalars['String'];
+};
+
+
+export type MutationAddProductVariantsArgs = {
+  productId: Scalars['String'];
+  variantsInfo: VariantsDto;
 };
 
 
@@ -229,14 +236,22 @@ export type Product = {
   name: Scalars['String'];
   productId: Scalars['String'];
   upvotes: Scalars['Float'];
+  variants?: Maybe<ProductVariants>;
 };
 
 export type ProductCategory = {
   __typename?: 'ProductCategory';
+  categoryDescription?: Maybe<Scalars['String']>;
   id: Scalars['String'];
   imageUrl?: Maybe<Scalars['String']>;
   name: Scalars['String'];
   product?: Maybe<Product>;
+};
+
+export type ProductVariants = {
+  __typename?: 'ProductVariants';
+  property: Scalars['String'];
+  variantProps?: Maybe<Array<VariantProps>>;
 };
 
 export type Query = {
@@ -266,6 +281,22 @@ export type UserCreationResponse = {
   __typename?: 'UserCreationResponse';
   errors: Array<Errors>;
   message: Scalars['String'];
+};
+
+export type VariantProps = {
+  __typename?: 'VariantProps';
+  priceIncement: Scalars['Float'];
+  variantName: Scalars['String'];
+};
+
+export type VariantPropsDto = {
+  priceIncrement: Scalars['Float'];
+  variantName: Scalars['String'];
+};
+
+export type VariantsDto = {
+  property: Scalars['String'];
+  variants: Array<VariantPropsDto>;
 };
 
 export type GetCategoriesQueryVariables = Exact<{ [key: string]: never; }>;

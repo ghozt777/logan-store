@@ -12,8 +12,7 @@ const Grid = styled.div`
     width:100%;
     height:100%;
     display:grid;
-    gap:16px;
-    grid-template-columns: repeat(auto-fit , minmax(240px, 1fr));
+    grid-template-columns: repeat(auto-fit , minmax(280px, 1fr));
     &::-webkit-scrollbar{
         width: 5px;
     }
@@ -125,7 +124,7 @@ export const Products: React.FC<{}> = () => {
     const showAllProducts = !productId
     return (
         <Box
-            h='100vh'
+            h='auto'
             minH='890px'
             w='100%'
             bg={`main.${themeState.theme}`}

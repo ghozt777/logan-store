@@ -2,6 +2,7 @@ import { Box, Flex, Grid, GridItem, Img, Text, useMediaQuery } from "@chakra-ui/
 import { useNavigate } from "react-router-dom";
 import { HashLoader } from "react-spinners";
 import { cacheExchange } from "urql";
+import { nanoid } from 'nanoid'
 import { useTheme } from "../../features/theme/themeSlice";
 import { GetCategoriesQuery, useGetCategoriesQuery } from '../../generated/graphql'
 import { ErrorCard } from "../Error/Error";
@@ -57,7 +58,7 @@ const DesktopView: React.FC<{ categories?: GetCategoriesQuery }> = ({ categories
             {
                 categories && categories.map((category, i) => {
                     return (
-                        <GridContent r={i === 0 ? 2 : 0} c={i === 0 ? 1 : i === 3 ? 1 : 2}>
+                        <GridContent key={nanoid()} r={i === 0 ? 2 : 0} c={i === 0 ? 1 : i === 3 ? 1 : 2}>
                             <GridCard
                                 c={i === 0 || i === 2 ? 'black' : 'white'}
                                 b={
@@ -105,7 +106,7 @@ const MobileView: React.FC<{ categories?: GetCategoriesQuery }> = ({ categories:
         <>
             {
                 categories && categories.map((category, i) => {
-                    return (<GridContent c={i === 0 || i == 3 ? 3 : 2} >
+                    return (<GridContent key={nanoid()} c={i === 0 || i == 3 ? 3 : 2} >
                         <GridCard
                             b={
                                 i === 0 ? 'white' :

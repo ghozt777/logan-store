@@ -1,15 +1,18 @@
-import ReactDOM from 'react-dom';
+import { createRoot } from 'react-dom/client';
 import { Root } from './root';
-import { RootState, store } from './app/store'
-import { Provider, useSelector } from 'react-redux'
+import { store } from './app/store'
+import { Provider } from 'react-redux'
 import './index.css'
 
 
-
-ReactDOM.render(
+const App: React.FC<{}> = () =>
+(
   <Provider store={store} >
     <Root />
   </Provider>
-  ,
-  document.getElementById('root')
-);
+)
+
+
+const container = document.getElementById('app')
+const root = createRoot(container!);
+root.render(<App />)

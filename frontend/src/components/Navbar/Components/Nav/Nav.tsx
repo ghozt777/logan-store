@@ -65,6 +65,20 @@ const Banner = () => {
                             </Flex>
                         )
                 }
+                <Flex
+                    alignItems='center'
+                    justifyContent='center'
+                    h='5rem'
+                    w='50%'
+                >
+                    <Text
+                        color={themeState.theme === 'dark' ? 'white' : 'black'}
+                        fontSize={"2.1rem"}
+                        className="asthetic-text-ii"
+                    >
+                        Logan Store
+                    </Text>
+                </Flex>
             </Flex>
         </Flex>
     )

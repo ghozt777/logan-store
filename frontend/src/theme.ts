@@ -54,5 +54,9 @@ export const theme = extendTheme({
             light: "#fff",
             dark: "#18181b"
         },
+        "footer": {
+            light: "#f3f4f6",
+            dark: "#2e2e2e"
+        }
     }
 })

@@ -10,7 +10,7 @@ import {
   CollectionsPage,
   MarketPlacePage,
   Products,
-  NotFound
+  NotFound,
 } from "../pages/index"
 import { Header } from '../components/Header/Header';
 import 'react-toastify/dist/ReactToastify.css';
@@ -18,6 +18,7 @@ import config from "../config/config.json"
 import { NavBar } from '../components/Navbar/Navbar';
 import { useNavBar } from '../context/navbar';
 import { useAuth } from '../features/auth/authSlice';
+import { Footer } from './../components'
 import { AppDispatch } from './store';
 
 function App() {
@@ -66,6 +67,7 @@ function App() {
           <Route path=':productId' element={<Products />} />
         </Route>
       </Routes>
+      <Footer variant='pazzaz' position='relative' />
     </>
   );
 }

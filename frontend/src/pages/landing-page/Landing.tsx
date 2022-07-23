@@ -17,7 +17,7 @@ export const LandingPage: React.FC<LaandingPageProps> = () => {
         >
             <LandingPageheader />
             <Banner />
-            <Footer />
+            <Footer variant="default" />
         </Box>
     )
 }
